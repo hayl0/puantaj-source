@@ -1,0 +1,38 @@
+/* Puantaj Yönetici Brand Colors */
+:root {
+  /* Primary Colors */
+  --brand-primary: #3B82F6;    /* Blue-500 */
+  --brand-secondary: #8B5CF6;  /* Purple-500 */
+  --brand-accent: #EC4899;     /* Pink-500 */
+  
+  /* Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, #3B82F6, #8B5CF6, #EC4899);
+  --gradient-dark: linear-gradient(135deg, #1E40AF, #5B21B6, #BE185D);
+  --gradient-light: linear-gradient(135deg, #60A5FA, #A78BFA, #F472B6);
+  
+  /* Status Colors */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+}
+
+/* Brand Utility Classes */
+.brand-gradient {
+  background: var(--gradient-primary);
+}
+
+.brand-gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-shadow {
+  box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.5);
+}
+
+.brand-glow {
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
+}
