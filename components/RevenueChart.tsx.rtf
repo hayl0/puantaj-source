@@ -1,0 +1,49 @@
+{\rtf1\ansi\ansicpg1254\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red184\green130\blue220;\red21\green21\blue21;\red247\green249\blue250;
+\red226\green158\blue107;\red129\green201\blue99;}
+{\*\expandedcolortbl;;\cssrgb\c77647\c60000\c89020;\cssrgb\c10588\c10588\c10980;\cssrgb\c97647\c98039\c98431;
+\cssrgb\c91373\c68235\c49412;\cssrgb\c56863\c81569\c46275;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12420\viewh16440\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 \expnd0\expndtw0\kerning0
+cat\cf4  \cf5 >\cf4  RevenueChart.tsx \cf5 <<\cf4  \cf6 'EOF'\
+import React from 'react';\
+import \{ BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer \} from 'recharts';\
+\
+const data = [\
+  \{ name: 'Oca', gelir: 125430 \},\
+  \{ name: '\uc0\u350 ub', gelir: 115200 \},\
+  \{ name: 'Mar', gelir: 138900 \},\
+  \{ name: 'Nis', gelir: 142300 \},\
+  \{ name: 'May', gelir: 148500 \},\
+  \{ name: 'Haz', gelir: 152000 \},\
+];\
+\
+export default function RevenueChart() \{\
+  return (\
+    <div className="w-full h-[400px] min-h-[400px]">\
+      <ResponsiveContainer width="100%" height="100%">\
+        <BarChart\
+          data=\{data\}\
+          margin=\{\{\
+            top: 20,\
+            right: 30,\
+            left: 20,\
+            bottom: 5,\
+          \}\}\
+        >\
+          <CartesianGrid strokeDasharray="3 3" />\
+          <XAxis dataKey="name" />\
+          <YAxis />\
+          <Tooltip formatter=\{(value) => [`\uc0\u8378 $\{value.toLocaleString()\}`, 'Gelir']\} />\
+          <Legend />\
+          <Bar dataKey="gelir" fill="#4f46e5" name="Ayl\uc0\u305 k Gelir (\u8378 )" />\
+        </BarChart>\
+      </ResponsiveContainer>\
+    </div>\
+  );\
+\}\
+EOF}

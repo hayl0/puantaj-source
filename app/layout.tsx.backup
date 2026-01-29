@@ -1,0 +1,40 @@
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'Puantaj Pro | Ultimate Workforce Management',
+  description: 'Enterprise-grade employee tracking and management system',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="tr">
+      <body className={`${inter.className} bg-gray-50`}>
+        <div className="min-h-screen">
+          {/* Basit Navbar */}
+          <nav className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-xl font-bold text-gray-800">🏢 Puantaj Pro</h1>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Giriş Yap
+              </button>
+            </div>
+          </nav>
+          
+          <main className="p-6">
+            <div className="max-w-7xl mx-auto">
+              {children}
+            </div>
+          </main>
+        </div>
+      </body>
+    </html>
+  )
+}

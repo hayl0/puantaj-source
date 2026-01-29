@@ -41,15 +41,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-900;
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded-full;
+  background: hsl(var(--muted-foreground));
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
+  background: hsl(var(--accent));
 }
 
 /* Animations */
