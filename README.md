@@ -1,8 +1,8 @@
-# 🚀 Puantaj Plus - Ultra Premium Personel Takip Sistemi
+# 🚀 Puantaj Pro - Ultra Premium Personel Takip Sistemi
 
 **Profesyonel personel takip, puantaj ve finans yönetimi çözümü**
 
-![Puantaj Plus](https://img.shields.io/badge/Status-Production%20Ready-green)
+![Puantaj Pro](https://img.shields.io/badge/Status-Production%20Ready-green)
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4.19-38B2AC)
