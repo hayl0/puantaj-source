@@ -1,0 +1,154 @@
+"use client"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
+import { Download, Filter, Printer } from 'lucide-react'
+
+const attendanceData = [
+  { ay: 'Oca', oran: 92, devamsiz: 8 },
+  { ay: 'Şub', oran: 94, devamsiz: 6 },
+  { ay: 'Mar', oran: 96, devamsiz: 4 },
+  { ay: 'Nis', oran: 93, devamsiz: 7 },
+  { ay: 'May', oran: 95, devamsiz: 5 },
+  { ay: 'Haz', oran: 97, devamsiz: 3 },
+]
+
+const departmentData = [
+  { name: 'Yazılım', value: 12 },
+  { name: 'Satış', value: 8 },
+  { name: 'Muhasebe', value: 6 },
+  { name: 'İnsan Kaynakları', value: 5 },
+  { name: 'Pazarlama', value: 7 },
+  { name: 'Üretim', value: 9 },
+]
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D']
+
+export default function RaporlarPage() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+          Raporlar ve Analizler
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Detaylı raporlar ve performans analizleri
+        </p>
+      </div>
+
+      <div className="flex justify-end space-x-4">
+        <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center">
+          <Filter className="h-4 w-4 mr-2" />
+          Filtrele
+        </button>
+        <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg flex items-center">
+          <Printer className="h-4 w-4 mr-2" />
+          Yazdır
+        </button>
+        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center hover:bg-blue-700">
+          <Download className="h-4 w-4 mr-2" />
+          Excel İndir
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Devam Oranı Trendi</h3>
+          <div style={{ width: '100%', height: 300 }}>
+            <LineChart
+              width={500}
+              height={300}
+              data={attendanceData}
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="ay" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="oran" stroke="#8884d8" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="devamsiz" stroke="#82ca9d" />
+            </LineChart>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Departman Dağılımı</h3>
+          <div style={{ width: '100%', height: 300 }}>
+            <PieChart width={400} height={300}>
+              <Pie
+                data={departmentData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {departmentData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Performans Raporu</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b dark:border-gray-700">
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Departman</th>
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Personel</th>
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Devam Oranı</th>
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Verimlilik</th>
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Proje Tamam.</th>
+                <th className="text-left py-3 text-gray-700 dark:text-gray-300">Performans</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b dark:border-gray-700">
+                <td className="py-3 text-gray-800 dark:text-gray-200">Yazılım</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">12</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">96%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">92%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">15/16</td>
+                <td className="py-3">
+                  <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-2 py-1 rounded text-sm">
+                    Çok İyi
+                  </span>
+                </td>
+              </tr>
+              <tr className="border-b dark:border-gray-700">
+                <td className="py-3 text-gray-800 dark:text-gray-200">Satış</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">8</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">94%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">88%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">24/28</td>
+                <td className="py-3">
+                  <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2 py-1 rounded text-sm">
+                    İyi
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td className="py-3 text-gray-800 dark:text-gray-200">Muhasebe</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">6</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">98%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">95%</td>
+                <td className="py-3 text-gray-600 dark:text-gray-400">12/12</td>
+                <td className="py-3">
+                  <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-2 py-1 rounded text-sm">
+                    Çok İyi
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  )
+}

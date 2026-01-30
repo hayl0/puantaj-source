@@ -1,50 +1,50 @@
 "use client"
-import { Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
+import { Calendar, UserCheck, UserX, Clock } from 'lucide-react'
 import { useState } from 'react'
 
-const overtimeRequests = [
-  { id: 1, personel: 'Ahmet Yılmaz', tarih: '29.01.2024', sure: '2 saat', sebep: 'Proje teslimi', durum: 'Onaylandı' },
-  { id: 2, personel: 'Ayşe Demir', tarih: '28.01.2024', sure: '3 saat', sebep: 'Müşteri toplantısı', durum: 'Beklemede' },
-  { id: 3, personel: 'Mehmet Kaya', tarih: '27.01.2024', sure: '4 saat', sebep: 'Acil üretim', durum: 'Reddedildi' },
-  { id: 4, personel: 'Zeynep Türk', tarih: '26.01.2024', sure: '1.5 saat', sebep: 'Rapor hazırlama', durum: 'Onaylandı' },
+const leaveRequests = [
+  { id: 1, personel: 'Ahmet Yılmaz', tip: 'Yıllık İzin', baslangic: '01.02.2024', bitis: '07.02.2024', gun: '5', durum: 'Onaylandı' },
+  { id: 2, personel: 'Ayşe Demir', tip: 'Hastalık', baslangic: '29.01.2024', bitis: '31.01.2024', gun: '3', durum: 'Beklemede' },
+  { id: 3, personel: 'Mehmet Kaya', tip: 'Ücretsiz İzin', baslangic: '15.02.2024', bitis: '16.02.2024', gun: '2', durum: 'Reddedildi' },
+  { id: 4, personel: 'Zeynep Türk', tip: 'Doğum İzni', baslangic: '01.03.2024', bitis: '01.06.2024', gun: '65', durum: 'Onaylandı' },
 ]
 
-export default function MesaiPage() {
-  const [requests, setRequests] = useState(overtimeRequests)
+export default function IzinPage() {
+  const [requests, setRequests] = useState(leaveRequests)
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
-          Mesai Yönetimi
+          İzin Yönetimi
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Fazla mesai talepleri ve onay süreçleri
+          İzin talepleri ve onay süreçleri
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex items-center">
-            <Clock className="h-8 w-8 text-blue-500 mr-4" />
+            <Calendar className="h-8 w-8 text-blue-500 mr-4" />
             <div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">Toplam Mesai</p>
-              <p className="text-2xl font-bold dark:text-white">142 saat</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Toplam İzin</p>
+              <p className="text-2xl font-bold dark:text-white">75 gün</p>
             </div>
           </div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex items-center">
-            <CheckCircle className="h-8 w-8 text-green-500 mr-4" />
+            <UserCheck className="h-8 w-8 text-green-500 mr-4" />
             <div>
               <p className="text-gray-500 dark:text-gray-400 text-sm">Onaylanan</p>
-              <p className="text-2xl font-bold dark:text-white">24</p>
+              <p className="text-2xl font-bold dark:text-white">42</p>
             </div>
           </div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex items-center">
-            <AlertCircle className="h-8 w-8 text-yellow-500 mr-4" />
+            <Clock className="h-8 w-8 text-yellow-500 mr-4" />
             <div>
               <p className="text-gray-500 dark:text-gray-400 text-sm">Bekleyen</p>
               <p className="text-2xl font-bold dark:text-white">8</p>
@@ -53,7 +53,7 @@ export default function MesaiPage() {
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex items-center">
-            <XCircle className="h-8 w-8 text-red-500 mr-4" />
+            <UserX className="h-8 w-8 text-red-500 mr-4" />
             <div>
               <p className="text-gray-500 dark:text-gray-400 text-sm">Reddedilen</p>
               <p className="text-2xl font-bold dark:text-white">5</p>
@@ -64,9 +64,9 @@ export default function MesaiPage() {
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center">
-          <h2 className="text-xl font-semibold dark:text-white">Mesai Talepleri</h2>
+          <h2 className="text-xl font-semibold dark:text-white">İzin Talepleri</h2>
           <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Yeni Talep
+            Yeni İzin Talebi
           </button>
         </div>
         <div className="overflow-x-auto">
@@ -74,9 +74,10 @@ export default function MesaiPage() {
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
                 <th className="text-left p-4 text-gray-700 dark:text-gray-300">Personel</th>
-                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Tarih</th>
-                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Süre</th>
-                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Sebep</th>
+                <th className="text-left p-4 text-gray-700 dark:text-gray-300">İzin Tipi</th>
+                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Başlangıç</th>
+                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Bitiş</th>
+                <th className="text-left p-4 text-gray-700 dark:text-gray-300">Gün</th>
                 <th className="text-left p-4 text-gray-700 dark:text-gray-300">Durum</th>
                 <th className="text-left p-4 text-gray-700 dark:text-gray-300">İşlemler</th>
               </tr>
@@ -85,9 +86,10 @@ export default function MesaiPage() {
               {requests.map((request) => (
                 <tr key={request.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900">
                   <td className="p-4 dark:text-white">{request.personel}</td>
-                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.tarih}</td>
-                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.sure}</td>
-                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.sebep}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.tip}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.baslangic}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.bitis}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-400">{request.gun} gün</td>
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded text-sm ${
                       request.durum === 'Onaylandı' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :

@@ -12,7 +12,7 @@ const data = [
 
 export default function RevenueChart() {
   return (
-    <div className="w-full h-[400px]">
+    <div style={{ width: '100%', height: '400px' }}>
       <BarChart
         width={800}
         height={400}
