@@ -127,7 +127,10 @@ export const authOptions: NextAuthOptions = {
             const isPasswordValid = await compare(credentials.password, user.password);
             if (isPasswordValid) {
               // Check verification
-              if (!user.emailVerified) {
+              // Enforce verification only for users created after the feature launch (2026-02-01)
+              // This ensures existing users (including today's registrations) can login without verification
+              const FEATURE_LAUNCH_DATE = new Date('2026-02-01T00:00:00Z');
+              if (!user.emailVerified && user.createdAt > FEATURE_LAUNCH_DATE) {
                 throw new Error("Lütfen email adresinizi doğrulayın.");
               }
 
@@ -157,9 +160,9 @@ export const authOptions: NextAuthOptions = {
             const isPasswordValid = await compare(credentials.password, employee.password);
             if (isPasswordValid) {
               // Check verification
-              // Enforce verification only for employees created after the feature launch (2026-01-31)
-              const FEATURE_LAUNCH_DATE = new Date('2026-01-31T18:00:00Z');
-              if (!employee.emailVerified && employee.createdAt > FEATURE_LAUNCH_DATE) {
+              // Enforce verification only for employees created after the feature launch (2026-02-01)
+              const FEATURE_LAUNCH_DATE = new Date('2026-02-01T00:00:00Z');
+              if (!(employee as any).emailVerified && employee.createdAt > FEATURE_LAUNCH_DATE) {
                 throw new Error("Lütfen email adresinizi doğrulayın.");
               }
 

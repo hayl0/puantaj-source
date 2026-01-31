@@ -27,7 +27,11 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError('Geçersiz email veya şifre');
+        if (result.error === 'CredentialsSignin') {
+          setError('Geçersiz email veya şifre');
+        } else {
+          setError(result.error);
+        }
       } else {
         router.push('/dashboard');
         router.refresh();
