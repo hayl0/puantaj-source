@@ -39,8 +39,9 @@ export async function sendVerificationEmail(email: string, code: string) {
 
     console.log('Message sent: %s', info.messageId);
     return { success: true, messageId: info.messageId };
-  } catch (error) {
-    console.error('Email send failed:', error);
-    return { success: false, error };
+  } catch (error: any) {
+    console.error('Email send failed detailed:', JSON.stringify(error, null, 2));
+    console.error('Email send failed message:', error.message);
+    return { success: false, error: error.message || error };
   }
 }
