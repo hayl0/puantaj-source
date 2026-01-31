@@ -1,132 +1,110 @@
+
 "use client";
 
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
 import { 
   Home, Users, Calendar, Clock, CreditCard, 
-  BarChart3, Settings, LogOut, PieChart,
-  FileText, HelpCircle, FileCheck, Briefcase
+  BarChart3, Settings, Briefcase
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { Logo } from '@/components/ui/Logo';
 
 const allNavItems = [
-  { icon: Home, label: 'Dashboard', href: '/dashboard', roles: ['admin', 'user'] },
+  { icon: Home, label: 'Dashboard', href: '/dashboard', roles: ['admin', 'user', 'personnel'] },
   { icon: Users, label: 'Personel', href: '/personel', roles: ['admin'] },
-  { icon: Calendar, label: 'Puantaj', href: '/puantaj', roles: ['admin', 'user'] },
-  { icon: Clock, label: 'Mesai', href: '/mesai', roles: ['admin', 'user'] },
-  { icon: Briefcase, label: 'Vardiya', href: '/vardiya', roles: ['admin', 'user'] },
-  { icon: FileCheck, label: 'İzinler', href: '/izin', roles: ['admin', 'user'] },
-  { icon: CreditCard, label: 'Maaş', href: '/maas', roles: ['admin'] },
-  { icon: PieChart, label: 'Finans', href: '/finans', roles: ['admin'] },
-  { icon: FileText, label: 'Raporlar', href: '/raporlar', roles: ['admin'] },
+  { icon: Calendar, label: 'Puantaj', href: '/puantaj', roles: ['admin', 'user', 'personnel'] },
+  { icon: Clock, label: 'Mesai', href: '/mesai', roles: ['admin', 'user', 'personnel'] },
+  { icon: Briefcase, label: 'İzin', href: '/izin', roles: ['admin', 'user', 'personnel'] },
+  { icon: CreditCard, label: 'Maaş', href: '/maas', roles: ['admin', 'user', 'personnel'] },
+  { icon: BarChart3, label: 'Finans', href: '/finans', roles: ['admin'] },
+  { icon: BarChart3, label: 'Raporlar', href: '/raporlar', roles: ['admin'] },
   { icon: Settings, label: 'Ayarlar', href: '/ayarlar', roles: ['admin'] },
-  { icon: HelpCircle, label: 'Yardım', href: '/yardim', roles: ['admin', 'user'] },
 ];
 
 export default function PremiumSidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const userRole = (session?.user as any)?.role || 'user';
+  const userRole = (session?.user as any)?.role || 'user'; // Default to user if unknown, but 'personnel' will be explicit
 
-  const filteredNavItems = allNavItems.filter(item => item.roles.includes(userRole));
+  // Filter items based on role
+  // If role is 'user' (which is actually Admin in our schema default, but let's be careful),
+  // In authOptions: User -> role: user.role (default 'user').
+  // Employee -> role: 'personnel'.
+  // So 'user' usually means Admin/Owner. 'personnel' means Employee.
+  // I will treat 'user' and 'admin' as having full access for now, or check schema default.
+  // Schema: role String @default("user").
+  // So Admins have role 'user' by default unless changed.
+  // But wait, my Admin Register API sets role: 'admin'.
+  // So new Admins are 'admin'. Old/Demo might be 'user'.
+  // I should treat 'admin' AND 'user' (legacy admin) as privileged, and 'personnel' as restricted.
+  
+  const isAdmin = userRole === 'admin' || userRole === 'user';
+
+  const filteredNavItems = allNavItems.filter(item => {
+    if (isAdmin) return true; // Admins see everything
+    return item.roles.includes('personnel'); // Personnel only see their allowed items
+  });
 
   return (
-    <motion.aside 
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-      className="w-72 bg-card/50 backdrop-blur-xl border-r border-border h-screen sticky top-0 flex flex-col z-40 hidden lg:flex"
-    >
-      <div className="p-6">
-        <div className="flex items-center gap-3">
-          <div className="relative w-12 h-12">
-            <Image 
-              src="/logo.svg" 
-              alt="Puantaj Pro Logo" 
-              fill 
-              className="object-contain drop-shadow-lg"
-            />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              Puantaj Pro
-            </h1>
-            <p className="text-xs text-muted-foreground font-medium tracking-wide">ULTRA PREMIUM</p>
-          </div>
+    <aside className="w-72 bg-card/80 dark:bg-slate-950/80 backdrop-blur-xl border-r border-border/50 flex flex-col shadow-2xl z-40">
+      <div className="p-8 pb-4">
+        <Logo 
+          textClassName="text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400" 
+        />
+        <div className="mt-6 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/10 backdrop-blur-sm">
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold mb-0.5">
+            {isAdmin ? 'YÖNETİCİ HESABI' : 'PERSONEL HESABI'}
+          </p>
+          <p className="text-sm font-bold text-foreground truncate">
+            {session?.user?.name || 'Kullanıcı'}
+          </p>
         </div>
       </div>
       
-      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto py-4 scrollbar-hide">
-        <div className="px-4 pb-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Menü</p>
-        </div>
+      <nav className="flex-1 px-4 space-y-2 overflow-y-auto py-4">
         {filteredNavItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           return (
             <Link
-              key={item.href}
+              key={item.label}
               href={item.href}
-              className="block"
+              className={cn(
+                "flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group relative overflow-hidden",
+                isActive 
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              )}
             >
-              <div
-                className={cn(
-                  "relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group overflow-hidden",
-                  isActive 
-                    ? "text-primary-foreground font-medium shadow-md shadow-primary/20" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                )}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-primary rounded-xl"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-                
-                <item.icon className={cn("w-5 h-5 relative z-10", isActive ? "text-primary-foreground" : "group-hover:text-primary transition-colors")} />
-                <span className="relative z-10">{item.label}</span>
-                
-                {!isActive && (
-                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                )}
-              </div>
+              {isActive && (
+                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent pointer-events-none" />
+              )}
+              <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-muted-foreground group-hover:text-primary")} />
+              <span className="font-medium">{item.label}</span>
+              {isActive && (
+                <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-white shadow-sm animate-pulse" />
+              )}
             </Link>
           );
         })}
       </nav>
-      
-      <div className="p-4 mt-auto">
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/10 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Settings className="w-16 h-16 text-primary" />
-          </div>
-          
-          <div className="flex items-center gap-3 mb-3 relative z-10">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-purple-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg uppercase">
-              {session?.user?.name?.substring(0, 1) || 'U'}
-            </div>
-            <div className="overflow-hidden">
-              <p className="font-semibold truncate text-foreground">{session?.user?.name || 'Kullanıcı'}</p>
-              <p className="text-xs text-muted-foreground truncate">{session?.user?.email || 'user@puantaj.com'}</p>
+
+      <div className="p-4 mx-4 mb-4 rounded-2xl bg-gradient-to-br from-secondary/50 to-secondary/30 border border-border/50 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 p-0.5">
+            <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
+              <span className="font-bold text-primary">
+                {session?.user?.name?.charAt(0).toUpperCase() || 'U'}
+              </span>
             </div>
           </div>
-          
-          <Button 
-            variant="ghost" 
-            className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 gap-2 h-9"
-            onClick={() => signOut({ callbackUrl: '/login' })}
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Çıkış Yap</span>
-          </Button>
+          <div className="flex-1 overflow-hidden">
+            <p className="font-medium truncate">{session?.user?.name || 'Kullanıcı'}</p>
+            <p className="text-xs text-muted-foreground truncate capitalize">{userRole === 'user' ? 'Yönetici' : userRole}</p>
+          </div>
         </div>
       </div>
-    </motion.aside>
+    </aside>
   );
 }

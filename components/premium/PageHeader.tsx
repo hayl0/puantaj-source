@@ -1,7 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface PageHeaderProps {
   title: string;
@@ -12,31 +10,19 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, children, className }: PageHeaderProps) {
   return (
-    <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8", className)}>
-      <motion.div 
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-          {title}
-        </h1>
+    <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-100 dark:border-gray-800", className)}>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h1>
         {description && (
-          <p className="text-muted-foreground mt-2 text-lg">
+          <p className="text-muted-foreground mt-1 text-sm">
             {description}
           </p>
         )}
-      </motion.div>
-      
+      </div>
       {children && (
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex items-center gap-3 w-full md:w-auto"
-        >
+        <div className="flex items-center gap-2">
           {children}
-        </motion.div>
+        </div>
       )}
     </div>
   );

@@ -1,55 +1,68 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { PageHeader } from '@/components/premium/PageHeader';
-import { PuantajGrid, AggregateStats } from '@/components/premium/PuantajGrid';
+import { PuantajGrid } from '@/components/premium/PuantajGrid';
 import { PremiumCard } from '@/components/premium/PremiumCard';
 import { Button } from '@/components/ui/button';
 import { Download, Upload, Filter, CheckCircle2, Clock, XCircle, Plane, FileText } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-
-const mockEmployees = [
-  { id: "1", name: "Ahmet Yılmaz", department: "Yazılım" },
-  { id: "2", name: "Ayşe Demir", department: "Tasarım" },
-  { id: "3", name: "Mehmet Kaya", department: "Pazarlama" },
-  { id: "4", name: "Fatma Şahin", department: "İnsan Kaynakları" },
-  { id: "5", name: "Can Yıldız", department: "Yazılım" },
-  { id: "6", name: "Zeynep Arslan", department: "Satış" },
-  { id: "7", name: "Ali Veli", department: "Operasyon" },
-  { id: "8", name: "Murat Can", department: "Yazılım" },
-  { id: "9", name: "Selin Yücel", department: "Tasarım" },
-  { id: "10", name: "Burak Öz", department: "Pazarlama" },
-];
+import { useToast } from '@/hooks/use-toast';
 
 export default function PuantajPage() {
   const { data: session } = useSession();
+  const { toast } = useToast();
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const userRole = (session?.user as any)?.role || 'user';
   const userName = session?.user?.name || 'Kullanıcı';
+  const userEmail = session?.user?.email;
 
-  const [gridStats, setGridStats] = useState<AggregateStats>({
-    present: 0,
-    half: 0,
-    absent: 0,
-    leave: 0,
-    report: 0
-  });
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch('/api/employees');
+        if (res.ok) {
+          const data = await res.json();
+          
+          if (userRole === 'personnel' || userRole === 'user') {
+            // Filter for self if not admin
+            // Note: This is client-side filtering. For security, API should handle this.
+            // But for now, we just want to show the correct view.
+            const self = data.filter((e: any) => e.email === userEmail);
+            setEmployees(self);
+          } else {
+            setEmployees(data);
+          }
+        } else {
+          console.error("Failed to fetch employees");
+          toast({
+            variant: "destructive",
+            title: "Hata",
+            description: "Personel listesi yüklenemedi.",
+          });
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // If user, filter to show only themselves (mocking by name matching or just showing first one if no match)
-  const displayedEmployees = useMemo(() => {
-    return userRole === 'admin' 
-      ? mockEmployees 
-      : mockEmployees.filter(e => e.name === userName).length > 0 
-        ? mockEmployees.filter(e => e.name === userName)
-        : [mockEmployees[0]]; // Fallback for demo if name doesn't match
-  }, [userRole, userName]);
+    if (session) {
+      fetchEmployees();
+    }
+  }, [session, userRole, userEmail, toast]);
 
-  // Stats based on grid calculations
+  // Placeholder stats - in a real app these would be calculated from the grid data
   const stats = [
-    { label: 'Tam Gün', value: gridStats.present.toString(), icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10' },
-    { label: 'Yarım Gün', value: gridStats.half.toString(), icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { label: 'Devamsız', value: gridStats.absent.toString(), icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10' },
-    { label: 'İzinli', value: gridStats.leave.toString(), icon: Plane, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { label: 'Raporlu', value: gridStats.report.toString(), icon: FileText, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+    { label: 'Tam Gün', value: '0', icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10' },
+    { label: 'Yarım Gün', value: '0', icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { label: 'Devamsız', value: '0', icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10' },
+    { label: 'İzinli', value: '0', icon: Plane, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { label: 'Raporlu', value: '0', icon: FileText, color: 'text-orange-500', bg: 'bg-orange-500/10' },
   ];
 
   return (
@@ -95,11 +108,11 @@ export default function PuantajPage() {
       </div>
 
       <div className={userRole !== 'admin' ? "pointer-events-none opacity-90" : ""}>
-         {/* Using pointer-events-none for read-only effect for non-admins for now */}
-        <PuantajGrid 
-          employees={displayedEmployees} 
-          onStatsChange={setGridStats}
-        />
+        {loading ? (
+           <div className="flex justify-center p-8 text-muted-foreground">Yükleniyor...</div>
+        ) : (
+           <PuantajGrid employees={employees} />
+        )}
       </div>
     </div>
   );

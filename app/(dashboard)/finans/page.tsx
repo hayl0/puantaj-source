@@ -7,25 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp, TrendingDown, DollarSign, 
-  ArrowUpRight, ArrowDownRight, Download, Filter,
-  CreditCard, Wallet, Building, MoreHorizontal
+  ArrowUpRight, ArrowDownRight, Download, Filter 
 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const incomeData = [
   { month: 'Oca', income: 45000, expense: 32000 },
@@ -43,16 +30,15 @@ const expenseCategories = [
   { name: 'Vergi & Stopaj', value: 10, color: '#f59e0b' },
 ];
 
-const transactions = [
-  { id: 1, desc: 'Haziran Ayı Maaş Ödemeleri', category: 'Maaş', amount: -125000, date: '30 Haz 2024', status: 'completed' },
-  { id: 2, desc: 'ABC Lojistik Fatura Ödemesi', category: 'Satış', amount: 45000, date: '29 Haz 2024', status: 'completed' },
-  { id: 3, desc: 'AWS Sunucu Giderleri', category: 'Altyapı', amount: -450, date: '28 Haz 2024', status: 'pending' },
-  { id: 4, desc: 'Ofis Kira Ödemesi', category: 'Kira', amount: -15000, date: '27 Haz 2024', status: 'completed' },
-  { id: 5, desc: 'XYZ Yazılım Danışmanlık', category: 'Hizmet', amount: 28000, date: '26 Haz 2024', status: 'completed' },
-];
-
-export default function FinansPage() {
+export default function FinancePage() {
+  const { data: session } = useSession();
   const { theme } = useTheme();
+  
+  // Protect Admin Route
+  const userRole = (session?.user as any)?.role;
+  if (session && userRole !== 'admin' && userRole !== 'user') {
+    redirect('/dashboard');
+  }
 
   return (
     <div className="space-y-6">
@@ -60,20 +46,18 @@ export default function FinansPage() {
         title="Finansal Genel Bakış" 
         description="Şirket gelir/gider durumu ve finansal raporlar"
       >
-        <div className="flex gap-2">
-            <Button variant="outline" className="gap-2">
-            <Filter className="w-4 h-4" />
-            Filtrele
-            </Button>
-            <Button className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/20">
-            <Download className="w-4 h-4" />
-            Rapor İndir
-            </Button>
-        </div>
+        <Button variant="outline" className="gap-2">
+          <Filter className="w-4 h-4" />
+          Filtrele
+        </Button>
+        <Button className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/20">
+          <Download className="w-4 h-4" />
+          Rapor İndir
+        </Button>
       </PageHeader>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Summary Cards */}
         <PremiumCard className="md:col-span-2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
           <div className="p-2">
             <p className="text-blue-100 font-medium mb-1">Toplam Net Kâr (Yıllık)</p>
@@ -114,11 +98,9 @@ export default function FinansPage() {
             <h3 className="text-2xl font-bold mt-1">₺42,000</h3>
           </div>
         </PremiumCard>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Charts */}
-        <PremiumCard className="lg:col-span-2" title="Gelir & Gider Analizi">
+        <PremiumCard className="md:col-span-3" title="Gelir & Gider Analizi">
           <div className="h-[400px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={incomeData}>
@@ -165,133 +147,33 @@ export default function FinansPage() {
           </div>
         </PremiumCard>
 
-        {/* Expense Distribution & Quick Stats */}
-        <div className="space-y-6">
-            <PremiumCard title="Gider Dağılımı">
-            <div className="space-y-6 mt-4">
-                {expenseCategories.map((item, index) => (
-                <div key={index} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                    <span className="font-medium">{item.name}</span>
-                    <span className="text-muted-foreground">%{item.value}</span>
-                    </div>
-                    <Progress 
-                    value={item.value} 
-                    className="h-2" 
-                    indicatorColor={item.color}
-                    />
+        {/* Expense Distribution */}
+        <PremiumCard className="md:col-span-1" title="Gider Dağılımı">
+          <div className="space-y-6 mt-4">
+            {expenseCategories.map((item, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="font-medium">{item.name}</span>
+                  <span className="text-muted-foreground">%{item.value}</span>
                 </div>
-                ))}
-            </div>
-            </PremiumCard>
-            
-            <PremiumCard title="Varlıklar">
-                <div className="space-y-4 mt-2">
-                    <div className="flex items-center justify-between p-3 bg-card/50 border rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg">
-                                <Wallet className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="font-medium text-sm">Kasa Nakit</p>
-                                <p className="text-xs text-muted-foreground">Ana Kasa</p>
-                            </div>
-                        </div>
-                        <p className="font-bold">₺12,450</p>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-card/50 border rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-lg">
-                                <Building className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="font-medium text-sm">Banka</p>
-                                <p className="text-xs text-muted-foreground">İş Bankası</p>
-                            </div>
-                        </div>
-                        <p className="font-bold">₺145,200</p>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-card/50 border rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 rounded-lg">
-                                <CreditCard className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="font-medium text-sm">Kredi Kartı</p>
-                                <p className="text-xs text-muted-foreground">Limit</p>
-                            </div>
-                        </div>
-                        <p className="font-bold">₺50,000</p>
-                    </div>
-                </div>
-            </PremiumCard>
-        </div>
-      </div>
-
-      {/* Recent Transactions Table */}
-      <PremiumCard title="Son Finansal İşlemler">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>İşlem Açıklaması</TableHead>
-              <TableHead>Kategori</TableHead>
-              <TableHead>Tarih</TableHead>
-              <TableHead>Durum</TableHead>
-              <TableHead className="text-right">Tutar</TableHead>
-              <TableHead className="w-[50px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow key={transaction.id} className="group cursor-pointer hover:bg-muted/50">
-                <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${transaction.amount > 0 ? 'bg-green-100 text-green-600 dark:bg-green-900/30' : 'bg-red-100 text-red-600 dark:bg-red-900/30'}`}>
-                            {transaction.amount > 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                        </div>
-                        {transaction.desc}
-                    </div>
-                </TableCell>
-                <TableCell>
-                    <Badge variant="secondary" className="font-normal">
-                        {transaction.category}
-                    </Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground">{transaction.date}</TableCell>
-                <TableCell>
-                    <Badge 
-                        variant="outline" 
-                        className={
-                            transaction.status === 'completed' 
-                            ? 'text-green-600 border-green-200 bg-green-50 dark:bg-green-900/10' 
-                            : 'text-orange-600 border-orange-200 bg-orange-50 dark:bg-orange-900/10'
-                        }
-                    >
-                        {transaction.status === 'completed' ? 'Tamamlandı' : 'Bekliyor'}
-                    </Badge>
-                </TableCell>
-                <TableCell className={`text-right font-bold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {transaction.amount > 0 ? '+' : ''}₺{Math.abs(transaction.amount).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="w-4 h-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Detayları Gör</DropdownMenuItem>
-                            <DropdownMenuItem>Faturayı İndir</DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">İşlemi İptal Et</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </TableCell>
-              </TableRow>
+                <Progress 
+                  value={item.value} 
+                  className="h-2" 
+                  indicatorColor={item.color}
+                  style={{
+                    '--progress-background': item.color
+                  } as any}
+                />
+              </div>
             ))}
-          </TableBody>
-        </Table>
-      </PremiumCard>
+            <div className="pt-4 border-t">
+              <p className="text-xs text-muted-foreground text-center">
+                Toplam aylık giderlerin kategori bazlı dağılımı
+              </p>
+            </div>
+          </div>
+        </PremiumCard>
+      </div>
     </div>
   );
 }

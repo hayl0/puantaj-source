@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -12,29 +13,62 @@ model User {
   name          String?
   password      String
   role          String    @default("user")
+  emailVerified DateTime?
+  verificationCode String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  employees     Employee[]
+  attendances   Attendance[]
+  payrolls      Payroll[]
+  leaves        Leave[]
+  shifts        Shift[]
+}
+
+model Payroll {
+  id            String    @id @default(cuid())
+  month         String    // Format: YYYY-MM
+  amount        Float
+  status        String    // pending, paid
+  generatedAt   DateTime  @default(now())
+  paidAt        DateTime?
+
+  employee      Employee  @relation(fields: [employeeId], references: [id])
+  employeeId    String
+
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String
 }
 
 model Employee {
   id            String    @id @default(cuid())
   name          String
+  email         String?   @unique
+  password      String?   // Hashed password for login
   department    String
   position      String
   salary        Float
+  paymentType   String    @default("monthly") // monthly, hourly, daily
+  emailVerified DateTime?
+  verificationCode String?
   hireDate      DateTime
   createdAt     DateTime  @default(now())
   
   user          User      @relation(fields: [userId], references: [id])
   userId        String
+
+  attendances   Attendance[]
+  payrolls      Payroll[]
+  leaves        Leave[]
+  shifts        Shift[]
 }
 
 model Attendance {
   id            String    @id @default(cuid())
   date          DateTime
-  checkIn       DateTime
-  checkOut      DateTime
-  hours         Float
+  checkIn       DateTime?
+  checkOut      DateTime?
+  hours         Float?
   status        String
   
   employee      Employee  @relation(fields: [employeeId], references: [id])
@@ -42,4 +76,41 @@ model Attendance {
   
   user          User      @relation(fields: [userId], references: [id])
   userId        String
+
+  @@unique([employeeId, date])
+}
+
+model Leave {
+  id          String    @id @default(cuid())
+  type        String    // Yıllık İzin, Hastalık İzni, Mazeret İzni
+  startDate   DateTime
+  endDate     DateTime
+  days        Int
+  status      String    @default("pending") // pending, approved, rejected
+  reason      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  employeeId  String
+
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+model Shift {
+  id          String    @id @default(cuid())
+  name        String    // Gündüz, Akşam, Gece
+  startTime   String    // 08:00
+  endTime     String    // 17:00
+  date        DateTime
+  
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  employeeId  String
+
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

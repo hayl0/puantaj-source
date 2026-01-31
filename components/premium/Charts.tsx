@@ -1,236 +1,189 @@
 "use client";
 
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Line,
-  LineChart,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { useTheme } from "next-themes";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, TrendingUp } from "lucide-react";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Line, LineChart, PieChart, Pie, Cell, Area, AreaChart, Legend } from "recharts";
 
-const revenueData = [
-  { name: "Ocak", total: 4500, previous: 4000 },
-  { name: "Şubat", total: 5200, previous: 4200 },
-  { name: "Mart", total: 4800, previous: 4500 },
-  { name: "Nisan", total: 6100, previous: 4800 },
-  { name: "Mayıs", total: 5500, previous: 5000 },
-  { name: "Haziran", total: 6700, previous: 5200 },
-  { name: "Temmuz", total: 7200, previous: 5800 },
+const data = [
+  { name: "Oca", total: 1200 },
+  { name: "Şub", total: 1800 },
+  { name: "Mar", total: 2200 },
+  { name: "Nis", total: 2600 },
+  { name: "May", total: 3200 },
+  { name: "Haz", total: 3800 },
 ];
 
-const workHoursData = [
-  { name: "Pzt", hours: 8.5 },
-  { name: "Sal", hours: 9.2 },
-  { name: "Çar", hours: 8.8 },
-  { name: "Per", hours: 9.5 },
-  { name: "Cum", hours: 7.5 },
-  { name: "Cmt", hours: 4.0 },
-  { name: "Paz", hours: 0 },
-];
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background/90 backdrop-blur-md border border-border/50 p-3 rounded-xl shadow-xl">
+        <p className="font-semibold mb-1 text-foreground">{label}</p>
+        <p className="text-primary font-bold">
+          {typeof payload[0].value === 'number' 
+            ? `₺${payload[0].value.toLocaleString()}` 
+            : payload[0].value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
 
-const departmentData = [
-  { name: "Yazılım", value: 35, color: "hsl(var(--chart-1))" },
-  { name: "İK", value: 15, color: "hsl(var(--chart-2))" },
-  { name: "Satış", value: 25, color: "hsl(var(--chart-3))" },
-  { name: "Pazarlama", value: 20, color: "hsl(var(--chart-4))" },
-  { name: "Yönetim", value: 5, color: "hsl(var(--chart-5))" },
-];
+const CustomTooltipSimple = ({ active, payload, label, unit = "" }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background/90 backdrop-blur-md border border-border/50 p-3 rounded-xl shadow-xl">
+        <p className="font-semibold mb-1 text-foreground">{label}</p>
+        <p className="text-primary font-bold">
+          {payload[0].value} {unit}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export function RevenueChart() {
-  const { theme } = useTheme();
-
   return (
-    <Card className="col-span-4 lg:col-span-2 glass-card border-0 shadow-2xl overflow-hidden relative group">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            Aylık Gelir Analizi
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Geçen yıla göre <span className="text-green-500 font-bold">+12.5%</span> artış
-          </p>
-        </div>
-        <div className="p-2 bg-primary/10 rounded-xl">
-          <TrendingUp className="w-5 h-5 text-primary" />
-        </div>
-      </CardHeader>
-      <CardContent className="pl-0">
-        <div className="h-[300px] w-full mt-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={revenueData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="colorPrevious" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--secondary-foreground))" stopOpacity={0.1} />
-                  <stop offset="95%" stopColor="hsl(var(--secondary-foreground))" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis 
-                dataKey="name" 
-                stroke="#888888" 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
-              />
-              <YAxis 
-                stroke="#888888" 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
-                tickFormatter={(value) => `₺${value}`} 
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.8)", 
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "12px", 
-                  border: "none",
-                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" 
-                }}
-                labelStyle={{ color: "#666" }}
-              />
-              <Area
-                type="monotone"
-                dataKey="total"
-                stroke="hsl(var(--primary))"
-                strokeWidth={3}
-                fillOpacity={1}
-                fill="url(#colorTotal)"
-              />
-              <Area
-                type="monotone"
-                dataKey="previous"
-                stroke="hsl(var(--muted-foreground))"
-                strokeWidth={2}
-                strokeDasharray="5 5"
-                fillOpacity={1}
-                fill="url(#colorPrevious)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
-    </Card>
-  );
+    <ResponsiveContainer width="100%" height={350}>
+      <AreaChart data={data}>
+        <defs>
+          <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4}/>
+            <stop offset="50%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+          </linearGradient>
+          <filter id="glow" height="300%" width="300%" x="-100%" y="-100%">
+            <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+        <XAxis 
+          dataKey="name" 
+          stroke="#888888" 
+          fontSize={12} 
+          tickLine={false} 
+          axisLine={false} 
+          dy={10}
+          tick={{ fill: '#6b7280' }}
+        />
+        <YAxis 
+          stroke="#888888" 
+          fontSize={12} 
+          tickLine={false} 
+          axisLine={false} 
+          tickFormatter={(value) => `₺${value}`} 
+          dx={-10}
+          tick={{ fill: '#6b7280' }}
+        />
+        <Tooltip 
+          content={<CustomTooltip />} 
+          cursor={{ stroke: '#8b5cf6', strokeWidth: 1, strokeDasharray: '5 5' }} 
+        />
+        <Area 
+          type="monotone" 
+          dataKey="total" 
+          stroke="#8b5cf6" 
+          strokeWidth={4}
+          fillOpacity={1} 
+          fill="url(#colorTotal)" 
+          filter="url(#glow)"
+          animationDuration={1500}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
 }
+
+const workData = [
+  { name: "Pzt", hours: 8 },
+  { name: "Sal", hours: 9 },
+  { name: "Çar", hours: 8 },
+  { name: "Per", hours: 8.5 },
+  { name: "Cum", hours: 7.5 },
+];
 
 export function WorkHoursChart() {
   return (
-    <Card className="col-span-4 lg:col-span-1 glass-card border-0 shadow-2xl">
-      <CardHeader>
-        <CardTitle className="text-lg font-bold">Haftalık Mesai</CardTitle>
-        <p className="text-xs text-muted-foreground">Ortalama 7.8 saat / gün</p>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[200px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={workHoursData}>
-              <XAxis 
-                dataKey="name" 
-                stroke="#888888" 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
-              />
-              <Tooltip
-                cursor={{ fill: 'transparent' }}
-                contentStyle={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.8)", 
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "8px", 
-                  border: "none" 
-                }}
-              />
-              <Bar 
-                dataKey="hours" 
-                fill="hsl(var(--primary))" 
-                radius={[4, 4, 0, 0]} 
-                barSize={30}
-              >
-                {workHoursData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={entry.hours > 9 ? "hsl(var(--destructive))" : "hsl(var(--primary))"} 
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
-    </Card>
-  );
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={workData}>
+        <defs>
+          <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0ea5e9" stopOpacity={1}/>
+            <stop offset="100%" stopColor="#0284c7" stopOpacity={1}/>
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+        <XAxis 
+          dataKey="name" 
+          stroke="#888888" 
+          fontSize={12} 
+          tickLine={false} 
+          axisLine={false}
+          dy={10}
+        />
+        <YAxis 
+          stroke="#888888" 
+          fontSize={12} 
+          tickLine={false} 
+          axisLine={false}
+          dx={-10}
+        />
+        <Tooltip 
+          content={<CustomTooltipSimple unit="Saat" />}
+          cursor={{ fill: 'rgba(255,255,255,0.05)' }} 
+        />
+        <Bar 
+          dataKey="hours" 
+          fill="url(#colorHours)" 
+          radius={[8, 8, 0, 0]} 
+          maxBarSize={50} 
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  )
 }
+
+const deptData = [
+  { name: 'Yazılım', value: 400 },
+  { name: 'İK', value: 300 },
+  { name: 'Satış', value: 300 },
+  { name: 'Pazarlama', value: 200 },
+];
+const COLORS = ['#8b5cf6', '#0ea5e9', '#f59e0b', '#10b981'];
 
 export function DepartmentChart() {
   return (
-    <Card className="col-span-4 lg:col-span-1 glass-card border-0 shadow-2xl">
-      <CardHeader>
-        <CardTitle className="text-lg font-bold">Departman Dağılımı</CardTitle>
-        <p className="text-xs text-muted-foreground">Toplam 5 Departman</p>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[200px] w-full relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={departmentData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-                stroke="none"
-              >
-                {departmentData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.8)", 
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "8px", 
-                  border: "none" 
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
-              <span className="text-2xl font-bold">100</span>
-              <p className="text-xs text-muted-foreground">Personel</p>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2 justify-center">
-          {departmentData.map((entry) => (
-            <Badge key={entry.name} variant="secondary" className="bg-secondary/50 backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: entry.color }} />
-              {entry.name}
-            </Badge>
+    <ResponsiveContainer width="100%" height={350}>
+      <PieChart>
+        <Pie
+          data={deptData}
+          cx="50%"
+          cy="50%"
+          innerRadius={80}
+          outerRadius={110}
+          fill="#8884d8"
+          paddingAngle={5}
+          dataKey="value"
+        >
+          {deptData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} strokeWidth={0} />
           ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </Pie>
+        <Tooltip 
+           contentStyle={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+            backdropFilter: 'blur(10px)',
+            borderRadius: '12px',
+            border: '1px solid rgba(0,0,0,0.1)',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            color: '#1f2937'
+          }}
+          itemStyle={{ color: '#1f2937', fontWeight: 'bold' }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  )
 }
