@@ -17,35 +17,34 @@ export async function GET() {
   const whereUserId = { userId: userId };
 
   try {
-    // 1. Revenue Chart Data (Last 6 months estimated cost)
-    // Since we might not have historical payroll data, we can estimate based on current salaries
-    // Or use actual payrolls if available. Let's use a mix: Actual payrolls or current salary projection.
-    // For simplicity and "realness" feeling without much history, we'll project current salaries back 6 months
-    // but vary it slightly to look realistic if no actual payrolls exist.
-    
+    // 1. Revenue Chart Data (Last 6 months)
+    // Use actual payroll data
     const revenueData = [];
     const currentMonth = new Date();
     
-    // Get total monthly salary obligation
-    const employees = await prisma.employee.findMany({
-      where: whereUserId,
-      select: { salary: true, paymentType: true, department: true }
+    // Fetch actual payroll history
+    const historicalPayrolls = await prisma.payroll.groupBy({
+      by: ['month'],
+      where: {
+        userId: userId,
+        month: {
+          gte: format(subMonths(currentMonth, 5), 'yyyy-MM')
+        }
+      },
+      _sum: {
+        amount: true
+      }
     });
 
-    let baseMonthlyCost = 0;
-    employees.forEach(emp => {
-      if (emp.paymentType === 'monthly') baseMonthlyCost += emp.salary;
-      else if (emp.paymentType === 'hourly') baseMonthlyCost += emp.salary * 160;
-      else if (emp.paymentType === 'daily') baseMonthlyCost += emp.salary * 22;
-    });
+    // Create a map for easy lookup
+    const payrollMap = new Map(historicalPayrolls.map(p => [p.month, p._sum.amount || 0]));
 
     for (let i = 5; i >= 0; i--) {
       const date = subMonths(currentMonth, i);
+      const monthKey = format(date, 'yyyy-MM');
       const monthName = format(date, 'MMM', { locale: tr });
       
-      // Add some random variation if it's past months to simulate history
-      const variation = i === 0 ? 0 : (Math.random() * 0.1 - 0.05); // +/- 5%
-      const total = Math.round(baseMonthlyCost * (1 + variation));
+      const total = payrollMap.get(monthKey) || 0;
       
       revenueData.push({ name: monthName, total });
     }
@@ -77,6 +76,11 @@ export async function GET() {
     }
 
     // 3. Department Distribution
+    const employees = await prisma.employee.findMany({
+      where: whereUserId,
+      select: { department: true }
+    });
+
     const deptCounts: Record<string, number> = {};
     employees.forEach(emp => {
       const dept = emp.department || 'Diğer';

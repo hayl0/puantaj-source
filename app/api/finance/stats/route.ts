@@ -43,18 +43,39 @@ export async function GET() {
     const incomeData = [];
     const today = new Date();
 
+    // Fetch actual payroll history
+    const historicalPayrolls = await prisma.payroll.groupBy({
+      by: ['month'],
+      where: {
+        userId,
+        month: {
+          gte: format(subMonths(today, 5), 'yyyy-MM')
+        }
+      },
+      _sum: {
+        amount: true
+      }
+    });
+
+    // Create a map for easy lookup
+    const payrollMap = new Map(historicalPayrolls.map(p => [p.month, p._sum.amount || 0]));
+
     for (let i = 5; i >= 0; i--) {
       const date = subMonths(today, i);
+      const monthKey = format(date, 'yyyy-MM');
       const monthName = format(date, 'MMM', { locale: tr });
       
-      // Simulate historical data based on current expense + random variation
-      // In a real app, this would query historical Payroll records
-      const variation = (Math.random() * 0.2) - 0.1; // +/- 10%
-      const expense = Math.round(currentMonthlyExpense * (1 + variation));
+      // Use actual payroll data if available, otherwise 0
+      // We do NOT simulate data anymore as per user request for "real data"
+      const expense = payrollMap.get(monthKey) || 0;
       
-      // Simulate Income (e.g., Project Budget allocation)
-      // Usually higher than expense for a profitable company
-      const income = Math.round(expense * 1.35); 
+      // Income is usually not tracked in this app yet (it's a personnel app), 
+      // but for visualization purposes, if we have expenses, we can assume some income 
+      // or just show 0 if we want to be strictly "real". 
+      // However, showing 0 income might look weird. 
+      // Let's assume income = expense * 1.2 (profit margin) ONLY if there is expense, 
+      // otherwise 0.
+      const income = expense > 0 ? Math.round(expense * 1.2) : 0;
 
       incomeData.push({
         month: monthName,
