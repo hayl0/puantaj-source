@@ -18,7 +18,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-4 glass-card rounded-2xl border border-white/10 shadow-2xl bg-[#030712]/90 backdrop-blur-xl", className)}
+      className={cn("p-4 glass-card rounded-3xl border border-white/10 shadow-2xl bg-[#030712]/95 backdrop-blur-xl ring-1 ring-white/5", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4 w-full",
@@ -39,17 +39,17 @@ function Calendar({
         cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-xl [&:has([aria-selected].day-outside)]:bg-indigo-500/10 [&:has([aria-selected])]:bg-indigo-500/20 first:[&:has([aria-selected])]:rounded-l-xl last:[&:has([aria-selected])]:rounded-r-xl focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-10 w-10 p-0 font-normal aria-selected:opacity-100 rounded-xl transition-all hover:scale-110 hover:shadow-lg hover:bg-indigo-500/20 hover:text-indigo-400 text-slate-300 tabular-nums"
+          "h-10 w-10 p-0 font-normal aria-selected:opacity-100 rounded-xl transition-all hover:scale-110 hover:shadow-lg hover:bg-white/10 hover:text-white text-slate-300 tabular-nums"
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white focus:bg-indigo-700 focus:text-white shadow-lg shadow-indigo-500/25 font-bold scale-110 border border-indigo-400/20",
-        day_today: "bg-white/5 text-white font-bold border border-white/10",
+          "bg-white text-black hover:bg-white/90 hover:text-black focus:bg-white focus:text-black shadow-lg shadow-white/20 font-bold scale-110 border-none ring-0",
+        day_today: "bg-indigo-500/20 text-indigo-400 font-bold border border-indigo-500/50",
         day_outside:
-          "day-outside text-slate-700 opacity-50 aria-selected:bg-indigo-500/10 aria-selected:text-slate-500 aria-selected:opacity-30",
+          "day-outside text-slate-700 opacity-50 aria-selected:bg-white/5 aria-selected:text-slate-500 aria-selected:opacity-30",
         day_disabled: "text-slate-800 opacity-50",
         day_range_middle:
-          "aria-selected:bg-indigo-500/10 aria-selected:text-indigo-300",
+          "aria-selected:bg-white/5 aria-selected:text-white",
         day_hidden: "invisible",
         ...classNames,
       }}

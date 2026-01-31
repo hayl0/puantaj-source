@@ -10,7 +10,10 @@ import {
   FileText, 
   HelpCircle,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  MousePointer2,
+  CalendarDays,
+  Filter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -42,13 +45,13 @@ interface PuantajGridProps {
   onStatsChange?: (stats: any) => void;
 }
 
-const statusConfig: Record<StatusType, { icon: any, color: string, label: string, bg: string, border: string }> = {
-  present: { icon: CheckCircle2, color: "text-green-500", label: "Tam Gün", bg: "bg-green-100 dark:bg-green-900/30", border: "border-green-200 dark:border-green-800" },
-  absent: { icon: XCircle, color: "text-red-500", label: "Devamsız", bg: "bg-red-100 dark:bg-red-900/30", border: "border-red-200 dark:border-red-800" },
-  late: { icon: Clock, color: "text-yellow-500", label: "Yarım Gün", bg: "bg-yellow-100 dark:bg-yellow-900/30", border: "border-yellow-200 dark:border-yellow-800" },
-  leave: { icon: Plane, color: "text-purple-500", label: "İzinli", bg: "bg-purple-100 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-800" },
-  report: { icon: FileText, color: "text-orange-500", label: "Raporlu", bg: "bg-orange-100 dark:bg-orange-900/30", border: "border-orange-200 dark:border-orange-800" },
-  empty: { icon: HelpCircle, color: "text-gray-300", label: "Girilmemiş", bg: "bg-gray-50 dark:bg-gray-800/50", border: "border-gray-200 dark:border-gray-700" },
+const statusConfig: Record<StatusType, { icon: any, color: string, label: string, bg: string, border: string, glow: string }> = {
+  present: { icon: CheckCircle2, color: "text-emerald-500", label: "Tam Gün", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "shadow-emerald-500/20" },
+  absent: { icon: XCircle, color: "text-rose-500", label: "Devamsız", bg: "bg-rose-500/10", border: "border-rose-500/20", glow: "shadow-rose-500/20" },
+  late: { icon: Clock, color: "text-amber-500", label: "Yarım Gün", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "shadow-amber-500/20" },
+  leave: { icon: Plane, color: "text-violet-500", label: "İzinli", bg: "bg-violet-500/10", border: "border-violet-500/20", glow: "shadow-violet-500/20" },
+  report: { icon: FileText, color: "text-blue-500", label: "Raporlu", bg: "bg-blue-500/10", border: "border-blue-500/20", glow: "shadow-blue-500/20" },
+  empty: { icon: HelpCircle, color: "text-slate-400", label: "Boş", bg: "bg-transparent", border: "border-transparent", glow: "shadow-none" },
 };
 
 export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
@@ -57,6 +60,7 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
   
   const [attendanceData, setAttendanceData] = useState<Record<string, Record<number, StatusType>>>({});
   const [loading, setLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<StatusType | null>(null);
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -98,9 +102,18 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
 
   const toggleStatus = async (employeeId: string, day: number) => {
     const currentStatus = attendanceData[employeeId]?.[day] || 'empty';
-    const statusKeys = Object.keys(statusConfig) as StatusType[];
-    const currentIndex = statusKeys.indexOf(currentStatus);
-    const nextStatus = statusKeys[(currentIndex + 1) % statusKeys.length];
+    
+    let nextStatus: StatusType;
+
+    if (selectedStatus) {
+      // If a specific status is selected, use it (toggle off if already applied)
+      nextStatus = currentStatus === selectedStatus ? 'empty' : selectedStatus;
+    } else {
+      // Cycle through statuses
+      const statusKeys = Object.keys(statusConfig) as StatusType[];
+      const currentIndex = statusKeys.indexOf(currentStatus);
+      nextStatus = statusKeys[(currentIndex + 1) % statusKeys.length];
+    }
 
     // Optimistic update
     setAttendanceData(prev => ({
@@ -114,14 +127,15 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
     try {
       const month = currentDate.getMonth() + 1;
       const year = currentDate.getFullYear();
-      const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
       
       await fetch('/api/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           employeeId,
-          date: dateStr,
+          day,
+          month,
+          year,
           status: nextStatus
         })
       });
@@ -154,60 +168,109 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card/50 p-4 rounded-2xl border border-border/50 backdrop-blur-sm shadow-sm">
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={() => {
-              const newDate = new Date(currentDate);
-              newDate.setMonth(newDate.getMonth() - 1);
-              setCurrentDate(newDate);
-            }}
-            className="h-10 w-10 rounded-xl hover:bg-primary/10 hover:text-primary transition-all"
+    <div className="space-y-8 relative">
+      {/* Floating Toolbar - Canva Style */}
+      <div className="sticky top-4 z-40 flex justify-center mb-8 pointer-events-none">
+        <div className="glass-card p-1.5 rounded-full border border-white/10 shadow-2xl bg-[#030712]/80 backdrop-blur-xl flex items-center gap-1 pointer-events-auto transform hover:scale-105 transition-all duration-300 ring-1 ring-white/5">
+          <button
+            onClick={() => setSelectedStatus(null)}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm relative overflow-hidden",
+              selectedStatus === null 
+                ? 'bg-white text-black shadow-lg' 
+                : 'text-muted-foreground hover:text-white hover:bg-white/5'
+            )}
           >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-          <div className="text-center min-w-[160px]">
-            <h2 className="text-xl font-bold tracking-tight text-foreground">
-              {currentDate.toLocaleString('tr-TR', { month: 'long', year: 'numeric' })}
-            </h2>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Puantaj Dönemi</p>
-          </div>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={() => {
-              const newDate = new Date(currentDate);
-              newDate.setMonth(newDate.getMonth() + 1);
-              setCurrentDate(newDate);
-            }}
-            className="h-10 w-10 rounded-xl hover:bg-primary/10 hover:text-primary transition-all"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-        </div>
+            <MousePointer2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Seç</span>
+            {selectedStatus === null && <motion.div layoutId="activeTab" className="absolute inset-0 bg-white mix-blend-overlay opacity-20" />}
+          </button>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 max-w-full">
+          <div className="w-px h-6 bg-white/10 mx-1" />
+
           {Object.entries(statusConfig).map(([key, config]) => (
              key !== 'empty' && (
-              <div key={key} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${config.bg} ${config.border} transition-all hover:scale-105 cursor-help`}>
-                <config.icon className={`w-4 h-4 ${config.color}`} />
-                <span className={`text-xs font-semibold ${config.color}`}>{config.label}</span>
-              </div>
+              <TooltipProvider key={key}>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <button 
+                      onClick={() => setSelectedStatus(selectedStatus === key ? null : key as StatusType)}
+                      className={cn(
+                        "p-2.5 rounded-full transition-all duration-300 relative group",
+                        selectedStatus === key
+                          ? `bg-white/10 text-white shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] ring-1 ring-white/20`
+                          : `text-muted-foreground hover:text-white hover:bg-white/5`
+                      )}
+                    >
+                      <config.icon className={cn("w-5 h-5 transition-transform duration-300", selectedStatus === key ? "scale-110" : "group-hover:scale-110", config.color)} />
+                      {selectedStatus === key && (
+                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-[#030712]" />
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="glass-card border-white/10 text-white text-xs font-medium py-1 px-3">
+                    {config.label}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
              )
           ))}
         </div>
       </div>
 
-      <div className="glass-card rounded-2xl border border-border/50 overflow-hidden shadow-xl">
-        <div className="overflow-x-auto relative">
-          <table className="w-full text-sm">
+      <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center bg-card/30 rounded-2xl p-1 border border-white/5 backdrop-blur-sm">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={prevMonth}
+              className="h-10 w-10 rounded-xl hover:bg-white/5 hover:text-white transition-all"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <div className="px-6 text-center min-w-[180px]">
+              <h2 className="text-2xl font-bold tracking-tight text-white">
+                {currentDate.toLocaleString('tr-TR', { month: 'long' })}
+              </h2>
+              <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest opacity-60">
+                {currentDate.getFullYear()}
+              </p>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={nextMonth}
+              className="h-10 w-10 rounded-xl hover:bg-white/5 hover:text-white transition-all"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <Button variant="outline" className="hidden sm:flex h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 gap-2">
+            <CalendarDays className="w-4 h-4" />
+            Bugün
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="h-10 rounded-lg border-dashed border-white/20 text-muted-foreground hover:text-white hover:border-white/40 gap-2">
+            <Filter className="w-4 h-4" />
+            Filtrele
+          </Button>
+        </div>
+      </div>
+
+      <div className="glass-card rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-[#030712]/40 backdrop-blur-xl ring-1 ring-white/5">
+        <div className="overflow-x-auto relative custom-scrollbar">
+          <table className="w-full text-sm border-separate border-spacing-0">
             <thead>
-              <tr className="bg-secondary/50 border-b border-border/50">
-                <th className="p-4 text-left font-semibold text-muted-foreground sticky left-0 z-20 bg-background/95 backdrop-blur-sm border-r border-border/50 min-w-[200px] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
-                  Personel
+              <tr>
+                <th className="p-4 text-left font-semibold text-muted-foreground sticky left-0 z-20 bg-[#030712]/95 backdrop-blur-xl border-b border-r border-white/10 min-w-[220px] shadow-[4px_0_24px_-4px_rgba(0,0,0,0.5)]">
+                  <div className="flex items-center gap-2 pl-2">
+                    <span className="w-1 h-4 bg-primary rounded-full" />
+                    Personel Listesi
+                  </div>
                 </th>
                 {days.map(day => {
                   const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
@@ -215,37 +278,50 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                   const isToday = new Date().toDateString() === date.toDateString();
                   
                   return (
-                    <th key={day} className={`p-0 min-w-[40px] h-[50px] text-center border-r border-border/10 last:border-0 relative group/day ${isWeekend ? 'bg-indigo-500/5' : ''} ${isToday ? 'bg-indigo-500/20' : ''}`}>
-                      <div className={`flex flex-col items-center justify-center w-full h-full transition-colors ${isToday ? 'text-indigo-400 font-bold' : 'text-slate-400'}`}>
-                        <span className="text-[10px] uppercase tracking-wider opacity-60 font-mono">{date.toLocaleDateString('tr-TR', { weekday: 'short' }).slice(0, 2)}</span>
-                        <span className="text-sm font-medium tabular-nums">{day}</span>
+                    <th key={day} className={cn(
+                      "p-0 min-w-[44px] h-[60px] text-center border-b border-white/5 relative group/day transition-colors",
+                      isWeekend ? 'bg-white/[0.02]' : '',
+                      isToday ? 'bg-primary/10' : ''
+                    )}>
+                      <div className="flex flex-col items-center justify-center w-full h-full gap-0.5">
+                        <span className={cn(
+                          "text-[10px] uppercase tracking-wider font-mono transition-colors",
+                          isToday ? 'text-primary font-bold' : 'text-muted-foreground/60'
+                        )}>
+                          {date.toLocaleDateString('tr-TR', { weekday: 'short' }).slice(0, 2)}
+                        </span>
+                        <span className={cn(
+                          "text-sm font-medium tabular-nums transition-all group-hover/day:scale-110",
+                          isToday ? 'text-primary font-bold' : 'text-slate-300'
+                        )}>
+                          {day}
+                        </span>
                       </div>
-                      {/* Hover Effect */}
-                      <div className="absolute inset-0 bg-indigo-500/0 group-hover/day:bg-indigo-500/5 transition-colors pointer-events-none" />
+                      {isToday && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_-4px_12px_-2px_rgba(var(--primary),0.5)]" />}
                     </th>
                   );
                 })}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/30">
+            <tbody className="divide-y divide-white/5">
               {employees.map((employee, idx) => (
                 <motion.tr 
                   key={employee.id} 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="group hover:bg-secondary/30 transition-colors"
+                  transition={{ delay: idx * 0.03 }}
+                  className="group hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="p-4 sticky left-0 z-20 bg-background/95 backdrop-blur-sm border-r border-border/50 group-hover:bg-background/95 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9 border border-border/50 ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
-                        <AvatarFallback className="bg-gradient-to-br from-primary/80 to-violet-500/80 text-white text-xs">
+                  <td className="p-3 sticky left-0 z-20 bg-[#0b0f1a]/95 backdrop-blur-xl border-r border-white/5 group-hover:bg-[#111522]/95 transition-colors shadow-[4px_0_24px_-4px_rgba(0,0,0,0.2)]">
+                    <div className="flex items-center gap-3 pl-2">
+                      <Avatar className="h-9 w-9 border border-white/10 ring-2 ring-transparent group-hover:ring-primary/20 transition-all shadow-lg">
+                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-bold">
                           {employee.name.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="font-medium text-foreground">{employee.name}</span>
-                        <span className="text-[10px] text-muted-foreground">{employee.department || 'Genel'}</span>
+                        <span className="font-medium text-slate-200 group-hover:text-white transition-colors">{employee.name}</span>
+                        <span className="text-[10px] text-muted-foreground/80">{employee.department || 'Genel'}</span>
                       </div>
                     </div>
                   </td>
@@ -256,33 +332,38 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                     const isWeekend = date.getDay() === 0 || date.getDay() === 6;
                     
                     return (
-                      <td key={day} className={`p-0 h-[50px] text-center border-r border-border/10 last:border-0 relative ${isWeekend ? 'bg-indigo-500/5' : ''}`}>
-                        <TooltipProvider>
-                          <Tooltip delayDuration={0}>
-                            <TooltipTrigger asChild>
-                              <button
-                                onClick={() => toggleStatus(employee.id, day)}
-                                disabled={loading}
-                                className={cn(
-                                  "w-full h-full flex items-center justify-center transition-all duration-200 outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50",
-                                  status === 'empty' 
-                                    ? "hover:bg-indigo-500/10 text-transparent hover:text-indigo-500/30" 
-                                    : `${config.bg} ${config.color} hover:brightness-110 z-10`
-                                )}
-                              >
-                                {status === 'empty' ? (
-                                  <div className="w-1 h-1 rounded-full bg-white/5 group-hover:bg-indigo-500/30 transition-colors" />
-                                ) : (
-                                  <config.icon className="w-5 h-5" />
-                                )}
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top" className="text-xs font-semibold bg-[#030712] text-white border-white/10">
-                              <p>{date.toLocaleDateString('tr-TR')}</p>
-                              <p>{config.label}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                      <td key={day} className={cn(
+                        "p-1 text-center relative transition-all duration-300",
+                        isWeekend ? 'bg-white/[0.02]' : ''
+                      )}>
+                        <div className="w-full h-full flex items-center justify-center">
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  onClick={() => toggleStatus(employee.id, day)}
+                                  disabled={loading}
+                                  className={cn(
+                                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50",
+                                    status === 'empty' 
+                                      ? "hover:bg-white/10 text-transparent hover:text-white/20" 
+                                      : `${config.bg} ${config.color} ${config.border} border shadow-lg ${config.glow} hover:scale-110 hover:brightness-110`
+                                  )}
+                                >
+                                  {status === 'empty' ? (
+                                    <div className="w-1 h-1 rounded-full bg-white/5 group-hover:bg-white/20 transition-colors" />
+                                  ) : (
+                                    <config.icon className="w-4 h-4" />
+                                  )}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="text-xs font-semibold bg-[#030712] text-white border-white/10">
+                                <p>{date.toLocaleDateString('tr-TR')}</p>
+                                <p>{config.label}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
                       </td>
                     );
                   })}

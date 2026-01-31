@@ -2,14 +2,7 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Line, LineChart, PieChart, Pie, Cell, Area, AreaChart, Legend } from "recharts";
 
-const data = [
-  { name: "Oca", total: 1200 },
-  { name: "Şub", total: 1800 },
-  { name: "Mar", total: 2200 },
-  { name: "Nis", total: 2600 },
-  { name: "May", total: 3200 },
-  { name: "Haz", total: 3800 },
-];
+const data = [];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -41,7 +34,14 @@ const CustomTooltipSimple = ({ active, payload, label, unit = "" }: any) => {
   return null;
 };
 
-export function RevenueChart() {
+export function RevenueChart({ data }: { data?: any[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[350px] text-muted-foreground">
+        Veri bulunamadı
+      </div>
+    );
+  }
   return (
     <ResponsiveContainer width="100%" height={350}>
       <AreaChart data={data}>
@@ -97,18 +97,17 @@ export function RevenueChart() {
   )
 }
 
-const workData = [
-  { name: "Pzt", hours: 8 },
-  { name: "Sal", hours: 9 },
-  { name: "Çar", hours: 8 },
-  { name: "Per", hours: 8.5 },
-  { name: "Cum", hours: 7.5 },
-];
-
-export function WorkHoursChart() {
+export function WorkHoursChart({ data }: { data?: any[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[350px] text-muted-foreground">
+        Veri bulunamadı
+      </div>
+    );
+  }
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={workData}>
+      <BarChart data={data}>
         <defs>
           <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#0ea5e9" stopOpacity={1}/>
@@ -146,20 +145,21 @@ export function WorkHoursChart() {
   )
 }
 
-const deptData = [
-  { name: 'Yazılım', value: 400 },
-  { name: 'İK', value: 300 },
-  { name: 'Satış', value: 300 },
-  { name: 'Pazarlama', value: 200 },
-];
 const COLORS = ['#8b5cf6', '#0ea5e9', '#f59e0b', '#10b981'];
 
-export function DepartmentChart() {
+export function DepartmentChart({ data }: { data?: any[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[350px] text-muted-foreground">
+        Veri bulunamadı
+      </div>
+    );
+  }
   return (
     <ResponsiveContainer width="100%" height={350}>
       <PieChart>
         <Pie
-          data={deptData}
+          data={data}
           cx="50%"
           cy="50%"
           innerRadius={80}
@@ -168,7 +168,7 @@ export function DepartmentChart() {
           paddingAngle={5}
           dataKey="value"
         >
-          {deptData.map((entry, index) => (
+          {data?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} strokeWidth={0} />
           ))}
         </Pie>

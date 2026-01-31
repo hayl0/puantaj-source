@@ -15,32 +15,34 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, 
 import { useTheme } from 'next-themes';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-
-const overtimeData = [
-  { name: 'Pzt', hours: 4.5 },
-  { name: 'Sal', hours: 3.2 },
-  { name: 'Çar', hours: 5.8 },
-  { name: 'Per', hours: 2.1 },
-  { name: 'Cum', hours: 6.4 },
-  { name: 'Cmt', hours: 8.0 },
-  { name: 'Paz', hours: 0 },
-];
-
-const pendingRequests = [
-  { id: 1, name: 'Can Yıldız', reason: 'Proje Teslimi', date: '30 Ocak', hours: 3, status: 'pending' },
-  { id: 2, name: 'Zeynep Arslan', reason: 'Müşteri Toplantısı', date: '30 Ocak', hours: 2, status: 'pending' },
-];
-
-const recentActivity = [
-  { id: 1, name: 'Ahmet Yılmaz', type: 'approved', hours: 2.5, date: 'Dün', approver: 'Sistem' },
-  { id: 2, name: 'Mehmet Kaya', type: 'rejected', hours: 4, date: 'Dün', approver: 'Admin' },
-  { id: 3, name: 'Ayşe Demir', type: 'approved', hours: 1, date: '28 Ocak', approver: 'Sistem' },
-];
+import { useState, useEffect } from 'react';
 
 export default function MesaiPage() {
   const { theme } = useTheme();
   const { data: session } = useSession();
   const userRole = (session?.user as any)?.role || 'user';
+  
+  const [data, setData] = useState({
+    overtimeData: [],
+    pendingRequests: [],
+    recentActivity: []
+  });
+
+  useEffect(() => {
+      const fetchData = async () => {
+          if (!session) return;
+          try {
+              const res = await fetch('/api/overtime/stats');
+              if (res.ok) {
+                  const jsonData = await res.json();
+                  setData(jsonData);
+              }
+          } catch (error) {
+              console.error('Error fetching overtime stats:', error);
+          }
+      };
+      fetchData();
+  }, [session]);
 
   return (
     <div className="space-y-8">
@@ -71,13 +73,13 @@ export default function MesaiPage() {
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
                 <TrendingUp className="w-3 h-3 mr-1" />
-                +12.5%
+                Güncel
               </Badge>
             </div>
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={overtimeData}>
+              <AreaChart data={data.overtimeData}>
                 <defs>
                   <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
@@ -99,108 +101,83 @@ export default function MesaiPage() {
                 />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'var(--background)', 
-                    borderColor: 'var(--border)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    backdropFilter: 'blur(8px)',
                     borderRadius: '12px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    border: 'none',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
-                  itemStyle={{ color: 'var(--foreground)' }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="hours" 
                   stroke="#f97316" 
-                  strokeWidth={3}
                   fillOpacity={1} 
                   fill="url(#colorHours)" 
+                  strokeWidth={2}
                 />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </PremiumCard>
 
-        {/* Quick Stats & Pending */}
+        {/* Recent Requests */}
         <div className="space-y-6">
-          <PremiumCard className="bg-gradient-to-br from-orange-500 to-red-600 text-white border-none">
-            <div className="mb-4">
-              <p className="text-orange-100 mb-1">Bu Ay Toplam</p>
-              <h3 className="text-4xl font-bold">142.5s</h3>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm text-orange-100">
-                <span>Bütçe Kullanımı</span>
-                <span>78%</span>
-              </div>
-              <Progress value={78} className="h-2 bg-black/20" indicatorClassName="bg-white" />
-              <p className="text-xs text-orange-200 mt-2">Geçen aya göre 12 saat daha az</p>
+          <PremiumCard title="Bekleyen Talepler">
+            <div className="space-y-4">
+              {data.pendingRequests.length > 0 ? (
+                  data.pendingRequests.map((req: any) => (
+                    <div key={req.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 font-bold">
+                          {req.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{req.name}</p>
+                          <p className="text-xs text-muted-foreground">{req.reason}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-sm">{req.hours} Saat</p>
+                        <p className="text-xs text-muted-foreground">{req.date}</p>
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                  <p className="text-muted-foreground text-sm text-center py-4">Bekleyen talep yok.</p>
+              )}
             </div>
           </PremiumCard>
 
-          {userRole === 'admin' && (
-            <PremiumCard>
-              <h3 className="font-bold mb-4 flex items-center justify-between">
-                Onay Bekleyenler
-                <Badge variant="secondary">{pendingRequests.length}</Badge>
-              </h3>
-              <div className="space-y-3">
-                {pendingRequests.map((req) => (
-                  <div key={req.id} className="flex items-center justify-between p-3 rounded-xl bg-secondary/30">
-                    <div>
-                      <p className="font-medium text-sm">{req.name}</p>
-                      <p className="text-xs text-muted-foreground">{req.reason}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-sm">{req.hours}s</p>
-                      <div className="flex gap-1 mt-1">
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-green-500 hover:text-green-600 hover:bg-green-500/10">
-                          <CheckCircle2 className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" className="h-6 w-6 text-red-500 hover:text-red-600 hover:bg-red-500/10">
-                          <XCircle className="w-4 h-4" />
-                        </Button>
+          <PremiumCard title="Son İşlemler">
+            <div className="space-y-4">
+              {data.recentActivity.length > 0 ? (
+                  data.recentActivity.map((activity: any) => (
+                    <div key={activity.id} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-full ${
+                          activity.type === 'approved' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                        }`}>
+                          {activity.type === 'approved' ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{activity.name}</p>
+                          <p className="text-xs text-muted-foreground">Onaylayan: {activity.approver}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold">{activity.hours} Saat</p>
+                        <p className="text-xs text-muted-foreground">{activity.date}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </PremiumCard>
-          )}
+                  ))
+              ) : (
+                  <p className="text-muted-foreground text-sm text-center py-4">İşlem yok.</p>
+              )}
+            </div>
+          </PremiumCard>
         </div>
       </div>
-
-      {/* Recent Activity List */}
-      <PremiumCard>
-        <h3 className="text-lg font-bold mb-6">Son Hareketler</h3>
-        <div className="space-y-1">
-          {recentActivity.map((activity, i) => (
-            <div key={activity.id} className="flex items-center justify-between p-4 hover:bg-secondary/30 rounded-xl transition-colors group">
-              <div className="flex items-center gap-4">
-                <div className={`
-                  w-10 h-10 rounded-full flex items-center justify-center
-                  ${activity.type === 'approved' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}
-                `}>
-                  {activity.type === 'approved' ? <CheckCircle2 className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
-                </div>
-                <div>
-                  <p className="font-medium">{activity.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {activity.type === 'approved' ? 'Mesai onaylandı' : 'Mesai reddedildi'} • {activity.date}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Badge variant="outline" className="h-8 px-3">
-                  {activity.hours} Saat
-                </Badge>
-                <div className="text-right text-sm text-muted-foreground hidden sm:block">
-                  <p>İşlem yapan:</p>
-                  <p className="font-medium text-foreground">{activity.approver}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </PremiumCard>
     </div>
   );
 }

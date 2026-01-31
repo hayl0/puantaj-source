@@ -59,6 +59,14 @@ export default function IzinPage() {
   const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    balances: [
+      { type: 'Yıllık İzin', total: 14, used: 0, remaining: 14, color: 'bg-purple-500', iconName: 'Plane' },
+      { type: 'Hastalık İzni', total: 10, used: 0, remaining: 10, color: 'bg-pink-500', iconName: 'AlertCircle' },
+      { type: 'Mazeret İzni', total: 5, used: 0, remaining: 5, color: 'bg-blue-500', iconName: 'FileText' },
+    ],
+    upcomingLeaves: []
+  });
   
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(),
@@ -85,6 +93,13 @@ export default function IzinPage() {
         if (leavesRes.ok) {
           const data = await leavesRes.json();
           setLeaves(data);
+        }
+
+        // Fetch stats (balances & upcoming)
+        const statsRes = await fetch('/api/leave/stats');
+        if (statsRes.ok) {
+          const data = await statsRes.json();
+          setStats(data);
         }
 
         // Fetch employees if admin
@@ -173,40 +188,9 @@ export default function IzinPage() {
   };
 
   // Calculate balances (Mock logic based on usage)
-  const calculateBalances = () => {
-    // Filter leaves for current user if personnel, or just summary if admin (showing avg or total)
-    // For simplicity, if admin, show total used across company. If personnel, show their own.
-    
-    // Default entitlements
-    const entitlements = {
-      'Yıllık İzin': 14,
-      'Hastalık İzni': 10,
-      'Mazeret İzni': 5
-    };
+  // const calculateBalances = () => { ... } // Removed
 
-    const used = {
-      'Yıllık İzin': 0,
-      'Hastalık İzni': 0,
-      'Mazeret İzni': 0
-    };
-
-    leaves.forEach(l => {
-      // Only count approved leaves for balance? Or pending too? Usually approved.
-      // But for demo, let's count all non-rejected.
-      if (l.status !== 'rejected' && (l.type in used)) {
-        // @ts-ignore
-        used[l.type] += l.days;
-      }
-    });
-
-    return [
-      { type: 'Yıllık İzin', total: entitlements['Yıllık İzin'], used: used['Yıllık İzin'], remaining: entitlements['Yıllık İzin'] - used['Yıllık İzin'], color: 'bg-purple-500', icon: Plane },
-      { type: 'Hastalık İzni', total: entitlements['Hastalık İzni'], used: used['Hastalık İzni'], remaining: entitlements['Hastalık İzni'] - used['Hastalık İzni'], color: 'bg-pink-500', icon: AlertCircle },
-      { type: 'Mazeret İzni', total: entitlements['Mazeret İzni'], used: used['Mazeret İzni'], remaining: entitlements['Mazeret İzni'] - used['Mazeret İzni'], color: 'bg-blue-500', icon: FileText },
-    ];
-  };
-
-  const leaveBalances = calculateBalances();
+  // const leaveBalances = calculateBalances(); // Removed
 
   return (
     <div className="space-y-8">

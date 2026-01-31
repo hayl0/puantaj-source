@@ -42,6 +42,28 @@ export default function RaporlarPage() {
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'yyyy-MM'));
   const [reportData, setReportData] = useState<any[]>([]);
   const [readyToDownload, setReadyToDownload] = useState(false);
+  const [stats, setStats] = useState({
+    totalReports: 0,
+    monthlyDownloads: 0,
+    dataSize: '0KB',
+    mostPopular: '-',
+    growth: 0
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/reports/stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Error fetching report stats:', error);
+      }
+    };
+    fetchStats();
+  }, []);
 
   // Generate last 6 months options
   const monthOptions = Array.from({ length: 6 }).map((_, i) => {
@@ -133,7 +155,7 @@ export default function RaporlarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 font-medium">Toplam Rapor</p>
-                <h2 className="text-4xl font-bold mt-2">24</h2>
+                <h2 className="text-4xl font-bold mt-2">{stats.totalReports}</h2>
                 <p className="text-blue-100/80 text-sm mt-1">aktif rapor şablonu</p>
               </div>
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
@@ -147,11 +169,11 @@ export default function RaporlarPage() {
           <div className="p-2">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 font-medium">Aylık İndirme</p>
-                <h2 className="text-4xl font-bold mt-2">214</h2>
+                <p className="text-green-100 font-medium">Bu Ay İndirilen</p>
+                <h2 className="text-4xl font-bold mt-2">{stats.monthlyDownloads}</h2>
                 <div className="flex items-center gap-1 text-green-100/80 text-sm mt-1">
                   <TrendingUp className="w-3 h-3" />
-                  <span>+18% artış</span>
+                  <span>+{stats.growth}% artış</span>
                 </div>
               </div>
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
@@ -166,7 +188,7 @@ export default function RaporlarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-100 font-medium">Veri Boyutu</p>
-                <h2 className="text-4xl font-bold mt-2">3.2<span className="text-2xl font-normal">GB</span></h2>
+                <h2 className="text-4xl font-bold mt-2">{stats.dataSize}</h2>
                 <p className="text-purple-100/80 text-sm mt-1">arşivlenmiş veri</p>
               </div>
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
@@ -181,7 +203,7 @@ export default function RaporlarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-orange-100 font-medium">En Popüler</p>
-                <h2 className="text-2xl font-bold mt-2 truncate">Puantaj Analiz</h2>
+                <h2 className="text-2xl font-bold mt-2 truncate">{stats.mostPopular}</h2>
                 <p className="text-orange-100/80 text-sm mt-1">51 indirme / ay</p>
               </div>
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">

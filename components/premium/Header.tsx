@@ -65,10 +65,38 @@ export default function PremiumHeader() {
           <span className="sr-only">Tema Değiştir</span>
         </Button>
 
-        <Button variant="ghost" size="icon" className="relative w-10 h-10 rounded-xl hover:bg-secondary/80">
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-background animate-pulse" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative w-12 h-12 rounded-xl hover:bg-secondary/80">
+              <Bell className="w-6 h-6 text-muted-foreground" />
+              <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-background animate-pulse" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80 glass-card border-border/50 p-0">
+            <div className="flex items-center justify-between p-4 border-b border-border/50">
+              <h4 className="font-semibold">Bildirimler</h4>
+              <span className="text-xs text-muted-foreground">3 okunmamış</span>
+            </div>
+            <div className="max-h-[300px] overflow-y-auto">
+              {[
+                { title: 'Yeni Personel', desc: 'Ahmet Yılmaz sisteme eklendi.', time: '10 dk önce', read: false },
+                { title: 'İzin Talebi', desc: 'Ayşe Demir yıllık izin talep etti.', time: '1 sa önce', read: false },
+                { title: 'Rapor Hazır', desc: 'Aylık puantaj raporu hazırlandı.', time: '2 sa önce', read: true },
+              ].map((notif, i) => (
+                <div key={i} className={`p-4 border-b border-border/10 hover:bg-secondary/30 transition-colors cursor-pointer ${!notif.read ? 'bg-primary/5' : ''}`}>
+                  <div className="flex justify-between items-start mb-1">
+                    <span className={`text-sm font-medium ${!notif.read ? 'text-foreground' : 'text-muted-foreground'}`}>{notif.title}</span>
+                    <span className="text-[10px] text-muted-foreground">{notif.time}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground line-clamp-2">{notif.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="p-2 border-t border-border/50">
+              <Button variant="ghost" className="w-full text-xs h-8">Tümünü Okundu İşaretle</Button>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
         
         <div className="h-8 w-[1px] bg-border/50 mx-2" />
         

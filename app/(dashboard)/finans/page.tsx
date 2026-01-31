@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/premium/PageHeader';
 import { PremiumCard } from '@/components/premium/PremiumCard';
 import { Button } from '@/components/ui/button';
@@ -7,38 +8,51 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp, TrendingDown, DollarSign, 
-  ArrowUpRight, ArrowDownRight, Download, Filter 
+  ArrowUpRight, ArrowDownRight, Download, Filter, Loader2
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-const incomeData = [
-  { month: 'Oca', income: 45000, expense: 32000 },
-  { month: 'Şub', income: 52000, expense: 34000 },
-  { month: 'Mar', income: 48000, expense: 30000 },
-  { month: 'Nis', income: 61000, expense: 40000 },
-  { month: 'May', income: 55000, expense: 38000 },
-  { month: 'Haz', income: 67000, expense: 42000 },
-];
-
-const expenseCategories = [
-  { name: 'Personel Maaşları', value: 65, color: '#8b5cf6' },
-  { name: 'Ofis Giderleri', value: 15, color: '#f43f5e' },
-  { name: 'Yazılım Lisansları', value: 10, color: '#0ea5e9' },
-  { name: 'Vergi & Stopaj', value: 10, color: '#f59e0b' },
-];
-
 export default function FinancePage() {
   const { data: session } = useSession();
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({
+    incomeData: [],
+    expenseCategories: [],
+    summary: {
+      totalNetProfit: 0,
+      monthlyIncome: 0,
+      monthlyExpense: 0,
+      yearlyGrowth: 0
+    }
+  });
   
   // Protect Admin Route
   const userRole = (session?.user as any)?.role;
   if (session && userRole !== 'admin' && userRole !== 'user') {
     redirect('/dashboard');
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('/api/finance/stats');
+        if (res.ok) {
+          const jsonData = await res.json();
+          setData(jsonData);
+        }
+      } catch (error) {
+        console.error('Error fetching finance stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (session) fetchData();
+  }, [session]);
 
   return (
     <div className="space-y-6">
@@ -60,11 +74,11 @@ export default function FinancePage() {
         {/* Summary Cards */}
         <PremiumCard className="md:col-span-2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
           <div className="p-2">
-            <p className="text-blue-100 font-medium mb-1">Toplam Net Kâr (Yıllık)</p>
-            <h2 className="text-4xl font-bold mb-4">₺485,250</h2>
+            <p className="text-blue-100 font-medium mb-1">Toplam Net Kâr (Yıllık Tahmini)</p>
+            <h2 className="text-4xl font-bold mb-4">₺{data.summary.totalNetProfit.toLocaleString('tr-TR')}</h2>
             <div className="flex items-center gap-2 text-blue-100 bg-white/10 w-fit px-3 py-1.5 rounded-lg backdrop-blur-sm">
               <TrendingUp className="w-4 h-4" />
-              <span className="font-medium">+24.5% geçen yıla göre</span>
+              <span className="font-medium">+{data.summary.yearlyGrowth}% geçen yıla göre</span>
             </div>
           </div>
         </PremiumCard>
@@ -79,8 +93,8 @@ export default function FinancePage() {
                 +12%
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">Aylık Gelir</p>
-            <h3 className="text-2xl font-bold mt-1">₺67,000</h3>
+            <p className="text-sm text-muted-foreground">Aylık Gelir (Tahmini)</p>
+            <h3 className="text-2xl font-bold mt-1">₺{data.summary.monthlyIncome.toLocaleString('tr-TR')}</h3>
           </div>
         </PremiumCard>
 
@@ -94,16 +108,19 @@ export default function FinancePage() {
                 +5%
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">Aylık Gider</p>
-            <h3 className="text-2xl font-bold mt-1">₺42,000</h3>
+            <p className="text-sm text-muted-foreground">Aylık Gider (Personel)</p>
+            <h3 className="text-2xl font-bold mt-1">₺{data.summary.monthlyExpense.toLocaleString('tr-TR')}</h3>
           </div>
         </PremiumCard>
 
         {/* Charts */}
         <PremiumCard className="md:col-span-3" title="Gelir & Gider Analizi">
           <div className="h-[400px] w-full mt-4">
+            {loading ? (
+               <div className="flex items-center justify-center h-full text-muted-foreground"><Loader2 className="animate-spin mr-2" /> Yükleniyor...</div>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={incomeData}>
+              <AreaChart data={data.incomeData}>
                 <defs>
                   <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
@@ -144,28 +161,33 @@ export default function FinancePage() {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </div>
         </PremiumCard>
 
         {/* Expense Distribution */}
         <PremiumCard className="md:col-span-1" title="Gider Dağılımı">
           <div className="space-y-6 mt-4">
-            {expenseCategories.map((item, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">{item.name}</span>
-                  <span className="text-muted-foreground">%{item.value}</span>
-                </div>
-                <Progress 
-                  value={item.value} 
-                  className="h-2" 
-                  indicatorColor={item.color}
-                  style={{
-                    '--progress-background': item.color
-                  } as any}
-                />
-              </div>
-            ))}
+            {data.expenseCategories.length > 0 ? (
+                data.expenseCategories.map((item: any, index: number) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-muted-foreground">%{item.value}</span>
+                    </div>
+                    <Progress 
+                      value={item.value} 
+                      className="h-2" 
+                      indicatorColor={item.color}
+                      style={{
+                        '--progress-background': item.color
+                      } as any}
+                    />
+                  </div>
+                ))
+            ) : (
+                <div className="text-center text-muted-foreground py-10">Veri bulunamadı</div>
+            )}
             <div className="pt-4 border-t">
               <p className="text-xs text-muted-foreground text-center">
                 Toplam aylık giderlerin kategori bazlı dağılımı

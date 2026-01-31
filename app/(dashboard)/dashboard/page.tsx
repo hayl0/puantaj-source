@@ -21,7 +21,7 @@ import { RevenueChart, WorkHoursChart, DepartmentChart } from '@/components/prem
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
@@ -31,10 +31,34 @@ import { tr } from 'date-fns/locale';
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const userRole = (session?.user as any)?.role || 'user';
   const userName = session?.user?.name || 'Kullanıcı';
+  
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [chartData, setChartData] = useState({
+    revenueData: [],
+    workHoursData: [],
+    deptData: [],
+    activities: [],
+    departmentStatus: []
+  });
+
+  useEffect(() => {
+    const fetchCharts = async () => {
+      if (userRole !== 'admin') return;
+      try {
+        const res = await fetch('/api/dashboard/charts');
+        if (res.ok) {
+          const data = await res.json();
+          setChartData(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch chart data', error);
+      }
+    };
+    fetchCharts();
+  }, [userRole]);
 
   const currentDate = new Date().toLocaleDateString('tr-TR', { 
     weekday: 'long', 
@@ -152,18 +176,18 @@ export default function DashboardPage() {
                 </div>
                 <Button variant="outline" size="sm" className="rounded-full">Detaylı Analiz</Button>
               </div>
-              <RevenueChart />
+              <RevenueChart data={chartData.revenueData} />
             </div>
 
             {/* Secondary Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="glass-card p-6 rounded-3xl border border-white/10 shadow-lg">
                 <h3 className="text-lg font-semibold mb-4">Çalışma Saatleri</h3>
-                <WorkHoursChart />
+                <WorkHoursChart data={chartData.workHoursData} />
               </div>
               <div className="glass-card p-6 rounded-3xl border border-white/10 shadow-lg">
                 <h3 className="text-lg font-semibold mb-4">Departman Dağılımı</h3>
-                <DepartmentChart />
+                <DepartmentChart data={chartData.deptData} />
               </div>
             </div>
           </div>
@@ -207,35 +231,39 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {[
-                    { user: 'Ahmet Yılmaz', action: 'Giriş yaptı', time: '2 dk önce', avatar: 'AY', bg: 'bg-green-100 text-green-700', icon: CheckCircle2 },
-                    { user: 'Ayşe Demir', action: 'İzin talebi oluşturdu', time: '15 dk önce', avatar: 'AD', bg: 'bg-blue-100 text-blue-700', icon: CalendarDays },
-                    { user: 'Mehmet Kaya', action: 'Mesai bitirdi', time: '45 dk önce', avatar: 'MK', bg: 'bg-orange-100 text-orange-700', icon: Clock },
-                    { user: 'Sistem', action: 'Otomatik yedekleme', time: '1 saat önce', avatar: 'SYS', bg: 'bg-purple-100 text-purple-700', icon: Database },
-                    { user: 'Fatma Şahin', action: 'Rapor indirdi', time: '2 saat önce', avatar: 'FŞ', bg: 'bg-pink-100 text-pink-700', icon: Download },
-                  ].map((activity, i) => (
-                    <div key={i} className="flex items-start gap-4 group">
-                      <div className="relative">
-                        <Avatar className="h-10 w-10 border-2 border-background shadow-sm group-hover:scale-105 transition-transform">
-                          <AvatarFallback className={activity.bg}>{activity.avatar}</AvatarFallback>
-                        </Avatar>
-                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-0.5">
-                          <activity.icon className={`w-3 h-3 ${activity.bg.split(' ')[1]}`} />
+                  {chartData.activities.length > 0 ? (
+                    chartData.activities.map((activity: any, i) => (
+                      <div key={i} className="flex items-start gap-4 group">
+                        <div className="relative">
+                          <Avatar className="h-10 w-10 border-2 border-background shadow-sm group-hover:scale-105 transition-transform">
+                            <AvatarFallback className={activity.bg}>{activity.avatar}</AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-0.5">
+                            {activity.type === 'attendance' ? (
+                              <CheckCircle2 className={`w-3 h-3 ${activity.bg.split(' ')[1]}`} />
+                            ) : activity.type === 'leave' ? (
+                              <CalendarDays className={`w-3 h-3 ${activity.bg.split(' ')[1]}`} />
+                            ) : (
+                              <Users className={`w-3 h-3 ${activity.bg.split(' ')[1]}`} />
+                            )}
+                          </div>
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium leading-none text-foreground">
+                            {activity.user}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 truncate">
+                            {activity.action}
+                          </p>
+                        </div>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap bg-secondary/50 px-2 py-1 rounded-full">
+                          {activity.time}
+                        </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium leading-none text-foreground">
-                          {activity.user}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1 truncate">
-                          {activity.action}
-                        </p>
-                      </div>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap bg-secondary/50 px-2 py-1 rounded-full">
-                        {activity.time}
-                      </span>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">Henüz aktivite yok.</p>
+                  )}
                 </div>
                 <Button variant="ghost" className="w-full mt-6 text-muted-foreground hover:text-primary">
                   Tüm Aktiviteleri Gör
@@ -249,23 +277,22 @@ export default function DashboardPage() {
                 <CardTitle className="text-lg font-semibold">Departman Durumu</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[
-                  { name: 'Yazılım', count: 12, status: 'Aktif', color: 'bg-blue-500' },
-                  { name: 'Pazarlama', count: 5, status: 'Aktif', color: 'bg-pink-500' },
-                  { name: 'İnsan Kaynakları', count: 3, status: 'Toplantıda', color: 'bg-yellow-500' },
-                  { name: 'Finans', count: 4, status: 'Aktif', color: 'bg-green-500' },
-                ].map((dept, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${dept.color}`} />
-                      <span className="font-medium">{dept.name}</span>
+                {chartData.departmentStatus.length > 0 ? (
+                  chartData.departmentStatus.map((dept: any, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${dept.color}`} />
+                        <span className="font-medium">{dept.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-sm font-bold">{dept.count}/{dept.total}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-sm font-bold">{dept.count}</span>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">Departman verisi yok.</p>
+                )}
               </CardContent>
             </Card>
           </div>
