@@ -438,6 +438,7 @@ export default function PersonelPage() {
                       selected={formData.hireDate}
                       onSelect={(date) => setFormData(prev => ({ ...prev, hireDate: date }))}
                       initialFocus
+                      locale={tr}
                     />
                   </PopoverContent>
                 </Popover>

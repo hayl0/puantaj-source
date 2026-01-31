@@ -27,6 +27,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { createGoogleCalendarUrl } from '@/lib/calendar';
+import { tr } from 'date-fns/locale';
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -280,6 +281,7 @@ export default function DashboardPage() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                locale={tr}
               />
             </div>
           </DialogContent>

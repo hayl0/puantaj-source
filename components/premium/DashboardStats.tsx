@@ -1,51 +1,79 @@
-import { Users, TrendingUp, DollarSign, Target } from 'lucide-react';
+
+import { Users, TrendingUp, Wallet, Clock, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 export default function DashboardStats() {
+  const [data, setData] = useState({
+    totalEmployees: 0,
+    attendanceRate: 0,
+    totalMonthlyCost: 0,
+    pendingLeaves: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/dashboard/stats');
+        if (res.ok) {
+          const jsonData = await res.json();
+          setData(jsonData);
+        }
+      } catch (error) {
+        console.error('Stats fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   const stats = [
     { 
       title: 'Aktif Personel', 
-      value: '47', 
-      change: '+3 bu ay', 
+      value: data.totalEmployees.toString(), 
+      change: 'Toplam', 
       icon: Users,
       color: 'bg-blue-500',
       gradient: 'from-blue-500 to-blue-600',
       shadow: 'shadow-blue-500/30',
       bg: 'bg-blue-500/10',
-      trend: 'up'
+      trend: 'neutral'
     },
     { 
       title: 'Devam Oranı', 
-      value: '94.2%', 
-      change: '+2.1%', 
+      value: `%${data.attendanceRate}`, 
+      change: 'Bugün', 
       icon: TrendingUp,
       color: 'bg-green-500',
       gradient: 'from-green-500 to-green-600',
       shadow: 'shadow-green-500/30',
       bg: 'bg-green-500/10',
-      trend: 'up'
+      trend: 'neutral'
     },
     { 
-      title: 'Aylık Gelir', 
-      value: '₺125,430', 
-      change: '+8.5%', 
-      icon: DollarSign,
+      title: 'Aylık Maliyet', 
+      value: `₺${data.totalMonthlyCost.toLocaleString('tr-TR')}`, 
+      change: 'Tahmini Maaş', 
+      icon: Wallet,
       color: 'bg-purple-500',
       gradient: 'from-purple-500 to-purple-600',
       shadow: 'shadow-purple-500/30',
       bg: 'bg-purple-500/10',
-      trend: 'up'
+      trend: 'neutral'
     },
     { 
-      title: 'Hedef Tamamlama', 
-      value: '78%', 
-      change: '+12%', 
-      icon: Target,
+      title: 'Bekleyen İzinler', 
+      value: data.pendingLeaves.toString(), 
+      change: 'Onay Bekliyor', 
+      icon: Clock,
       color: 'bg-orange-500',
       gradient: 'from-orange-500 to-orange-600',
       shadow: 'shadow-orange-500/30',
       bg: 'bg-orange-500/10',
-      trend: 'up'
+      trend: 'neutral'
     },
   ];
 
@@ -63,6 +91,16 @@ export default function DashboardStats() {
     hidden: { y: 20, opacity: 0 },
     show: { y: 0, opacity: 1 }
   };
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-32 rounded-2xl bg-white/5 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <motion.div 
@@ -87,10 +125,9 @@ export default function DashboardStats() {
               <h3 className="text-3xl font-bold tracking-tight text-foreground mb-2">{stat.value}</h3>
               
               <div className="flex items-center gap-2">
-                <span className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full ${stat.trend === 'up' ? 'bg-green-500/10 text-green-600' : 'bg-red-500/10 text-red-600'}`}>
+                <span className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full ${stat.bg} text-foreground/80`}>
                   {stat.change}
                 </span>
-                <span className="text-xs text-muted-foreground">geçen aya göre</span>
               </div>
             </div>
             
