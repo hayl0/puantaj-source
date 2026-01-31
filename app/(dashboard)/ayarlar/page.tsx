@@ -10,10 +10,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   User, Building, Bell, Shield, Save, 
-  Mail, Globe, Lock, CreditCard 
+  Mail, Globe, Lock, CreditCard, Loader2
 } from 'lucide-react';
+import { useState } from 'react';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function AyarlarPage() {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm verileriniz silinir.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const res = await fetch('/api/user/delete', {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        throw new Error('Hesap silinirken bir hata oluştu');
+      }
+
+      toast.success('Hesabınız başarıyla silindi');
+      await signOut({ redirect: true, callbackUrl: '/login' });
+    } catch (error) {
+      console.error(error);
+      toast.error('Hesap silinemedi. Lütfen tekrar deneyin.');
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader 
@@ -144,7 +175,20 @@ export default function AyarlarPage() {
                   <Label className="text-red-600">Hesabı Sil</Label>
                   <p className="text-sm text-muted-foreground">Bu işlem geri alınamaz</p>
                 </div>
-                <Button variant="destructive">Hesabı Sil</Button>
+                <Button 
+                  variant="destructive" 
+                  onClick={handleDeleteAccount}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Siliniyor...
+                    </>
+                  ) : (
+                    'Hesabı Sil'
+                  )}
+                </Button>
               </div>
             </div>
           </PremiumCard>

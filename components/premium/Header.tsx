@@ -75,25 +75,13 @@ export default function PremiumHeader() {
           <DropdownMenuContent align="end" className="w-80 glass-card border-border/50 p-0">
             <div className="flex items-center justify-between p-4 border-b border-border/50">
               <h4 className="font-semibold">Bildirimler</h4>
-              <span className="text-xs text-muted-foreground">3 okunmamış</span>
+              <span className="text-xs text-muted-foreground">0 okunmamış</span>
             </div>
-            <div className="max-h-[300px] overflow-y-auto">
-              {[
-                { title: 'Yeni Personel', desc: 'Ahmet Yılmaz sisteme eklendi.', time: '10 dk önce', read: false },
-                { title: 'İzin Talebi', desc: 'Ayşe Demir yıllık izin talep etti.', time: '1 sa önce', read: false },
-                { title: 'Rapor Hazır', desc: 'Aylık puantaj raporu hazırlandı.', time: '2 sa önce', read: true },
-              ].map((notif, i) => (
-                <div key={i} className={`p-4 border-b border-border/10 hover:bg-secondary/30 transition-colors cursor-pointer ${!notif.read ? 'bg-primary/5' : ''}`}>
-                  <div className="flex justify-between items-start mb-1">
-                    <span className={`text-sm font-medium ${!notif.read ? 'text-foreground' : 'text-muted-foreground'}`}>{notif.title}</span>
-                    <span className="text-[10px] text-muted-foreground">{notif.time}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{notif.desc}</p>
-                </div>
-              ))}
+            <div className="max-h-[300px] overflow-y-auto p-4 text-center text-muted-foreground text-sm">
+              <p>Yeni bildiriminiz yok.</p>
             </div>
             <div className="p-2 border-t border-border/50">
-              <Button variant="ghost" className="w-full text-xs h-8">Tümünü Okundu İşaretle</Button>
+              <Button variant="ghost" className="w-full text-xs h-8" disabled>Tümünü Okundu İşaretle</Button>
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
