@@ -157,7 +157,9 @@ export const authOptions: NextAuthOptions = {
             const isPasswordValid = await compare(credentials.password, employee.password);
             if (isPasswordValid) {
               // Check verification
-              if (!employee.emailVerified) {
+              // Enforce verification only for employees created after the feature launch (2026-01-31)
+              const FEATURE_LAUNCH_DATE = new Date('2026-01-31T18:00:00Z');
+              if (!employee.emailVerified && employee.createdAt > FEATURE_LAUNCH_DATE) {
                 throw new Error("Lütfen email adresinizi doğrulayın.");
               }
 
