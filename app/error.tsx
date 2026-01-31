@@ -4,6 +4,7 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle } from 'lucide-react'
+import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
 
 export default function Error({
   error,
