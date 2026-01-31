@@ -2,6 +2,21 @@ import { NextResponse } from 'next/server';
 import { sendVerificationEmail } from '@/lib/email';
 import nodemailer from 'nodemailer';
 
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get('email');
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email parametresi gerekli (örn: ?email=test@ornek.com)' }, { status: 400 });
+    }
+
+    return await runTest(email);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -11,6 +26,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email gerekli' }, { status: 400 });
     }
 
+    return await runTest(email);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+async function runTest(email: string) {
     // 1. Doğrudan SMTP bağlantısını test et
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -54,12 +76,4 @@ export async function POST(req: Request) {
         error: result.error
       }, { status: 500 });
     }
-
-  } catch (error: any) {
-    console.error('Test route error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
-  }
 }
