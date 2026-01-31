@@ -318,11 +318,14 @@ export default function IzinPage() {
 
       {/* Leave Balances */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {leaveBalances.map((balance, i) => (
+        {stats.balances.map((balance, i) => (
           <PremiumCard key={i} className="relative overflow-hidden">
             <div className="flex justify-between items-start mb-4">
               <div className={`p-3 rounded-xl ${balance.color} bg-opacity-10 text-${balance.color.split('-')[1]}-500`}>
-                <balance.icon className="w-6 h-6" />
+                {/* Dynamically render icon based on name if needed, or fallback */}
+                {balance.type === 'Yıllık İzin' ? <Plane className="w-6 h-6" /> : 
+                 balance.type === 'Hastalık İzni' ? <AlertCircle className="w-6 h-6" /> : 
+                 <FileText className="w-6 h-6" />}
               </div>
               <Badge variant="outline" className="text-lg font-bold">
                 {balance.remaining} Gün Kaldı

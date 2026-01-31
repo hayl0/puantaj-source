@@ -38,11 +38,11 @@ export async function GET() {
       // as "Remaining Days" only makes sense for an individual.
       // If admin wants to see employee balances, that's a different view (Personnel Management).
       
-      leaves = await prisma.leaveRequest.findMany({
+      leaves = await prisma.leave.findMany({
         where: { userId, status: 'approved' } // Only count approved leaves
       });
     } else {
-      leaves = await prisma.leaveRequest.findMany({
+      leaves = await prisma.leave.findMany({
         where: { userId, status: 'approved' }
       });
     }
@@ -92,7 +92,7 @@ export async function GET() {
     const now = new Date();
     
     if (userRole === 'admin') {
-      upcomingLeaves = await prisma.leaveRequest.findMany({
+      upcomingLeaves = await prisma.leave.findMany({
         where: {
           startDate: { gte: now },
           status: 'approved'
@@ -102,7 +102,7 @@ export async function GET() {
         take: 5
       });
     } else {
-      upcomingLeaves = await prisma.leaveRequest.findMany({
+      upcomingLeaves = await prisma.leave.findMany({
         where: {
           userId,
           startDate: { gte: now },
