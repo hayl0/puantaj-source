@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import AuthProvider from '@/components/auth-provider';
+import { CommandMenu } from '@/components/premium/CommandMenu';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
             <div className="min-h-screen bg-background">
               {children}
             </div>
+            <CommandMenu />
             <Toaster />
           </AuthProvider>
         </ThemeProvider>
