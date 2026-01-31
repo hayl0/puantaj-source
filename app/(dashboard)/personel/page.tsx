@@ -10,7 +10,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
   Plus, Search, Filter, Download, 
   LayoutGrid, List as ListIcon, 
-  MoreHorizontal, Mail, Phone, MapPin, Edit, Trash, CreditCard 
+  MoreHorizontal, Mail, Phone, MapPin, Edit, Trash, CreditCard,
+  Calendar as CalendarIcon
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -38,6 +39,15 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import { cn } from "@/lib/utils";
 
 interface Employee {
   id: string;
@@ -69,6 +79,7 @@ export default function PersonelPage() {
     position: '',
     salary: '',
     paymentType: 'monthly',
+    hireDate: undefined as Date | undefined,
   });
 
   const fetchEmployees = async () => {
@@ -110,6 +121,7 @@ export default function PersonelPage() {
       position: '',
       salary: '',
       paymentType: 'monthly',
+      hireDate: new Date(),
     });
     setSelectedEmployee(null);
   };
@@ -129,6 +141,7 @@ export default function PersonelPage() {
       position: employee.position,
       salary: employee.salary.toString(),
       paymentType: employee.paymentType || 'monthly',
+      hireDate: employee.hireDate ? new Date(employee.hireDate) : new Date(),
     });
     setIsDialogOpen(true);
   };
@@ -405,13 +418,38 @@ export default function PersonelPage() {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="salary">
-                  {formData.paymentType === 'hourly' ? 'Saatlik Ücret (TL)' : 
-                   formData.paymentType === 'daily' ? 'Günlük Yevmiye (TL)' : 
-                   'Aylık Maaş (TL)'}
-                </Label>
-                <Input id="salary" name="salary" type="number" value={formData.salary} onChange={handleInputChange} required />
+                <Label htmlFor="hireDate">İşe Başlama Tarihi</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.hireDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {formData.hireDate ? format(formData.hireDate, "d MMMM yyyy", { locale: tr }) : <span>Tarih seçin</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={formData.hireDate}
+                      onSelect={(date) => setFormData(prev => ({ ...prev, hireDate: date }))}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="salary">
+                {formData.paymentType === 'hourly' ? 'Saatlik Ücret (TL)' : 
+                 formData.paymentType === 'daily' ? 'Günlük Yevmiye (TL)' : 
+                 'Aylık Maaş (TL)'}
+              </Label>
+              <Input id="salary" name="salary" type="number" value={formData.salary} onChange={handleInputChange} required />
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>İptal</Button>

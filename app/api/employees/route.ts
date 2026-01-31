@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, email, password, department, position, salary, paymentType } = await req.json();
+    const { name, email, password, department, position, salary, paymentType, hireDate } = await req.json();
 
     if (!name || !department || !position || !salary) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -59,11 +59,12 @@ export async function POST(req: Request) {
         name,
         // @ts-ignore
         email: cleanEmail,
-        password: hashedPassword,    department,
+        password: hashedPassword,
+        department,
         position,
         salary: parseFloat(salary),
         paymentType: paymentType || 'monthly',
-        hireDate: new Date(),
+        hireDate: hireDate ? new Date(hireDate) : new Date(),
         userId: session.user.id,
       },
     });
@@ -82,7 +83,7 @@ export async function PUT(req: Request) {
   }
 
   try {
-    const { id, name, email, password, department, position, salary, paymentType } = await req.json();
+    const { id, name, email, password, department, position, salary, paymentType, hireDate } = await req.json();
 
     if (!id) {
       return NextResponse.json({ error: "Employee ID is required" }, { status: 400 });
@@ -106,6 +107,10 @@ export async function PUT(req: Request) {
       salary: parseFloat(salary),
       paymentType: paymentType || 'monthly',
     };
+
+    if (hireDate) {
+      updateData.hireDate = new Date(hireDate);
+    }
 
     if (password) {
       updateData.password = await hash(password, 12);
