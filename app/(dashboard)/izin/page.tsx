@@ -200,10 +200,27 @@ export default function IzinPage() {
           ? "Personel izin taleplerini onaylayın ve takvimi yönetin" 
           : "İzin durumunuzu görüntüleyin ve yeni talep oluşturun"}
       >
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" onClick={() => setIsCalendarOpen(true)}>
           <CalendarIcon className="w-4 h-4" />
           Yıllık Plan
         </Button>
+        
+        <Dialog open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden bg-background/80 backdrop-blur-xl border-white/10">
+                <DialogHeader className="p-6 pb-2">
+                    <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        Yıllık İzin Takvimi
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="flex-1 p-6 pt-0 overflow-hidden">
+                    <SmartCalendar 
+                        events={calendarEvents} 
+                        eventContent={renderEventContent}
+                        className="h-full shadow-none border-0 bg-transparent"
+                    />
+                </div>
+            </DialogContent>
+        </Dialog>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

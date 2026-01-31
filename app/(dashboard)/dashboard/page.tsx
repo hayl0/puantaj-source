@@ -24,6 +24,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
+import { SmartCalendar } from '@/components/premium/SmartCalendar';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { createGoogleCalendarUrl } from '@/lib/calendar';
@@ -36,6 +37,7 @@ export default function DashboardPage() {
   
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
   const [chartData, setChartData] = useState({
     revenueData: [],
     workHoursData: [],
@@ -43,6 +45,23 @@ export default function DashboardPage() {
     activities: [],
     departmentStatus: []
   });
+
+  useEffect(() => {
+    if (isCalendarOpen) {
+      const fetchEvents = async () => {
+        try {
+          const res = await fetch('/api/calendar-events');
+          if (res.ok) {
+            const data = await res.json();
+            setCalendarEvents(data);
+          }
+        } catch (error) {
+          console.error('Failed to fetch calendar events', error);
+        }
+      };
+      fetchEvents();
+    }
+  }, [isCalendarOpen]);
 
   useEffect(() => {
     const fetchCharts = async () => {
@@ -510,6 +529,21 @@ export default function DashboardPage() {
            </div>
         </div>
       </div>
+      <Dialog open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+        <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden bg-background/80 backdrop-blur-xl border-white/10">
+          <DialogHeader className="p-6 pb-2">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              Takvimim
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 p-6 pt-0 overflow-hidden">
+            <SmartCalendar 
+              events={calendarEvents} 
+              className="h-full shadow-none border-0 bg-transparent"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
