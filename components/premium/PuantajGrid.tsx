@@ -170,23 +170,22 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
   return (
     <div className="space-y-8 relative">
       {/* Floating Toolbar - Canva Style */}
-      <div className="sticky top-4 z-40 flex justify-center mb-8 pointer-events-none">
-        <div className="glass-card p-1.5 rounded-full border border-white/10 shadow-2xl bg-[#030712]/80 backdrop-blur-xl flex items-center gap-1 pointer-events-auto transform hover:scale-105 transition-all duration-300 ring-1 ring-white/5">
+      <div className="sticky top-4 z-40 flex justify-center mb-10 pointer-events-none">
+        <div className="glass-card p-2 rounded-full border border-white/20 shadow-2xl bg-white/90 dark:bg-black/80 backdrop-blur-xl flex items-center gap-2 pointer-events-auto transform hover:scale-105 transition-all duration-300 ring-1 ring-black/5 dark:ring-white/10">
           <button
             onClick={() => setSelectedStatus(null)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm relative overflow-hidden",
+              "flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium text-sm relative overflow-hidden",
               selectedStatus === null 
-                ? 'bg-white text-black shadow-lg' 
-                : 'text-muted-foreground hover:text-white hover:bg-white/5'
+                ? 'bg-black text-white dark:bg-white dark:text-black shadow-lg' 
+                : 'text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10'
             )}
           >
             <MousePointer2 className="w-4 h-4" />
-            <span className="hidden sm:inline">Seç</span>
-            {selectedStatus === null && <motion.div layoutId="activeTab" className="absolute inset-0 bg-white mix-blend-overlay opacity-20" />}
+            <span className="hidden sm:inline font-semibold">Seç</span>
           </button>
 
-          <div className="w-px h-6 bg-white/10 mx-1" />
+          <div className="w-px h-8 bg-black/10 dark:bg-white/10 mx-1" />
 
           {Object.entries(statusConfig).map(([key, config]) => (
              key !== 'empty' && (
@@ -196,19 +195,19 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                     <button 
                       onClick={() => setSelectedStatus(selectedStatus === key ? null : key as StatusType)}
                       className={cn(
-                        "p-2.5 rounded-full transition-all duration-300 relative group",
+                        "p-3 rounded-full transition-all duration-300 relative group",
                         selectedStatus === key
-                          ? `bg-white/10 text-white shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] ring-1 ring-white/20`
-                          : `text-muted-foreground hover:text-white hover:bg-white/5`
+                          ? `bg-black/5 dark:bg-white/10 shadow-inner ring-1 ring-black/10 dark:ring-white/20`
+                          : `text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 hover:scale-110`
                       )}
                     >
-                      <config.icon className={cn("w-5 h-5 transition-transform duration-300", selectedStatus === key ? "scale-110" : "group-hover:scale-110", config.color)} />
+                      <config.icon className={cn("w-5 h-5 transition-transform duration-300", config.color)} />
                       {selectedStatus === key && (
-                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-[#030712]" />
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-white dark:border-black animate-pulse" />
                       )}
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="glass-card border-white/10 text-white text-xs font-medium py-1 px-3">
+                  <TooltipContent side="bottom" className="glass-card border-black/5 dark:border-white/10 text-xs font-bold py-1.5 px-4 rounded-full shadow-xl">
                     {config.label}
                   </TooltipContent>
                 </Tooltip>
@@ -218,22 +217,22 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
+      <div className="flex flex-col sm:flex-row items-end justify-between gap-6 mb-4">
         <div className="flex items-center gap-4">
-          <div className="flex items-center bg-card/30 rounded-2xl p-1 border border-white/5 backdrop-blur-sm">
+          <div className="flex items-center bg-white/50 dark:bg-black/50 rounded-[2rem] p-1.5 border border-black/5 dark:border-white/10 backdrop-blur-md shadow-sm">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={prevMonth}
-              className="h-10 w-10 rounded-xl hover:bg-white/5 hover:text-white transition-all"
+              className="h-11 w-11 rounded-full hover:bg-white dark:hover:bg-white/10 hover:shadow-md transition-all"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="px-6 text-center min-w-[180px]">
-              <h2 className="text-2xl font-bold tracking-tight text-white">
+            <div className="px-8 text-center min-w-[200px]">
+              <h2 className="text-3xl font-bold tracking-tighter text-foreground font-heading">
                 {currentDate.toLocaleString('tr-TR', { month: 'long' })}
               </h2>
-              <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest opacity-60">
+              <p className="text-sm text-muted-foreground font-medium uppercase tracking-[0.2em] opacity-60">
                 {currentDate.getFullYear()}
               </p>
             </div>
@@ -241,35 +240,35 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
               variant="ghost" 
               size="icon" 
               onClick={nextMonth}
-              className="h-10 w-10 rounded-xl hover:bg-white/5 hover:text-white transition-all"
+              className="h-11 w-11 rounded-full hover:bg-white dark:hover:bg-white/10 hover:shadow-md transition-all"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
           </div>
           
-          <Button variant="outline" className="hidden sm:flex h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 gap-2">
-            <CalendarDays className="w-4 h-4" />
+          <Button variant="outline" className="hidden sm:flex h-14 rounded-2xl border-black/5 dark:border-white/10 bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-white/10 gap-2 shadow-sm font-semibold">
+            <CalendarDays className="w-5 h-5" />
             Bugün
           </Button>
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="h-10 rounded-lg border-dashed border-white/20 text-muted-foreground hover:text-white hover:border-white/40 gap-2">
+          <Button variant="outline" className="h-12 rounded-xl border-dashed border-black/20 dark:border-white/20 text-muted-foreground hover:text-foreground hover:border-black/40 dark:hover:border-white/40 gap-2">
             <Filter className="w-4 h-4" />
             Filtrele
           </Button>
         </div>
       </div>
 
-      <div className="glass-card rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-[#030712]/40 backdrop-blur-xl ring-1 ring-white/5">
+      <div className="glass-card rounded-[2.5rem] border border-black/5 dark:border-white/10 overflow-hidden shadow-2xl bg-white/40 dark:bg-black/40 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/5">
         <div className="overflow-x-auto relative custom-scrollbar">
           <table className="w-full text-sm border-separate border-spacing-0">
             <thead>
               <tr>
-                <th className="p-4 text-left font-semibold text-muted-foreground sticky left-0 z-20 bg-[#030712]/95 backdrop-blur-xl border-b border-r border-white/10 min-w-[220px] shadow-[4px_0_24px_-4px_rgba(0,0,0,0.5)]">
-                  <div className="flex items-center gap-2 pl-2">
-                    <span className="w-1 h-4 bg-primary rounded-full" />
-                    Personel Listesi
+                <th className="p-6 text-left font-bold text-muted-foreground sticky left-0 z-20 bg-white/95 dark:bg-[#030712]/95 backdrop-blur-xl border-b border-r border-black/5 dark:border-white/5 min-w-[240px] shadow-[4px_0_24px_-4px_rgba(0,0,0,0.05)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.5)]">
+                  <div className="flex items-center gap-3 pl-2">
+                    <span className="w-1.5 h-6 bg-primary rounded-full" />
+                    <span className="text-lg tracking-tight text-foreground">Personel Listesi</span>
                   </div>
                 </th>
                 {days.map(day => {
@@ -279,23 +278,23 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                   
                   return (
                     <th key={day} className={cn(
-                      "p-0 min-w-[44px] h-[60px] text-center border-b border-white/5 relative group/day transition-colors",
-                      isWeekend ? 'bg-white/[0.02]' : '',
-                      isToday ? 'bg-primary/10' : ''
+                      "p-0 min-w-[48px] h-[72px] text-center border-b border-black/5 dark:border-white/5 relative group/day transition-colors",
+                      isWeekend ? 'bg-black/[0.02] dark:bg-white/[0.02]' : '',
+                      isToday ? 'bg-primary/5' : ''
                     )}>
-                      <div className="flex flex-col items-center justify-center w-full h-full gap-0.5">
+                      <div className="flex flex-col items-center justify-center w-full h-full gap-1">
                         <span className={cn(
-                          "text-[10px] uppercase tracking-wider font-mono transition-colors",
-                          isToday ? 'text-primary font-bold' : 'text-muted-foreground/60'
+                          "text-[10px] uppercase tracking-wider font-bold transition-colors",
+                          isToday ? 'text-primary' : 'text-muted-foreground/50'
                         )}>
                           {date.toLocaleDateString('tr-TR', { weekday: 'short' }).slice(0, 2)}
                         </span>
-                        <span className={cn(
-                          "text-sm font-medium tabular-nums transition-all group-hover/day:scale-110",
-                          isToday ? 'text-primary font-bold' : 'text-slate-300'
+                        <div className={cn(
+                          "w-8 h-8 flex items-center justify-center rounded-full text-base font-bold tabular-nums transition-all group-hover/day:scale-110",
+                          isToday ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' : 'text-foreground/70'
                         )}>
                           {day}
-                        </span>
+                        </div>
                       </div>
                       {isToday && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_-4px_12px_-2px_rgba(var(--primary),0.5)]" />}
                     </th>
@@ -303,25 +302,25 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                 })}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {employees.map((employee, idx) => (
                 <motion.tr 
                   key={employee.id} 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.03 }}
-                  className="group hover:bg-white/[0.02] transition-colors"
+                  className="group hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="p-3 sticky left-0 z-20 bg-[#0b0f1a]/95 backdrop-blur-xl border-r border-white/5 group-hover:bg-[#111522]/95 transition-colors shadow-[4px_0_24px_-4px_rgba(0,0,0,0.2)]">
-                    <div className="flex items-center gap-3 pl-2">
-                      <Avatar className="h-9 w-9 border border-white/10 ring-2 ring-transparent group-hover:ring-primary/20 transition-all shadow-lg">
-                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-bold">
+                  <td className="p-4 sticky left-0 z-20 bg-white/95 dark:bg-[#0b0f1a]/95 backdrop-blur-xl border-r border-black/5 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-[#111522]/95 transition-colors shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.2)]">
+                    <div className="flex items-center gap-4 pl-2">
+                      <Avatar className="h-10 w-10 border-2 border-white dark:border-white/10 ring-2 ring-transparent group-hover:ring-primary/20 transition-all shadow-md">
+                        <AvatarFallback className="bg-gradient-to-tr from-violet-500 to-fuchsia-500 text-white text-xs font-black tracking-wider">
                           {employee.name.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-medium text-slate-200 group-hover:text-white transition-colors">{employee.name}</span>
-                        <span className="text-[10px] text-muted-foreground/80">{employee.department || 'Genel'}</span>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-bold text-foreground group-hover:text-primary transition-colors">{employee.name}</span>
+                        <span className="text-[10px] font-medium text-muted-foreground/70 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full w-fit">{employee.department || 'Genel'}</span>
                       </div>
                     </div>
                   </td>
@@ -333,8 +332,8 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                     
                     return (
                       <td key={day} className={cn(
-                        "p-1 text-center relative transition-all duration-300",
-                        isWeekend ? 'bg-white/[0.02]' : ''
+                        "p-1.5 text-center relative transition-all duration-300",
+                        isWeekend ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
                       )}>
                         <div className="w-full h-full flex items-center justify-center">
                           <TooltipProvider>
@@ -344,21 +343,21 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                                   onClick={() => toggleStatus(employee.id, day)}
                                   disabled={loading}
                                   className={cn(
-                                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50",
+                                    "w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50",
                                     status === 'empty' 
-                                      ? "hover:bg-white/10 text-transparent hover:text-white/20" 
-                                      : `${config.bg} ${config.color} ${config.border} border shadow-lg ${config.glow} hover:scale-110 hover:brightness-110`
+                                      ? "hover:bg-black/5 dark:hover:bg-white/10 text-transparent hover:text-black/20 dark:hover:text-white/20" 
+                                      : `${config.bg} ${config.color} ${config.border} border shadow-sm ${config.glow} hover:scale-110 hover:shadow-md`
                                   )}
                                 >
                                   {status === 'empty' ? (
-                                    <div className="w-1 h-1 rounded-full bg-white/5 group-hover:bg-white/20 transition-colors" />
+                                    <div className="w-1 h-1 rounded-full bg-black/5 dark:bg-white/5 group-hover:bg-black/20 dark:group-hover:bg-white/20 transition-colors" />
                                   ) : (
                                     <config.icon className="w-4 h-4" />
                                   )}
                                 </button>
                               </TooltipTrigger>
-                              <TooltipContent side="top" className="text-xs font-semibold bg-[#030712] text-white border-white/10">
-                                <p>{date.toLocaleDateString('tr-TR')}</p>
+                              <TooltipContent side="top" className="text-xs font-bold bg-foreground text-background border-border shadow-xl rounded-lg py-2 px-3">
+                                <p className="opacity-70 font-medium mb-0.5">{date.toLocaleDateString('tr-TR')}</p>
                                 <p>{config.label}</p>
                               </TooltipContent>
                             </Tooltip>

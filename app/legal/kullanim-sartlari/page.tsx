@@ -1,8 +1,11 @@
 
+import { BackgroundGrid } from '@/components/premium/BackgroundGrid';
+
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white py-20 px-4">
-      <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen bg-[#030712] text-white py-20 px-4 relative overflow-hidden">
+      <BackgroundGrid fixed />
+      <div className="container mx-auto max-w-4xl relative z-10">
         <h1 className="text-4xl font-bold mb-8 text-indigo-500">Kullanım Şartları</h1>
         
         <div className="space-y-6 text-slate-300 leading-relaxed">

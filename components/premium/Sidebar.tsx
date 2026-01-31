@@ -48,7 +48,7 @@ export default function PremiumSidebar() {
   });
 
   return (
-    <aside className="w-72 bg-card/80 dark:bg-slate-950/80 backdrop-blur-xl border-r border-border/50 flex flex-col shadow-2xl z-40">
+    <aside className="w-72 bg-background/60 backdrop-blur-xl border-r border-white/10 flex flex-col shadow-2xl z-40">
       <div className="p-8 pb-4">
         <Logo 
           textClassName="text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400" 

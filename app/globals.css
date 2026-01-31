@@ -38,17 +38,17 @@
 
   .dark {
     /* Premium Dark Theme - Deep Slate & Neon Accents */
-    --background: 222.2 47.4% 11.2%;
+    --background: 224 71% 4%; /* #030712 */
     --foreground: 210 40% 98%;
 
-    --card: 222.2 47.4% 11.2%; /* Semi-transparent handled in components */
+    --card: 224 71% 4%; /* Matches background for glass effect base */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 47.4% 11.2%;
+    --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%; /* Bright Blue/Indigo */
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 246 80% 60%; /* Indigo-500/600 hybrid */
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -64,7 +64,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 246 80% 60%;
   }
 }
 
@@ -80,11 +80,11 @@
 /* Glassmorphism Utilities */
 @layer utilities {
   .glass {
-    @apply bg-white/10 dark:bg-black/20 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl;
+    @apply bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl supports-[backdrop-filter]:bg-background/60;
   }
   
   .glass-card {
-    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 shadow-lg;
+    @apply bg-white/70 dark:bg-[#0A0F1C]/60 backdrop-blur-md border border-slate-200/50 dark:border-white/5 shadow-lg;
   }
   
   .text-gradient {

@@ -28,7 +28,7 @@ export default function PremiumHeader() {
   const userRole = (user as any)?.role === 'admin' ? 'Yönetici' : 'Personel';
 
   return (
-    <header className="sticky top-0 z-30 h-20 glass border-b border-border/40 px-4 md:px-8 flex items-center justify-between transition-all duration-300">
+    <header className="sticky top-0 z-30 h-20 bg-background/60 backdrop-blur-xl border-b border-white/10 px-4 md:px-8 flex items-center justify-between transition-all duration-300">
       <div className="flex items-center gap-4 flex-1 max-w-xl">
         <Button
           variant="ghost"

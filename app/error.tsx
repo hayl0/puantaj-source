@@ -17,15 +17,16 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-[#030712] text-white p-4">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10 text-red-500 mb-6">
+    <div className="flex h-screen flex-col items-center justify-center bg-[#030712] text-white p-4 relative overflow-hidden">
+      <BackgroundGrid fixed />
+      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10 text-red-500 mb-6 relative z-10">
         <AlertTriangle className="h-10 w-10" />
       </div>
-      <h2 className="text-2xl font-bold mb-2 text-center">Bir şeyler ters gitti!</h2>
-      <p className="text-slate-400 mb-8 text-center max-w-md">
+      <h2 className="text-2xl font-bold mb-2 text-center relative z-10">Bir şeyler ters gitti!</h2>
+      <p className="text-slate-400 mb-8 text-center max-w-md relative z-10">
         Beklenmedik bir hata oluştu. Lütfen tekrar deneyin.
       </p>
-      <div className="flex gap-4">
+      <div className="flex gap-4 relative z-10">
         <Button
           onClick={() => reset()}
           className="bg-indigo-600 hover:bg-indigo-700 text-white"

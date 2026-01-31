@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, CheckCircle, Users, Target, Shield } from 'lucide-react'
+import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
 
 export const metadata: Metadata = {
   title: 'Hakkımızda | Puantaj Pro',
@@ -13,10 +14,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white selection:bg-indigo-500/30">
       {/* Background Effects */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-        <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-indigo-500/10 opacity-30 blur-[100px]" />
-      </div>
+      <BackgroundGrid fixed />
 
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="mb-12">

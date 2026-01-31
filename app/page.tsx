@@ -17,6 +17,7 @@ import {
   Star
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false)
@@ -36,11 +37,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden selection:bg-indigo-500/30">
       {/* Background Grid & Spotlights */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-indigo-500 opacity-20 blur-[100px]" />
-        <div className="absolute right-0 top-0 -z-10 h-[500px] w-[500px] bg-blue-500/10 opacity-30 blur-[100px]" />
-      </div>
+      <BackgroundGrid fixed />
 
       {/* Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#030712]/80 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
