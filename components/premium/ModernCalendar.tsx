@@ -81,14 +81,14 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
     return (
         <div className="flex flex-col h-full bg-background/50 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
             <div className="flex-1 flex flex-col md:flex-row">
-                <div className={`flex-1 flex flex-col p-6 transition-all duration-300 ${isNotesOpen ? 'md:w-2/3' : 'w-full'}`}>
+                <div className={`flex-1 flex flex-col p-4 md:p-6 transition-all duration-300 ${isNotesOpen ? 'md:w-2/3' : 'w-full'}`}>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center justify-between mb-4 md:mb-8">
                         <div>
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent capitalize">
+                            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent capitalize">
                                 {currentTime.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}
                             </h1>
-                            <p className="text-muted-foreground capitalize font-medium">
+                            <p className="text-sm md:text-base text-muted-foreground capitalize font-medium">
                                 {currentTime.toLocaleDateString('tr-TR', { weekday: 'long' })}
                             </p>
                         </div>
@@ -101,16 +101,16 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
 
                     {/* Calendar Grid */}
                     <div className="flex-1">
-                        <div className="grid grid-cols-7 mb-4">
+                        <div className="grid grid-cols-7 mb-2 md:mb-4">
                             {['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'].map(day => (
-                                <div key={day} className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider py-2">
+                                <div key={day} className="text-center text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider py-1 md:py-2">
                                     {day}
                                 </div>
                             ))}
                         </div>
-                        <div className="grid grid-cols-7 gap-2 h-full">
+                        <div className="grid grid-cols-7 gap-1 md:gap-2 h-full content-start md:content-normal">
                             {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                                <div key={`empty-${i}`} className="p-2" />
+                                <div key={`empty-${i}`} className="p-1 md:p-2" />
                             ))}
                             
                             {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -127,7 +127,7 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
                                         key={day} 
                                         onClick={() => handleDateClick(day)}
                                         className={cn(
-                                            "relative aspect-square rounded-2xl flex flex-col items-center justify-center text-lg font-medium transition-all duration-200 border border-transparent group",
+                                            "relative aspect-square rounded-xl md:rounded-2xl flex flex-col items-center justify-center text-sm md:text-lg font-medium transition-all duration-200 border border-transparent group",
                                             isToday ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105 font-bold" : 
                                             isSelected ? "bg-secondary text-foreground ring-2 ring-primary/50" :
                                             "hover:bg-secondary/50 hover:border-white/10 text-foreground/80"
@@ -136,14 +136,14 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
                                         <span className={cn("relative z-10", isToday && "text-white")}>{day}</span>
                                         
                                         {/* Indicators */}
-                                        <div className="absolute bottom-2 flex gap-1 items-center justify-center">
+                                        <div className="absolute bottom-1 md:bottom-2 flex gap-0.5 md:gap-1 items-center justify-center">
                                             {hasNote && (
-                                                <div className={cn("w-1.5 h-1.5 rounded-full", isToday ? "bg-white" : "bg-orange-500")} />
+                                                <div className={cn("w-1 h-1 md:w-1.5 md:h-1.5 rounded-full", isToday ? "bg-white" : "bg-orange-500")} />
                                             )}
                                             {dayEvents.slice(0, 3).map((ev, idx) => (
                                                 <div 
                                                     key={idx} 
-                                                    className="w-1.5 h-1.5 rounded-full"
+                                                    className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full"
                                                     style={{ backgroundColor: ev.color || (isToday ? 'white' : '#3b82f6') }}
                                                 />
                                             ))}

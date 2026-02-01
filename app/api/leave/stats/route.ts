@@ -91,9 +91,10 @@ export async function GET() {
     let upcomingLeaves;
     const now = new Date();
     
-    if (userRole === 'admin') {
+    if (userRole === 'personnel') {
       upcomingLeaves = await prisma.leave.findMany({
         where: {
+          employeeId: userId,
           startDate: { gte: now },
           status: 'approved'
         },
@@ -102,9 +103,10 @@ export async function GET() {
         take: 5
       });
     } else {
+      // Admin sees all upcoming leaves
       upcomingLeaves = await prisma.leave.findMany({
         where: {
-          userId,
+          userId: userId,
           startDate: { gte: now },
           status: 'approved'
         },
