@@ -177,7 +177,10 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
     return (
         <div className="flex flex-col h-full bg-background/50 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
             <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden">
-                <div className={`flex-1 flex flex-col p-4 md:p-6 transition-all duration-300 ${isNotesOpen ? 'md:w-2/3' : 'w-full'} overflow-y-auto`}>
+                <div className={cn(
+                    "flex flex-col transition-all duration-300 overflow-y-auto",
+                    isNotesOpen ? "h-0 md:h-full md:flex-1 md:w-2/3 p-0 md:p-6 opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto" : "flex-1 w-full p-4 md:p-6 opacity-100"
+                )}>
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4 md:mb-8 shrink-0">
                         <div className="flex items-center gap-4">
@@ -274,8 +277,8 @@ export function ModernCalendar({ events = [] }: ModernCalendarProps) {
                 
                 {/* Modern Planner Panel */}
                 <div className={cn(
-                    "border-l border-white/10 bg-background/30 backdrop-blur-md transition-all duration-500 ease-in-out flex flex-col h-full",
-                    isNotesOpen ? "md:w-[400px] w-full opacity-100" : "w-0 opacity-0 overflow-hidden"
+                    "border-l border-white/10 bg-background/30 backdrop-blur-md transition-all duration-500 ease-in-out flex flex-col",
+                    isNotesOpen ? "h-full md:w-[400px] w-full opacity-100" : "h-0 md:h-full w-0 opacity-0 overflow-hidden"
                 )}>
                     <div className="p-6 h-full flex flex-col">
                         <div className="flex items-center justify-between mb-6 shrink-0">
