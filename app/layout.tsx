@@ -16,13 +16,6 @@ export const metadata: Metadata = {
   keywords: ['personel takip', 'puantaj', 'vardiya', 'maaş hesaplama', 'ik yazılımı', 'insan kaynakları'],
   authors: [{ name: 'Puantaj Pro Team' }],
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Mobile app feel
-  },
-  themeColor: '#4f46e5',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -41,6 +34,14 @@ export const metadata: Metadata = {
     title: 'Puantaj Pro',
     description: 'Yapay Zeka Destekli Personel Yönetimi',
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#4f46e5',
 };
 
 export default function RootLayout({

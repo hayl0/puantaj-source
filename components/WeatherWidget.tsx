@@ -426,7 +426,7 @@ export default function WeatherWidget() {
                     <div className="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">6°</div>
                     <div className="text-xs opacity-70">0°</div>
                 </div>
-                <div className={`bg-white/5 backdrop-blur-sm rounded-xl p-3 w-20 text-center border border-white/10 shadow-sm hover:bg-white/10 transition-all duration-200 cursor-pointer transform hover:-translate-y-1 ${styles.animateFadeInUp} delay-[0.8s] ${styles.forecastDay}`}>
+                <div className={`bg-white/5 backdrop-blur-sm rounded-xl p-3 w-20 text-center border border-white/10 shadow-sm hover:bg-white/10 transition-all duration-200 cursor-pointer transform hover:-translate-y-1 ${styles.animateFadeInUp} ${styles.forecastDay}`} style={{ animationDelay: '0.8s' }}>
                     <div className="text-xs font-medium mb-1 opacity-80">Sun</div>
                     <div className={`text-2xl my-1 drop-shadow-md ${styles.forecastIcon}`}>☀️</div>
                     <div className="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">9°</div>
