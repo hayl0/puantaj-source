@@ -130,7 +130,8 @@ export const authOptions: NextAuthOptions = {
               // Enforce verification only for users created after the feature launch (2026-02-01)
               const FEATURE_LAUNCH_DATE = new Date('2026-02-01T00:00:00Z');
               if (!user.emailVerified && user.createdAt > FEATURE_LAUNCH_DATE) {
-                throw new Error("Lütfen email adresinizi doğrulayın.");
+                const dateStr = user.createdAt.toISOString().split('T')[0];
+                throw new Error(`Email adresiniz doğrulanmamış. (Kayıt: ${dateStr}, Hesap: Yönetici)`);
               }
 
               console.log("User Password Valid");
@@ -162,7 +163,8 @@ export const authOptions: NextAuthOptions = {
               // Enforce verification only for employees created after the feature launch (2026-02-01)
               const FEATURE_LAUNCH_DATE = new Date('2026-02-01T00:00:00Z');
               if (!(employee as any).emailVerified && employee.createdAt > FEATURE_LAUNCH_DATE) {
-                throw new Error("Lütfen email adresinizi doğrulayın.");
+                const dateStr = employee.createdAt.toISOString().split('T')[0];
+                throw new Error(`Email adresiniz doğrulanmamış. (Kayıt: ${dateStr}, Hesap: Personel)`);
               }
 
               console.log("Employee Password Valid");
