@@ -39,9 +39,16 @@ export default function PlasmaSphere() {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.z = 2.4;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: window.innerWidth > 768, // Disable antialias on mobile
+      alpha: true,
+      powerPreference: "high-performance"
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Reduce pixel ratio on mobile to save battery and improve performance
+    const isMobile = window.innerWidth < 768;
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
     
     // TONE MAPPING
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -264,7 +271,7 @@ export default function PlasmaSphere() {
 
 
     // 5. PARTICLES
-    const pCount = 600; 
+    const pCount = isMobile ? 200 : 600; // Reduce particles on mobile
     const pPos = new Float32Array(pCount * 3);
     const pSizes = new Float32Array(pCount);
     const sphereRadius = 0.95;
@@ -354,11 +361,19 @@ export default function PlasmaSphere() {
         renderer.render(scene, camera);
     }
 
-    // Handle Resize
+    // Handle Resize with Debounce
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Update mobile status on resize
+            const isMobileResize = window.innerWidth < 768;
+            renderer.setPixelRatio(isMobileResize ? 1 : Math.min(window.devicePixelRatio, 2));
+        }, 100);
     };
 
     window.addEventListener('resize', handleResize);
