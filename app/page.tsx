@@ -198,7 +198,7 @@ export default function HomePage() {
         </section>
 
         {/* Trusted By */}
-        <section className="py-10 border-y border-white/5 bg-white/[0.02]">
+        <section className="py-10 border-y border-white/5 bg-white/[0.02] relative z-10">
           <div className="container mx-auto px-4 text-center">
             <p className="text-sm text-slate-500 mb-8 font-medium">YENİLİKÇİ ŞİRKETLER TARAFINDAN GÜVENİLİYOR</p>
             <div className="flex flex-wrap justify-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
@@ -211,7 +211,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Bento Grid */}
-        <section id="features" className="py-32 relative">
+        <section id="features" className="py-32 relative z-10">
           <div className="container mx-auto px-4">
             <div className="text-center mb-20">
               <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Her Şey Kontrol Altında</h2>
@@ -301,7 +301,7 @@ export default function HomePage() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-32 relative border-t border-white/5 bg-white/[0.02]">
+        <section className="py-32 relative z-10 border-t border-white/5 bg-white/[0.02]">
           <div className="container mx-auto px-4">
             <div className="text-center mb-20">
               <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
@@ -386,7 +386,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-32 relative overflow-hidden">
+        <section className="py-32 relative z-10 overflow-hidden">
           <div className="container mx-auto px-4 text-center relative z-10">
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px] -z-10" />
              
@@ -409,7 +409,7 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-white/10 bg-[#02040a] pt-20 pb-10">
+        <footer className="border-t border-white/10 bg-[#02040a] pt-20 pb-10 relative z-10">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
               <div className="col-span-2 md:col-span-1">
