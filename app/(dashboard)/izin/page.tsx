@@ -10,7 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Progress } from "@/components/ui/progress";
 import { 
   Plus, Calendar as CalendarIcon, CheckCircle, XCircle, Clock, Filter,
-  Plane, AlertCircle, FileText, Loader2, CalendarDays
+  Plane, AlertCircle, FileText, Loader2, CalendarDays, Trash2
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useToast } from "@/hooks/use-toast";
@@ -217,10 +217,70 @@ export default function IzinPage() {
     }
   };
 
-  // Calculate balances (Mock logic based on usage)
-  // const calculateBalances = () => { ... } // Removed
+  const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
+    try {
+      const res = await fetch(`/api/leaves/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
 
-  // const leaveBalances = calculateBalances(); // Removed
+      if (res.ok) {
+        toast({
+          title: "Başarılı",
+          description: `İzin talebi ${status === 'approved' ? 'onaylandı' : 'reddedildi'}.`,
+        });
+        // Refresh data
+        const leavesRes = await fetch('/api/leaves');
+        if (leavesRes.ok) {
+          const data = await leavesRes.json();
+          setLeaves(data);
+        }
+        // Refresh stats too as balances might change
+        const statsRes = await fetch('/api/leave/stats');
+        if (statsRes.ok) {
+          const data = await statsRes.json();
+          setStats(data);
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Hata",
+          description: "İşlem gerçekleştirilemedi.",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating leave:", error);
+      toast({
+        variant: "destructive",
+        title: "Hata",
+        description: "Bir hata oluştu.",
+      });
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bu izin talebini silmek istediğinize emin misiniz?')) return;
+    
+    try {
+      const res = await fetch(`/api/leaves/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        toast({ title: "Başarılı", description: "İzin talebi silindi." });
+        
+        // Refresh data
+        const leavesRes = await fetch('/api/leaves');
+        if (leavesRes.ok) setLeaves(await leavesRes.json());
+        
+        const statsRes = await fetch('/api/leave/stats');
+        if (statsRes.ok) setStats(await statsRes.json());
+      } else {
+         toast({ variant: "destructive", title: "Hata", description: "Silinemedi." });
+      }
+    } catch (error) {
+       console.error("Error deleting:", error);
+       toast({ variant: "destructive", title: "Hata", description: "Bir hata oluştu." });
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -230,7 +290,7 @@ export default function IzinPage() {
           ? "Personel izin taleplerini onaylayın ve takvimi yönetin" 
           : "İzin durumunuzu görüntüleyin ve yeni talep oluşturun"}
       >
-      <div className="mb-8 h-[600px] border rounded-2xl overflow-hidden bg-background/50 backdrop-blur-sm shadow-sm">
+      <div className="mb-8 h-[650px] md:h-[750px] border rounded-2xl overflow-hidden bg-background/50 backdrop-blur-sm shadow-sm transition-all duration-300">
         <ModernCalendar events={calendarEvents} />
       </div>
         
@@ -434,14 +494,24 @@ export default function IzinPage() {
                     )}
 
                     {userRole === 'admin' && req.status === 'pending' ? (
-                      <div className="flex gap-2">
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white h-8">Onayla</Button>
-                        <Button size="sm" variant="outline" className="border-red-500/50 text-red-500 hover:bg-red-500/10 h-8">Reddet</Button>
+                      <div className="flex gap-2 items-center">
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white h-8" onClick={() => handleUpdateStatus(req.id, 'approved')}>Onayla</Button>
+                        <Button size="sm" variant="outline" className="border-red-500/50 text-red-500 hover:bg-red-500/10 h-8" onClick={() => handleUpdateStatus(req.id, 'rejected')}>Reddet</Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500" onClick={() => handleDelete(req.id)}>
+                            <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     ) : (
-                      <Badge variant={req.status === 'pending' ? 'secondary' : req.status === 'approved' ? 'default' : 'destructive'}>
-                        {req.status === 'pending' ? 'Bekliyor' : req.status === 'approved' ? 'Onaylandı' : 'Reddedildi'}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={req.status === 'pending' ? 'secondary' : req.status === 'approved' ? 'default' : 'destructive'}>
+                          {req.status === 'pending' ? 'Bekliyor' : req.status === 'approved' ? 'Onaylandı' : 'Reddedildi'}
+                        </Badge>
+                        {(userRole === 'admin' || (req.status === 'pending')) && (
+                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500" onClick={() => handleDelete(req.id)}>
+                                 <Trash2 className="w-4 h-4" />
+                             </Button>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

@@ -364,7 +364,7 @@ export default function VardiyaPage() {
         )}
       </PageHeader>
 
-      <div className="mb-8 h-[600px] w-full">
+      <div className="mb-8 h-[650px] md:h-[750px] w-full transition-all duration-300">
         <ModernCalendar events={calendarEvents} />
       </div>
 

@@ -49,7 +49,7 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
-    if (isCalendarOpen) {
+    if (session) {
       const fetchEvents = async () => {
         try {
           const res = await fetch('/api/calendar-events');
@@ -63,7 +63,7 @@ export default function DashboardPage() {
       };
       fetchEvents();
     }
-  }, [isCalendarOpen]);
+  }, [session]);
 
   useEffect(() => {
     const fetchCharts = async () => {
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                 Tam Ekran
              </Button>
           </div>
-          <div className="h-[600px] w-full">
+          <div className="h-[650px] md:h-[750px] w-full transition-all duration-300">
             <ModernCalendar events={calendarEvents} />
           </div>
         </div>
