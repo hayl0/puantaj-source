@@ -37,8 +37,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden selection:bg-indigo-500/30">
       {/* Background Grid & Spotlights */}
-      <PlasmaSphere />
       <BackgroundGrid fixed />
+      <PlasmaSphere />
 
       {/* Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#030712]/80 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>

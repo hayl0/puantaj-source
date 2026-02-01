@@ -385,6 +385,6 @@ export default function PlasmaSphere() {
   }, []);
 
   return (
-    <div ref={containerRef} className="fixed inset-0 z-0" />
+    <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none" />
   );
 }

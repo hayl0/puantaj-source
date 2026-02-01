@@ -48,8 +48,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#030712] text-white relative overflow-hidden selection:bg-indigo-500/30">
       {/* Background Effects */}
-      <PlasmaSphere />
       <BackgroundGrid fixed />
+      <PlasmaSphere />
 
       <div className="glass-card p-8 md:p-12 rounded-3xl w-full max-w-lg relative z-10 animate-float border border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="text-center mb-10">
