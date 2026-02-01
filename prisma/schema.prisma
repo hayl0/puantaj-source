@@ -15,6 +15,13 @@ model User {
   role          String    @default("user")
   emailVerified DateTime?
   verificationCode String?
+  
+  // Company Info
+  companyName   String?
+  taxNumber     String?
+  address       String?
+  phone         String?
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

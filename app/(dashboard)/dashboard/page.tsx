@@ -106,6 +106,29 @@ export default function DashboardPage() {
     }
   };
 
+  const [userStats, setUserStats] = useState({
+    leave: { remaining: 0, total: 14, used: 0 },
+    work: { monthlyHours: 0, overtime: 0 },
+    payroll: { amount: 0, date: null }
+  });
+
+  useEffect(() => {
+    if (userRole === 'personnel') {
+      const fetchUserStats = async () => {
+        try {
+          const res = await fetch('/api/dashboard/stats');
+          if (res.ok) {
+            const data = await res.json();
+            setUserStats(data);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user stats', error);
+        }
+      };
+      fetchUserStats();
+    }
+  }, [userRole]);
+
   // --- ADMIN DASHBOARD ---
   if (userRole === 'admin') {
     return (
@@ -134,10 +157,6 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex flex-wrap gap-3">
-              <Button variant="outline" onClick={() => setIsCalendarOpen(true)} className="gap-2 h-12 px-6 rounded-full bg-background/50 backdrop-blur-sm hover:bg-background border-white/10 transition-all hover:scale-105">
-                <CalendarIcon className="w-4 h-4" />
-                Takvim
-              </Button>
               <Button className="gap-2 h-12 px-6 rounded-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:shadow-primary/40">
                 <Download className="w-4 h-4" />
                 Hızlı Rapor
@@ -148,6 +167,26 @@ export default function DashboardPage() {
 
         {/* Stats Grid */}
         <DashboardStats />
+
+        {/* Calendar Section (Visible) */}
+        <div className="glass-card p-6 rounded-3xl border border-white/10 shadow-xl bg-gradient-to-b from-background/80 to-background/40 backdrop-blur-md">
+          <div className="flex items-center justify-between mb-6">
+             <div className="flex items-center gap-2">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <CalendarIcon className="w-5 h-5 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+                  Takvim ve Planlama
+                </h3>
+             </div>
+             <Button variant="outline" size="sm" onClick={() => setIsCalendarOpen(true)}>
+                Tam Ekran
+             </Button>
+          </div>
+          <div className="h-[600px] w-full">
+            <ModernCalendar events={calendarEvents} />
+          </div>
+        </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -383,9 +422,30 @@ export default function DashboardPage() {
       {/* Main Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: 'Kalan İzin', value: '14 Gün', sub: 'Yıllık izin hakkı', icon: CalendarDays, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-          { label: 'Bu Ay Mesai', value: '12 Saat', sub: 'Onay bekleyen: 2 saat', icon: Clock, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-          { label: 'Son Maaş', value: '₺32.450', sub: 'Ödeme tarihi: 15.01.2025', icon: Wallet, color: 'text-green-500', bg: 'bg-green-500/10' },
+          { 
+            label: 'Kalan İzin', 
+            value: `${userStats.leave.remaining} Gün`, 
+            sub: `Toplam: ${userStats.leave.total} Gün`, 
+            icon: CalendarDays, 
+            color: 'text-blue-500', 
+            bg: 'bg-blue-500/10' 
+          },
+          { 
+            label: 'Bu Ay Çalışma', 
+            value: `${userStats.work.monthlyHours} Saat`, 
+            sub: 'Toplam çalışma saati', 
+            icon: Clock, 
+            color: 'text-orange-500', 
+            bg: 'bg-orange-500/10' 
+          },
+          { 
+            label: 'Son Maaş', 
+            value: userStats.payroll.amount ? `₺${userStats.payroll.amount.toLocaleString('tr-TR')}` : '-', 
+            sub: userStats.payroll.date ? `Ödeme: ${new Date(userStats.payroll.date).toLocaleDateString('tr-TR')}` : 'Ödeme bulunamadı', 
+            icon: Wallet, 
+            color: 'text-green-500', 
+            bg: 'bg-green-500/10' 
+          },
         ].map((stat, i) => (
           <motion.div
             key={i}

@@ -85,7 +85,6 @@ export default function IzinPage() {
     employeeId: ''
   });
   const [submitting, setSubmitting] = useState(false);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
 
   // Convert leaves to ModernCalendar events
@@ -103,8 +102,8 @@ export default function IzinPage() {
                     events.push({
                         date: format(day, 'yyyy-M-d'),
                         title: `${leave.employee?.name || 'Personel'} - ${leave.type}`,
-                        color: leave.status === 'Approved' ? '#22c55e' : 
-                               leave.status === 'Rejected' ? '#ef4444' : '#f59e0b',
+                        color: leave.status === 'approved' ? '#22c55e' : 
+                               leave.status === 'rejected' ? '#ef4444' : '#f59e0b',
                     });
                 });
             } catch (e) {
@@ -371,40 +370,9 @@ export default function IzinPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Calendar Section */}
-        <PremiumCard className="lg:col-span-1">
-          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5 text-primary" />
-            İzin Takvimi
-          </h3>
-          <Calendar
-            mode="range"
-            selected={dateRange}
-            onSelect={setDateRange}
-          />
-          <div className="mt-6 space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Yaklaşan İzinler</h4>
-            {loading ? (
-               <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>
-            ) : leaves.filter(r => r.status === 'approved').slice(0, 2).map((req) => (
-              <div key={req.id} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>{(req.employee?.name || "P")[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium">{req.employee?.name || "Personel"}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(req.startDate).toLocaleDateString()} - {new Date(req.endDate).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </PremiumCard>
-
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         {/* Requests List */}
-        <PremiumCard className="lg:col-span-2">
+        <PremiumCard className="lg:col-span-1">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-lg">İzin Talepleri</h3>
             <div className="flex gap-2">

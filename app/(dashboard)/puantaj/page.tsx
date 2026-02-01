@@ -110,7 +110,7 @@ export default function PuantajPage() {
         </Button>
       </PageHeader>
 
-      <div className="mb-8">
+      <div className="mb-8 h-[600px] w-full">
         <ModernCalendar />
       </div>
 

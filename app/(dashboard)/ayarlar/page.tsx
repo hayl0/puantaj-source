@@ -9,20 +9,86 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  User, Building, Bell, Shield, Save, 
-  Mail, Globe, Lock, CreditCard, Loader2
+  Save, Loader2
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export default function AyarlarPage() {
   const { data: session } = useSession();
-  const user = session?.user;
-
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
+  
+  // Form States
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    role: '',
+    companyName: '',
+    taxNumber: '',
+    address: '',
+    phone: ''
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch('/api/user/me');
+        if (res.ok) {
+          const data = await res.json();
+          setFormData({
+            name: data.name || '',
+            email: data.email || '',
+            role: data.role || 'user',
+            companyName: data.companyName || '',
+            taxNumber: data.taxNumber || '',
+            address: data.address || '',
+            phone: data.phone || ''
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data", error);
+        toast.error("Kullanıcı bilgileri yüklenemedi");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (session) {
+      fetchUserData();
+    }
+  }, [session]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch('/api/user/update', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        toast.success("Ayarlar başarıyla kaydedildi");
+        // Optionally reload session or update UI
+      } else {
+        throw new Error("Update failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Kaydetme işlemi başarısız oldu");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleDeleteAccount = async () => {
     if (!window.confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm verileriniz silinir.')) {
@@ -48,6 +114,10 @@ export default function AyarlarPage() {
     }
   };
 
+  if (loading) {
+    return <div className="flex justify-center p-8"><Loader2 className="animate-spin" /></div>;
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader 
@@ -69,7 +139,7 @@ export default function AyarlarPage() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <Avatar className="w-20 h-20 border-4 border-background shadow-xl">
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage src={`https://ui-avatars.com/api/?name=${formData.name}&background=random`} />
                     <AvatarFallback>AD</AvatarFallback>
                   </Avatar>
                   <Button variant="outline">Fotoğraf Değiştir</Button>
@@ -78,20 +148,20 @@ export default function AyarlarPage() {
                 <div className="grid gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Ad Soyad</Label>
-                    <Input id="name" defaultValue={user?.name || ''} key={user?.name} />
+                    <Input id="name" value={formData.name} onChange={handleInputChange} />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" value={user?.email || ''} readOnly />
+                    <Input id="email" value={formData.email} readOnly className="bg-muted" />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="bio">Rol</Label>
-                    <Input id="bio" value={(user as any)?.role || 'User'} readOnly />
+                    <Label htmlFor="role">Rol</Label>
+                    <Input id="role" value={formData.role} readOnly className="bg-muted capitalize" />
                   </div>
                 </div>
 
-                <Button className="w-full">
-                  <Save className="w-4 h-4 mr-2" />
+                <Button className="w-full" onClick={handleSave} disabled={saving}>
+                  {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                   Kaydet
                 </Button>
               </div>
@@ -104,24 +174,28 @@ export default function AyarlarPage() {
             <div className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label>Şirket Adı</Label>
-                  <Input placeholder="Şirket adı girilmemiş" readOnly />
+                  <Label htmlFor="companyName">Şirket Adı</Label>
+                  <Input id="companyName" value={formData.companyName} onChange={handleInputChange} placeholder="Şirket adı girin" />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Vergi Numarası</Label>
-                  <Input placeholder="Vergi no girilmemiş" readOnly />
+                  <Label htmlFor="taxNumber">Vergi Numarası</Label>
+                  <Input id="taxNumber" value={formData.taxNumber} onChange={handleInputChange} placeholder="Vergi no girin" />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Adres</Label>
-                  <Input placeholder="Adres girilmemiş" readOnly />
+                  <Label htmlFor="address">Adres</Label>
+                  <Input id="address" value={formData.address} onChange={handleInputChange} placeholder="Adres girin" />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Telefon</Label>
-                  <Input placeholder="Telefon girilmemiş" readOnly />
+                  <Label htmlFor="phone">Telefon</Label>
+                  <Input id="phone" value={formData.phone} onChange={handleInputChange} placeholder="Telefon girin" />
                 </div>
               </div>
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-lg text-sm">
-                Şirket bilgileri şu anda düzenlenemez. Lütfen sistem yöneticisi ile iletişime geçin.
+              
+              <div className="flex justify-end">
+                <Button onClick={handleSave} disabled={saving}>
+                    {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                    Şirket Bilgilerini Güncelle
+                </Button>
               </div>
             </div>
           </PremiumCard>

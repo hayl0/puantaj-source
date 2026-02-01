@@ -1,89 +1,88 @@
-
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
-import prisma from '@/lib/prisma';
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import prisma from "@/lib/prisma";
+import { startOfMonth, endOfMonth, subMonths } from "date-fns";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = session.user.id;
-  const userRole = (session.user as any).role;
+  const user = session.user as any;
+  const userId = user.id;
+  const userRole = user.role;
 
   try {
-    // Determine the query filter based on role
-    // Admins see all data (or just their own if it's a multi-tenant app structure where admin=company owner)
-    // Based on schema, everything is linked to `userId` (User model).
-    // So "Admin" here effectively means the Company Owner/Manager.
-    const whereUserId = { userId: userId };
+    if (userRole === 'personnel') {
+      const now = new Date();
+      const start = startOfMonth(now);
+      const end = endOfMonth(now);
 
-    // 1. Total Employees
-    const totalEmployees = await prisma.employee.count({
-      where: whereUserId,
-    });
-
-    // 2. Attendance Rate (Today)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const presentCount = await prisma.attendance.count({
-      where: {
-        ...whereUserId,
-        date: {
-          gte: today,
-          lt: tomorrow,
+      // 1. Remaining Leave (Total - Used)
+      // Assuming 14 days standard for now, or fetch from Employee model if added
+      // We calculate used days
+      const usedLeaves = await prisma.leave.aggregate({
+        where: {
+          employeeId: userId,
+          status: 'approved',
+          startDate: {
+            gte: new Date(now.getFullYear(), 0, 1) // From start of year
+          }
         },
-        status: {
-          in: ['present', 'late', 'early_leave'] // Assuming these count as "attended"
+        _sum: { days: true }
+      });
+      
+      const usedDays = usedLeaves._sum.days || 0;
+      const totalLeaveRights = 14; // Default standard
+      const remainingLeave = Math.max(0, totalLeaveRights - usedDays);
+
+      // 2. Monthly Overtime (Attendance > 9 hours or shifts marked as overtime)
+      // For simplicity, summing 'hours' from attendance where status is 'present' or 'late'
+      // Ideally we check shift plan, but let's assume > 9 hours is overtime or specific 'overtime' field
+      // The current Attendance model has 'hours'.
+      // Let's sum hours for this month.
+      const attendanceStats = await prisma.attendance.aggregate({
+        where: {
+          employeeId: userId,
+          date: { gte: start, lte: end }
+        },
+        _sum: { hours: true }
+      });
+      
+      const totalHours = attendanceStats._sum.hours || 0;
+      // Simple logic: assume 45 hours/week, approx 180 hours/month standard? 
+      // Or just return total hours worked.
+      // The UI says "Bu Ay Mesai" (Overtime this month).
+      // Let's return total hours for now, or 0 if no specific overtime logic.
+      
+      // 3. Last Payroll
+      const lastPayroll = await prisma.payroll.findFirst({
+        where: { employeeId: userId, status: 'paid' },
+        orderBy: { month: 'desc' }
+      });
+
+      return NextResponse.json({
+        leave: {
+          remaining: remainingLeave,
+          total: totalLeaveRights,
+          used: usedDays
+        },
+        work: {
+          monthlyHours: totalHours.toFixed(1),
+          overtime: 0 // Placeholder until we have strict overtime logic
+        },
+        payroll: {
+          amount: lastPayroll?.amount || 0,
+          date: lastPayroll?.paidAt || lastPayroll?.generatedAt || null
         }
-      },
-    });
+      });
+    }
 
-    const attendanceRate = totalEmployees > 0 
-      ? Math.round((presentCount / totalEmployees) * 100) 
-      : 0;
-
-    // 3. Total Monthly Salary (Cost)
-    // Sum of all employee salaries
-    const employees = await prisma.employee.findMany({
-      where: whereUserId,
-      select: { salary: true, paymentType: true }
-    });
-
-    let totalMonthlyCost = 0;
-    employees.forEach(emp => {
-      if (emp.paymentType === 'monthly') {
-        totalMonthlyCost += emp.salary;
-      } else if (emp.paymentType === 'daily') {
-        totalMonthlyCost += emp.salary * 30; // Approximation
-      } else if (emp.paymentType === 'hourly') {
-        totalMonthlyCost += emp.salary * 160; // Approximation (8h * 20d)
-      }
-    });
-
-    // 4. Pending Leave Requests
-    const pendingLeaves = await prisma.leave.count({
-      where: {
-        ...whereUserId,
-        status: 'pending'
-      }
-    });
-
-    return NextResponse.json({
-      totalEmployees,
-      attendanceRate,
-      totalMonthlyCost,
-      pendingLeaves
-    });
-
+    return NextResponse.json({ error: "Not implemented for admin" }, { status: 400 });
   } catch (error) {
-    console.error('Dashboard stats error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error("Dashboard Stats Error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
