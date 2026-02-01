@@ -290,10 +290,6 @@ export default function IzinPage() {
           ? "Personel izin taleplerini onaylayın ve takvimi yönetin" 
           : "İzin durumunuzu görüntüleyin ve yeni talep oluşturun"}
       >
-      <div className="mb-8 h-[650px] md:h-[750px] border rounded-2xl overflow-hidden bg-background/50 backdrop-blur-sm shadow-sm transition-all duration-300">
-        <ModernCalendar events={calendarEvents} />
-      </div>
-        
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-600/20">
@@ -404,6 +400,75 @@ export default function IzinPage() {
           </DialogContent>
         </Dialog>
       </PageHeader>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        {/* Sidebar Info */}
+        <div className="lg:col-span-3 space-y-6">
+            <PremiumCard className="p-5 border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-500/5 to-transparent">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <CalendarDays className="w-5 h-5 text-purple-500" />
+                    Resmi Tatiller
+                </h3>
+                <div className="space-y-4">
+                    <div className="flex gap-3 items-start">
+                        <div className="bg-purple-500/10 text-purple-500 rounded-lg p-2 text-center min-w-[50px]">
+                            <span className="block text-xs font-bold uppercase">NİS</span>
+                            <span className="block text-lg font-bold">23</span>
+                        </div>
+                        <div>
+                            <p className="font-medium text-sm">Ulusal Egemenlik ve Çocuk Bayramı</p>
+                            <p className="text-xs text-muted-foreground">Çarşamba</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <div className="bg-purple-500/10 text-purple-500 rounded-lg p-2 text-center min-w-[50px]">
+                            <span className="block text-xs font-bold uppercase">MAY</span>
+                            <span className="block text-lg font-bold">01</span>
+                        </div>
+                        <div>
+                            <p className="font-medium text-sm">Emek ve Dayanışma Günü</p>
+                            <p className="text-xs text-muted-foreground">Perşembe</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <div className="bg-purple-500/10 text-purple-500 rounded-lg p-2 text-center min-w-[50px]">
+                            <span className="block text-xs font-bold uppercase">MAY</span>
+                            <span className="block text-lg font-bold">19</span>
+                        </div>
+                        <div>
+                            <p className="font-medium text-sm">Atatürk'ü Anma, Gençlik ve Spor Bayramı</p>
+                            <p className="text-xs text-muted-foreground">Pazartesi</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <div className="bg-purple-500/10 text-purple-500 rounded-lg p-2 text-center min-w-[50px]">
+                            <span className="block text-xs font-bold uppercase">HAZ</span>
+                            <span className="block text-lg font-bold">06</span>
+                        </div>
+                        <div>
+                            <p className="font-medium text-sm">Kurban Bayramı (1. Gün)</p>
+                            <p className="text-xs text-muted-foreground">Cumartesi</p>
+                        </div>
+                    </div>
+                </div>
+            </PremiumCard>
+
+            <PremiumCard className="p-5 bg-gradient-to-br from-blue-500/5 to-transparent border-l-4 border-l-blue-500">
+                <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-blue-500" />
+                    Bilgilendirme
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                    Yıllık izin haklarınız işe giriş tarihinize göre hesaplanmaktadır. İzin taleplerinizi en az 1 hafta önceden oluşturmanız önerilir.
+                </p>
+            </PremiumCard>
+        </div>
+
+        {/* Main Calendar */}
+        <div className="lg:col-span-9 h-[800px] border rounded-2xl overflow-hidden bg-background/50 backdrop-blur-sm shadow-sm transition-all duration-300">
+            <ModernCalendar events={calendarEvents} />
+        </div>
+      </div>
 
       {/* Leave Balances */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
