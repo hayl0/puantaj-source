@@ -30,6 +30,20 @@ model User {
   payrolls      Payroll[]
   leaves        Leave[]
   shifts        Shift[]
+  incomes       Income[]
+}
+
+model Income {
+  id          String   @id @default(cuid())
+  amount      Float
+  description String?
+  date        DateTime
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }
 
 model Payroll {
@@ -40,10 +54,10 @@ model Payroll {
   generatedAt   DateTime  @default(now())
   paidAt        DateTime?
 
-  employee      Employee  @relation(fields: [employeeId], references: [id])
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId    String
 
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
 }
 
@@ -59,9 +73,14 @@ model Employee {
   emailVerified DateTime?
   verificationCode String?
   hireDate      DateTime
+  
+  // Contact Info
+  phone         String?
+  address       String?
+
   createdAt     DateTime  @default(now())
   
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
 
   attendances   Attendance[]
@@ -78,10 +97,10 @@ model Attendance {
   hours         Float?
   status        String
   
-  employee      Employee  @relation(fields: [employeeId], references: [id])
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId    String
   
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
 
   @@unique([employeeId, date])
@@ -97,27 +116,26 @@ model Leave {
   reason      String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-
-  employee    Employee  @relation(fields: [employeeId], references: [id])
+  
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId  String
 
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
 }
 
 model Shift {
   id          String    @id @default(cuid())
-  name        String    // Gündüz, Akşam, Gece
-  startTime   String    // 08:00
-  endTime     String    // 17:00
-  date        DateTime
-  
-  employee    Employee  @relation(fields: [employeeId], references: [id])
-  employeeId  String
-
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String
-
+  title       String    // Vardiya Başlığı (Sabah, Akşam vb.)
+  start       DateTime
+  end         DateTime
+  type        String    // morning, evening, night, full
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId  String
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }

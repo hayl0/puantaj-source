@@ -24,7 +24,8 @@ export async function GET() {
           email: true,
           department: true,
           position: true,
-          // Map employee fields to generic user profile fields if needed
+          phone: true,    // Now exists
+          address: true,  // Now exists
         }
       });
       
@@ -32,12 +33,12 @@ export async function GET() {
         userData = {
           ...employee,
           role: 'personnel',
-          // Personnel might not have company details, or they inherit from their employer (User)
-          // For now, return empty company details or fetch from parent User
+          // Personnel don't have company details
           companyName: '',
           taxNumber: '',
-          address: '',
-          phone: ''
+          // Use employee's own phone/address
+          phone: employee.phone || '',
+          address: employee.address || ''
         };
       }
     } else {
@@ -62,6 +63,7 @@ export async function GET() {
 
     return NextResponse.json(userData);
   } catch (error) {
+    console.error("Error fetching user:", error);
     return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 }

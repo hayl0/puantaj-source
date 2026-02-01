@@ -7,6 +7,7 @@ import { Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid';
+import PlasmaSphere from '@/components/premium/PlasmaSphere';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -46,7 +47,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#030712] text-white relative overflow-hidden selection:bg-indigo-500/30">
-      {/* Background Grid & Spotlights */}
+      {/* Background Effects */}
+      <PlasmaSphere />
       <BackgroundGrid fixed />
 
       <div className="glass-card p-8 md:p-12 rounded-3xl w-full max-w-lg relative z-10 animate-float border border-white/10 bg-white/5 backdrop-blur-xl">

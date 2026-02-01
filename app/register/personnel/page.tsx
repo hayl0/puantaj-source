@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Lock, Mail, User, Briefcase, ArrowRight, Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid';
+import PlasmaSphere from '@/components/premium/PlasmaSphere';
 
 export default function PersonnelRegisterPage() {
   const [step, setStep] = useState<'register' | 'verify'>('register');
@@ -71,7 +72,8 @@ export default function PersonnelRegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#030712] text-white relative overflow-hidden selection:bg-indigo-500/30">
-      {/* Background Grid & Spotlights */}
+      {/* Background Effects */}
+      <PlasmaSphere />
       <BackgroundGrid fixed />
 
       <div className="glass-card p-8 md:p-12 rounded-3xl w-full max-w-lg relative z-10 animate-float border border-white/10 bg-white/5 backdrop-blur-xl">

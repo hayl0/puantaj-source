@@ -57,8 +57,44 @@ export async function GET() {
       }
     });
 
-    // Create a map for easy lookup
+    // Fetch actual income history
+    const historicalIncomes = await prisma.income.groupBy({
+        by: ['date'],
+        where: {
+            userId,
+            date: {
+                gte: startOfMonth(subMonths(today, 5))
+            }
+        },
+        _sum: {
+            amount: true
+        }
+    });
+
+    // Create maps for easy lookup
     const payrollMap = new Map(historicalPayrolls.map(p => [p.month, p._sum.amount || 0]));
+    
+    // Aggregate income by month
+    const incomeMap = new Map<string, number>();
+    // Since groupBy returns dates, we need to process them into months
+    // Ideally we would group by month in SQL, but Prisma groupBy date is specific.
+    // So we fetch all and aggregate here or use raw query. 
+    // For now, let's just use findMany if we want precise date handling or stick to groupBy if we can group by formatted string (Prisma doesn't support format in groupBy).
+    // Let's use findMany for simplicity and aggregation in JS for now as data volume is likely low.
+    
+    const incomes = await prisma.income.findMany({
+        where: {
+            userId,
+            date: {
+                gte: startOfMonth(subMonths(today, 5))
+            }
+        }
+    });
+
+    incomes.forEach((inc: any) => {
+        const m = format(inc.date, 'yyyy-MM');
+        incomeMap.set(m, (incomeMap.get(m) || 0) + inc.amount);
+    });
 
     for (let i = 5; i >= 0; i--) {
       const date = subMonths(today, i);
@@ -68,9 +104,8 @@ export async function GET() {
       // Use actual payroll data if available, otherwise 0
       const expense = payrollMap.get(monthKey) || 0;
       
-      // Since there is no Income model in the database yet, we show 0.
-      // The user requested to remove fake data.
-      const income = 0;
+      // Use actual income data
+      const income = incomeMap.get(monthKey) || 0;
 
       incomeData.push({
         month: monthName,
@@ -86,7 +121,7 @@ export async function GET() {
         const colors = ['#8b5cf6', '#f43f5e', '#0ea5e9', '#f59e0b', '#10b981', '#6366f1'];
         return {
           name,
-          value: Math.round((value / currentMonthlyExpense) * 100), // Percentage
+          value: Math.round((value / currentMonthlyExpense) * 100) || 0, // Percentage
           amount: value,
           color: colors[index % colors.length]
         };
@@ -96,7 +131,21 @@ export async function GET() {
     // 4. Summary Stats
     // Annualized run rate based on current employees
     const totalYearlyExpense = currentMonthlyExpense * 12; 
-    const totalYearlyIncome = 0; // No income tracking yet
+    
+    // Calculate total income from the last 12 months (or similar period)
+    const yearlyIncomes = await prisma.income.aggregate({
+        where: {
+            userId,
+            date: {
+                gte: subMonths(today, 12)
+            }
+        },
+        _sum: {
+            amount: true
+        }
+    });
+    
+    const totalYearlyIncome = yearlyIncomes._sum.amount || 0;
     const netProfit = totalYearlyIncome - totalYearlyExpense;
 
     return NextResponse.json({

@@ -19,20 +19,23 @@ export async function PATCH(req: Request) {
     let updatedUser;
 
     if (userRole === 'personnel') {
-      // Personnel can only update their own basic info (name, maybe phone if we add it to Employee)
-      // For now, just update name.
+      // Personnel can only update their own basic info
       updatedUser = await prisma.employee.update({
         where: { id: userId },
         data: {
           name: name || undefined,
-          // Employee model doesn't have company/address fields usually
+          phone: phone || undefined,
+          address: address || undefined,
         },
       });
       
       // Return consistent structure
       updatedUser = {
         ...updatedUser,
-        role: 'personnel'
+        role: 'personnel',
+        // Ensure fields are returned even if not updated
+        phone: updatedUser.phone || '',
+        address: updatedUser.address || ''
       };
     } else {
       updatedUser = await prisma.user.update({
