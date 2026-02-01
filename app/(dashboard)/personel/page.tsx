@@ -194,10 +194,8 @@ export default function PersonelPage() {
     if (!selectedEmployee) return;
 
     try {
-      const res = await fetch('/api/employees', {
+      const res = await fetch(`/api/employees?id=${selectedEmployee.id}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: selectedEmployee.id }),
       });
 
       if (res.ok) {

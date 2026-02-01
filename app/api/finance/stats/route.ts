@@ -99,8 +99,9 @@ export async function GET() {
       .sort((a, b) => b.value - a.value); // Sort by highest expense
 
     // 4. Summary Stats
-    const totalYearlyExpense = currentMonthlyExpense * 12; // Projected
-    const totalYearlyIncome = totalYearlyExpense * 1.4;
+    // Annualized run rate based on current employees
+    const totalYearlyExpense = currentMonthlyExpense * 12; 
+    const totalYearlyIncome = 0; // No income tracking yet
     const netProfit = totalYearlyIncome - totalYearlyExpense;
 
     return NextResponse.json({
@@ -108,9 +109,9 @@ export async function GET() {
       expenseCategories,
       summary: {
         totalNetProfit: netProfit,
-        monthlyIncome: Math.round(currentMonthlyExpense * 1.35),
+        monthlyIncome: 0,
         monthlyExpense: currentMonthlyExpense,
-        yearlyGrowth: 24.5 // Mock growth
+        yearlyGrowth: 0 // Cannot calculate without historical revenue
       }
     });
 

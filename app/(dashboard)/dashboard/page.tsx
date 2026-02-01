@@ -24,11 +24,12 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
-import { SmartCalendar } from '@/components/premium/SmartCalendar';
+import { ModernCalendar } from '@/components/premium/ModernCalendar';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { createGoogleCalendarUrl } from '@/lib/calendar';
 import { tr } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -318,17 +319,12 @@ export default function DashboardPage() {
         </div>
 
         <Dialog open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Takvim</DialogTitle>
+          <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden bg-background/80 backdrop-blur-xl border-white/10">
+            <DialogHeader className="p-6 pb-2">
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Takvim</DialogTitle>
             </DialogHeader>
-            <div className="flex justify-center p-4">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                locale={tr}
-              />
+            <div className="flex-1 p-6 pt-0 overflow-hidden">
+              <ModernCalendar events={calendarEvents} />
             </div>
           </DialogContent>
         </Dialog>
@@ -537,10 +533,7 @@ export default function DashboardPage() {
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 p-6 pt-0 overflow-hidden">
-            <SmartCalendar 
-              events={calendarEvents} 
-              className="h-full shadow-none border-0 bg-transparent"
-            />
+            <ModernCalendar events={calendarEvents} />
           </div>
         </DialogContent>
       </Dialog>

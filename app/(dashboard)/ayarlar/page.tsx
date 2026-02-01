@@ -13,11 +13,14 @@ import {
   Mail, Globe, Lock, CreditCard, Loader2
 } from 'lucide-react';
 import { useState } from 'react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export default function AyarlarPage() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -102,25 +105,24 @@ export default function AyarlarPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="grid gap-2">
                   <Label>Şirket Adı</Label>
-                  <Input defaultValue="Puantaj Pro A.Ş." />
+                  <Input placeholder="Şirket adı girilmemiş" readOnly />
                 </div>
                 <div className="grid gap-2">
                   <Label>Vergi Numarası</Label>
-                  <Input defaultValue="1234567890" />
+                  <Input placeholder="Vergi no girilmemiş" readOnly />
                 </div>
                 <div className="grid gap-2">
                   <Label>Adres</Label>
-                  <Input defaultValue="Teknoloji Vadisi, İstanbul" />
+                  <Input placeholder="Adres girilmemiş" readOnly />
                 </div>
                 <div className="grid gap-2">
                   <Label>Telefon</Label>
-                  <Input defaultValue="+90 212 123 45 67" />
+                  <Input placeholder="Telefon girilmemiş" readOnly />
                 </div>
               </div>
-              <Button>
-                <Save className="w-4 h-4 mr-2" />
-                Şirket Bilgilerini Güncelle
-              </Button>
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-lg text-sm">
+                Şirket bilgileri şu anda düzenlenemez. Lütfen sistem yöneticisi ile iletişime geçin.
+              </div>
             </div>
           </PremiumCard>
         </TabsContent>

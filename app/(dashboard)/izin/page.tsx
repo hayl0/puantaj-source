@@ -49,7 +49,8 @@ interface LeaveRequest {
 }
 
 import { DateRange } from "react-day-picker";
-import { SmartCalendar } from '@/components/premium/SmartCalendar';
+import { ModernCalendar } from '@/components/premium/ModernCalendar';
+import { eachDayOfInterval, format, parseISO } from 'date-fns';
 
 export default function IzinPage() {
   const { data: session } = useSession();
@@ -87,31 +88,32 @@ export default function IzinPage() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
 
-  // Convert leaves to calendar events
+  // Convert leaves to ModernCalendar events
   useEffect(() => {
     if (leaves.length > 0) {
-        const events = leaves.map(leave => ({
-            id: leave.id,
-            title: `${leave.employee?.name || 'Personel'} - ${leave.type}`,
-            start: leave.startDate,
-            end: leave.endDate,
-            backgroundColor: leave.status === 'Approved' ? '#22c55e' : 
-                           leave.status === 'Rejected' ? '#ef4444' : '#f59e0b',
-            borderColor: 'transparent',
-            extendedProps: { eventType: 'leave', ...leave }
-        }));
+        const events: any[] = [];
+        
+        leaves.forEach(leave => {
+            try {
+                const start = parseISO(leave.startDate);
+                const end = parseISO(leave.endDate);
+                const days = eachDayOfInterval({ start, end });
+                
+                days.forEach(day => {
+                    events.push({
+                        date: format(day, 'yyyy-M-d'),
+                        title: `${leave.employee?.name || 'Personel'} - ${leave.type}`,
+                        color: leave.status === 'Approved' ? '#22c55e' : 
+                               leave.status === 'Rejected' ? '#ef4444' : '#f59e0b',
+                    });
+                });
+            } catch (e) {
+                console.error("Date parsing error", e);
+            }
+        });
         setCalendarEvents(events);
     }
   }, [leaves]);
-
-  const renderEventContent = (eventInfo: any) => {
-    return (
-        <div className="flex items-center gap-1 overflow-hidden px-1 py-0.5 rounded-sm text-xs font-medium w-full h-full">
-            <div className="w-1.5 h-1.5 rounded-full bg-white/80 shrink-0" />
-            <span className="truncate text-white">{eventInfo.event.title}</span>
-        </div>
-    );
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,27 +231,9 @@ export default function IzinPage() {
           ? "Personel izin taleplerini onaylayın ve takvimi yönetin" 
           : "İzin durumunuzu görüntüleyin ve yeni talep oluşturun"}
       >
-        <Button variant="outline" className="gap-2" onClick={() => setIsCalendarOpen(true)}>
-          <CalendarIcon className="w-4 h-4" />
-          Yıllık Plan
-        </Button>
-        
-        <Dialog open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-            <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden bg-background/80 backdrop-blur-xl border-white/10">
-                <DialogHeader className="p-6 pb-2">
-                    <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                        Yıllık İzin Takvimi
-                    </DialogTitle>
-                </DialogHeader>
-                <div className="flex-1 p-6 pt-0 overflow-hidden">
-                    <SmartCalendar 
-                        events={calendarEvents} 
-                        eventContent={renderEventContent}
-                        className="h-full shadow-none border-0 bg-transparent"
-                    />
-                </div>
-            </DialogContent>
-        </Dialog>
+      <div className="mb-8 h-[600px] border rounded-2xl overflow-hidden bg-background/50 backdrop-blur-sm shadow-sm">
+        <ModernCalendar events={calendarEvents} />
+      </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

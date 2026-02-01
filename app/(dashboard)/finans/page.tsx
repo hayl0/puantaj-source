@@ -74,7 +74,7 @@ export default function FinancePage() {
         {/* Summary Cards */}
         <PremiumCard className="md:col-span-2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
           <div className="p-2">
-            <p className="text-blue-100 font-medium mb-1">Toplam Net Kâr (Yıllık Tahmini)</p>
+            <p className="text-blue-100 font-medium mb-1">Toplam Net Kâr (Yıllık)</p>
             <h2 className="text-4xl font-bold mb-4">₺{data.summary.totalNetProfit.toLocaleString('tr-TR')}</h2>
             <div className="flex items-center gap-2 text-blue-100 bg-white/10 w-fit px-3 py-1.5 rounded-lg backdrop-blur-sm">
               <TrendingUp className="w-4 h-4" />
@@ -90,10 +90,10 @@ export default function FinancePage() {
                 <ArrowUpRight className="w-5 h-5" />
               </div>
               <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 dark:bg-green-900/10">
-                +12%
+                +{data.summary.yearlyGrowth}%
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">Aylık Gelir (Tahmini)</p>
+            <p className="text-sm text-muted-foreground">Aylık Gelir</p>
             <h3 className="text-2xl font-bold mt-1">₺{data.summary.monthlyIncome.toLocaleString('tr-TR')}</h3>
           </div>
         </PremiumCard>
