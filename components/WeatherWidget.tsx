@@ -10,6 +10,90 @@ export default function WeatherWidget() {
   const [dateTime, setDateTime] = useState('');
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
+  const [weatherData, setWeatherData] = useState<{
+    temp: number;
+    city: string;
+    description: string;
+    icon: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Weather Code to Text/Icon mapping
+  const getWeatherInfo = (code: number) => {
+    if (code === 0) return { desc: 'Açık', icon: '☀️' };
+    if (code >= 1 && code <= 3) return { desc: 'Parçalı Bulutlu', icon: '⛅' };
+    if (code >= 45 && code <= 48) return { desc: 'Sisli', icon: '🌫️' };
+    if (code >= 51 && code <= 55) return { desc: 'Çiseleme', icon: '🌦️' };
+    if (code >= 61 && code <= 67) return { desc: 'Yağmurlu', icon: '🌧️' };
+    if (code >= 71 && code <= 77) return { desc: 'Karlı', icon: '❄️' };
+    if (code >= 80 && code <= 82) return { desc: 'Sağanak Yağış', icon: '🌧️' };
+    if (code >= 95 && code <= 99) return { desc: 'Fırtınalı', icon: '⛈️' };
+    return { desc: 'Bilinmiyor', icon: '❓' };
+  };
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+
+            // 1. Fetch Weather
+            const weatherRes = await fetch(
+              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+            );
+            const weatherJson = await weatherRes.json();
+            const current = weatherJson.current_weather;
+
+            // 2. Fetch City Name (Reverse Geocoding)
+            // Using a free reliable API or fallback
+            let city = "Konum Bulunamadı";
+            try {
+                const geoRes = await fetch(
+                    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=tr`
+                );
+                const geoJson = await geoRes.json();
+                city = geoJson.city || geoJson.locality || geoJson.principalSubdivision || "Bilinmeyen Konum";
+            } catch (err) {
+                console.error("Geocoding error", err);
+                city = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+            }
+
+            const info = getWeatherInfo(current.weathercode);
+
+            setWeatherData({
+              temp: Math.round(current.temperature),
+              city: city,
+              description: info.desc,
+              icon: info.icon
+            });
+          } catch (err) {
+            console.error(err);
+            setError("Hava durumu alınamadı");
+          } finally {
+            setLoading(false);
+          }
+        },
+        (err) => {
+          console.error(err);
+          setError("Konum izni verilmedi");
+          setLoading(false);
+          // Fallback to Istanbul/Default if permission denied
+           setWeatherData({
+              temp: 15,
+              city: "İstanbul (Varsayılan)",
+              description: "Parçalı Bulutlu",
+              icon: "⛅"
+            });
+        }
+      );
+    } else {
+      setError("Tarayıcı konumu desteklemiyor");
+      setLoading(false);
+    }
+  }, []);
+
   // Time update effect
   useEffect(() => {
     const updateDateTime = () => {
@@ -278,6 +362,11 @@ export default function WeatherWidget() {
         </div>
 
         <div className="relative z-20">
+            {error && (
+              <div className="absolute top-0 left-0 w-full bg-red-500/20 text-red-200 text-xs p-1 rounded mb-2">
+                {error}
+              </div>
+            )}
             {/* Date Time */}
             <div className={`text-sm font-light opacity-80 mb-1 tracking-wide ${styles.animateFadeInUp}`}>
                 {dateTime}
@@ -285,17 +374,24 @@ export default function WeatherWidget() {
 
             {/* Current Weather */}
             <div className="flex items-center mb-2">
-                <div className={`${styles.weatherIconMain} text-5xl mr-3`}>⛅</div>
+                <div className={`${styles.weatherIconMain} text-5xl mr-3`}>
+                    {loading ? <span className="animate-pulse">...</span> : (weatherData?.icon || '⛅')}
+                </div>
                 <div className="text-5xl font-semibold">
                     <span className={`bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300 ${styles.animateFadeInScaleUp} ${styles.delay100}`}>
-                        8°C
+                        {loading ? <span className="animate-pulse">--</span> : `${weatherData?.temp}°C`}
                     </span>
                 </div>
             </div>
 
             {/* Location */}
-            <div className={`text-lg opacity-90 mb-4 tracking-wide ${styles.animateFadeInUp} ${styles.delay200}`}>
-                New York, USA
+            <div className={`text-lg opacity-90 mb-1 tracking-wide ${styles.animateFadeInUp} ${styles.delay200}`}>
+                {loading ? 'Konum alınıyor...' : weatherData?.city}
+            </div>
+            
+            {/* Description */}
+            <div className={`text-sm opacity-70 mb-4 tracking-wide ${styles.animateFadeInUp} ${styles.delay200}`}>
+                {loading ? '' : weatherData?.description}
             </div>
 
             {/* Sun Info */}
