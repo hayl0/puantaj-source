@@ -40,30 +40,42 @@ export default function WeatherWidget() {
             const { latitude, longitude } = position.coords;
 
             // 1. Fetch Weather
+            // Using updated Open-Meteo params for better accuracy
             const weatherRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,is_day&timezone=auto`
             );
             const weatherJson = await weatherRes.json();
-            const current = weatherJson.current_weather;
+            const current = weatherJson.current;
 
             // 2. Fetch City Name (Reverse Geocoding)
-            // Using a free reliable API or fallback
+            // Switching to Nominatim (OpenStreetMap) for better local accuracy
             let city = "Konum Bulunamadı";
             try {
                 const geoRes = await fetch(
-                    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=tr`
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
+                    { headers: { 'User-Agent': 'PuantajPro/1.0' } }
                 );
                 const geoJson = await geoRes.json();
-                city = geoJson.city || geoJson.locality || geoJson.principalSubdivision || "Bilinmeyen Konum";
+                // Prioritize district/city names
+                city = geoJson.address.town || geoJson.address.city || geoJson.address.district || geoJson.address.province || "Bilinmeyen Konum";
             } catch (err) {
                 console.error("Geocoding error", err);
-                city = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+                // Fallback to BigDataCloud if Nominatim fails
+                try {
+                     const backupGeoRes = await fetch(
+                        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=tr`
+                    );
+                    const backupGeoJson = await backupGeoRes.json();
+                    city = backupGeoJson.city || backupGeoJson.locality || "Bilinmeyen Konum";
+                } catch (backupErr) {
+                     city = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+                }
             }
 
-            const info = getWeatherInfo(current.weathercode);
+            const info = getWeatherInfo(current.weather_code);
 
             setWeatherData({
-              temp: Math.round(current.temperature),
+              temp: Math.round(current.temperature_2m),
               city: city,
               description: info.desc,
               icon: info.icon
