@@ -34,8 +34,7 @@ export default function PlasmaSphere() {
     const scene = new THREE.Scene();
     // Transparent background to blend with existing gradients if needed, 
     // or black as in original. Original was 0x000000.
-    // Let's use a very dark blue/black to match the theme.
-    scene.background = new THREE.Color(0x030712); // Tailwind gray-950 (app background)
+    // scene.background = new THREE.Color(0x030712); // Removed to allow transparency
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.z = 2.4;
