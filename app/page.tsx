@@ -37,6 +37,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden selection:bg-indigo-500/30">
       {/* Background Grid & Spotlights */}
+      <PlasmaSphere />
       <BackgroundGrid fixed />
 
       {/* Navbar */}
