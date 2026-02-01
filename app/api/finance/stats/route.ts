@@ -166,14 +166,25 @@ export async function GET() {
     const totalYearlyIncome = yearlyIncomes._sum.amount || 0;
     const netProfit = totalYearlyIncome - totalYearlyExpense;
 
+    // Calculate current month's income
+    const currentMonthKey = format(today, 'yyyy-MM');
+    const currentMonthlyIncome = incomeMap.get(currentMonthKey) || 0;
+
+    // Calculate growth (simple comparison with last month for now, or 0 if no history)
+    const lastMonthKey = format(subMonths(today, 1), 'yyyy-MM');
+    const lastMonthIncome = incomeMap.get(lastMonthKey) || 0;
+    const growth = lastMonthIncome > 0 
+      ? Math.round(((currentMonthlyIncome - lastMonthIncome) / lastMonthIncome) * 100) 
+      : 0;
+
     return NextResponse.json({
       incomeData,
       expenseCategories,
       summary: {
         totalNetProfit: netProfit,
-        monthlyIncome: 0,
+        monthlyIncome: currentMonthlyIncome,
         monthlyExpense: currentMonthlyExpense,
-        yearlyGrowth: 0 // Cannot calculate without historical revenue
+        yearlyGrowth: growth
       }
     });
 
