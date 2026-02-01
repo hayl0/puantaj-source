@@ -7,7 +7,6 @@
   --text-color: #F5F5DC; /* Beige */
   --light-text-color: rgba(245, 245, 220, 0.7);
   --dark-accent-color: #8B4513; /* Saddle Brown */
-  --background-overlay: rgba(0, 0, 0, 0.5);
 
   display: flex;
   justify-content: center;
@@ -96,7 +95,7 @@
 }
 
 .calendarDay:hover {
-  background-color: var(--background-overlay);
+  background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
