@@ -100,7 +100,7 @@ export async function GET(req: Request) {
         end: leave.endDate,
         backgroundColor: '#ef4444', // red-500
         borderColor: '#ef4444',
-        extendedProps: { type: 'leave', ...leave }
+        extendedProps: { eventType: 'leave', ...leave }
       }))
     ];
 

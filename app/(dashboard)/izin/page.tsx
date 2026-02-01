@@ -98,7 +98,7 @@ export default function IzinPage() {
             backgroundColor: leave.status === 'Approved' ? '#22c55e' : 
                            leave.status === 'Rejected' ? '#ef4444' : '#f59e0b',
             borderColor: 'transparent',
-            extendedProps: { type: 'leave', ...leave }
+            extendedProps: { eventType: 'leave', ...leave }
         }));
         setCalendarEvents(events);
     }

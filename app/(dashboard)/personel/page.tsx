@@ -310,7 +310,13 @@ export default function PersonelPage() {
                           <Edit className="w-4 h-4 mr-2" />
                           Düzenle
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteClick(employee)}>
+                        <DropdownMenuItem 
+                          className="text-red-600 focus:text-red-600 focus:bg-red-100 dark:focus:bg-red-900/50" 
+                          onSelect={(e) => {
+                            e.preventDefault();
+                            handleDeleteClick(employee);
+                          }}
+                        >
                           <Trash className="w-4 h-4 mr-2" />
                           Sil
                         </DropdownMenuItem>

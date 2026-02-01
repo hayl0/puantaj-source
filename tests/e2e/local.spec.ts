@@ -130,7 +130,7 @@ test.describe('Local TUI Calendar Tests', () => {
             maxDiffPixelRatio: 0.1, // Allow small differences
             fullPage: true
         });
-    } catch (e) {
+    } catch (e: any) {
         console.log('Visual test failed or baseline created:', e.message);
     }
     

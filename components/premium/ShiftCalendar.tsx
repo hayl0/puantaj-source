@@ -27,7 +27,7 @@ export function ShiftCalendar({
   className 
 }: ShiftCalendarProps) {
   const { theme } = useTheme();
-  const calendarRef = useRef<Calendar | null>(null);
+  const calendarRef = useRef<any | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
@@ -72,13 +72,13 @@ export function ShiftCalendar({
     calendarRef.current = calendar;
 
     // Bind events
-    calendar.on('clickEvent', (eventInfo) => {
+    calendar.on('clickEvent', (eventInfo: any) => {
       if (onEventClick) {
         onEventClick(eventInfo.event);
       }
     });
 
-    calendar.on('selectDateTime', (eventInfo) => {
+    calendar.on('selectDateTime', (eventInfo: any) => {
         const start = eventInfo.start.toJSDate();
         if (onDateClick) {
             onDateClick(start);
