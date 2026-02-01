@@ -39,44 +39,19 @@ export default function WeatherWidget() {
           try {
             const { latitude, longitude } = position.coords;
 
-            // 1. Fetch Weather
-            // Using updated Open-Meteo params for better accuracy
-            const weatherRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,is_day&timezone=auto`
-            );
-            const weatherJson = await weatherRes.json();
-            const current = weatherJson.current;
-
-            // 2. Fetch City Name (Reverse Geocoding)
-            // Switching to Nominatim (OpenStreetMap) for better local accuracy
-            let city = "Konum Bulunamadı";
-            try {
-                const geoRes = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
-                    { headers: { 'User-Agent': 'PuantajPro/1.0' } }
-                );
-                const geoJson = await geoRes.json();
-                // Prioritize district/city names
-                city = geoJson.address.town || geoJson.address.city || geoJson.address.district || geoJson.address.province || "Bilinmeyen Konum";
-            } catch (err) {
-                console.error("Geocoding error", err);
-                // Fallback to BigDataCloud if Nominatim fails
-                try {
-                     const backupGeoRes = await fetch(
-                        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=tr`
-                    );
-                    const backupGeoJson = await backupGeoRes.json();
-                    city = backupGeoJson.city || backupGeoJson.locality || "Bilinmeyen Konum";
-                } catch (backupErr) {
-                     city = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
-                }
+            // Call our own API route to handle external fetching securely
+            const res = await fetch(`/api/weather?lat=${latitude}&lon=${longitude}`);
+            
+            if (!res.ok) {
+                throw new Error('Weather API route failed');
             }
 
-            const info = getWeatherInfo(current.weather_code);
+            const data = await res.json();
+            const info = getWeatherInfo(data.weatherCode);
 
             setWeatherData({
-              temp: Math.round(current.temperature_2m),
-              city: city,
+              temp: data.temp,
+              city: data.city,
               description: info.desc,
               icon: info.icon
             });
