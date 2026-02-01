@@ -25,6 +25,7 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
 import { ModernCalendar } from '@/components/premium/ModernCalendar';
+import WeatherWidget from '@/components/WeatherWidget';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { createGoogleCalendarUrl } from '@/lib/calendar';
@@ -215,6 +216,9 @@ export default function DashboardPage() {
           {/* Right Column (Activity & Insights) */}
           <div className="space-y-8 sticky top-6 h-fit">
             
+            {/* Weather Widget */}
+            <WeatherWidget />
+
             {/* AI Insights Card */}
             <motion.div 
               variants={itemVariants}
@@ -484,6 +488,9 @@ export default function DashboardPage() {
 
         {/* Right Column: Notifications & Support */}
         <div className="space-y-8">
+           {/* Weather Widget */}
+           <WeatherWidget />
+
            <Card className="glass-card border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800">
              <CardHeader>
                <CardTitle className="text-lg">Bildirimler</CardTitle>

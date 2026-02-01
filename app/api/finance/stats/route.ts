@@ -66,16 +66,11 @@ export async function GET() {
       const monthName = format(date, 'MMM', { locale: tr });
       
       // Use actual payroll data if available, otherwise 0
-      // We do NOT simulate data anymore as per user request for "real data"
       const expense = payrollMap.get(monthKey) || 0;
       
-      // Income is usually not tracked in this app yet (it's a personnel app), 
-      // but for visualization purposes, if we have expenses, we can assume some income 
-      // or just show 0 if we want to be strictly "real". 
-      // However, showing 0 income might look weird. 
-      // Let's assume income = expense * 1.2 (profit margin) ONLY if there is expense, 
-      // otherwise 0.
-      const income = expense > 0 ? Math.round(expense * 1.2) : 0;
+      // Since there is no Income model in the database yet, we show 0.
+      // The user requested to remove fake data.
+      const income = 0;
 
       incomeData.push({
         month: monthName,

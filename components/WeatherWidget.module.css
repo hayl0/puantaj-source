@@ -1,0 +1,114 @@
+.wrapper {
+    font-family: 'Outfit', sans-serif;
+    /* Removed fixed height/width constraints to let it adapt to parent */
+}
+
+.weatherWidget {
+    position: relative;
+    color: white;
+    background: linear-gradient(to bottom right, rgba(126, 34, 206, 0.7), rgba(55, 48, 163, 0.6), rgba(30, 58, 138, 0.7));
+    backdrop-filter: blur(16px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weatherWidget::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
+    animation: shimmer 15s infinite linear;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes shimmer {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.weatherIconMain {
+    filter: drop-shadow(0 0 12px rgba(220, 220, 255, 0.5));
+    animation: floating 3.5s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+.cloudContainer {
+    pointer-events: auto;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animateFadeInUp {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInScaleUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.animateFadeInScaleUp {
+    opacity: 0;
+    animation: fadeInScaleUp 0.7s ease-out forwards;
+}
+
+@keyframes gentleBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+.animateGentleBob {
+    animation: gentleBob 2.5s ease-in-out infinite;
+}
+
+.sunInfo .sunrise:hover .sunIcon,
+.sunInfo .sunset:hover .sunIcon {
+    transform: rotate(15deg) scale(1.15);
+}
+.sunIcon {
+    transition: transform 0.3s ease-in-out;
+}
+
+.forecastDay:hover {
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0,0,0,0.2);
+}
+.forecastDay:hover .forecastIcon {
+    transform: scale(1.2) translateY(-2px);
+    transition: transform 0.3s ease-out;
+}
+.forecastDay .forecastIcon {
+     transition: transform 0.3s ease-out;
+}
+
+.delay100 { animation-delay: 0.1s !important; }
+.delay200 { animation-delay: 0.2s !important; }
+.delay300 { animation-delay: 0.3s !important; }
+.delay400 { animation-delay: 0.4s !important; }
+.delay500 { animation-delay: 0.5s !important; }
+.delay600 { animation-delay: 0.6s !important; }
+.delay700 { animation-delay: 0.7s !important; }
