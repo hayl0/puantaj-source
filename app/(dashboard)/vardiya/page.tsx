@@ -32,25 +32,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
+import { ModernCalendar } from '@/components/premium/ModernCalendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import dynamic from 'next/dynamic';
-
-const ShiftCalendar = dynamic(
-  () => import('@/components/premium/ShiftCalendar').then((mod) => mod.ShiftCalendar),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="h-[600px] flex items-center justify-center glass-card">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    )
-  }
-);
 
 // Shift Types for UI styling
 const shiftStyles: Record<string, any> = {
@@ -93,6 +81,9 @@ export default function VardiyaPage() {
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
 
+  // Calendar events
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+
   // Form states
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [shiftDate, setShiftDate] = useState<Date | undefined>(new Date());
@@ -102,9 +93,11 @@ export default function VardiyaPage() {
 
   useEffect(() => {
     if (session) {
-      // Initial fetch will be triggered by SmartCalendar's onDatesSet
-      // But we need to fetch employees once
       fetchEmployees();
+      const now = new Date();
+      const start = new Date(now.getFullYear(), now.getMonth(), 1);
+      const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      fetchData(start, end);
     }
   }, [session]);
 
@@ -146,6 +139,20 @@ export default function VardiyaPage() {
   };
 
 
+
+  useEffect(() => {
+    if (shifts.length > 0) {
+        const events = shifts.map(shift => {
+            const date = new Date(shift.date);
+            return {
+                date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+                title: `${shift.employee?.name || 'Vardiya'} (${shift.startTime}-${shift.endTime})`,
+                color: shiftStyles[shift.name]?.color || '#cbd5e1'
+            };
+        });
+        setCalendarEvents(events);
+    }
+  }, [shifts]);
 
   const handleCreateShift = async () => {
     if (!selectedEmployee || !shiftDate || !startTime || !endTime) {
@@ -222,44 +229,6 @@ export default function VardiyaPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const calendarEvents = shifts.map(shift => {
-    const style = shiftStyles[shift.name] || shiftStyles['Mesai'];
-    // Parse date and time correctly
-    const dateStr = shift.date.split('T')[0];
-    
-    // TUI Calendar Event Format
-    return {
-        id: shift.id,
-        calendarId: '1',
-        title: `${shift.employee?.name || 'Vardiya'} (${shift.name})`,
-        category: 'time',
-        start: `${dateStr}T${shift.startTime}`,
-        end: `${dateStr}T${shift.endTime}`,
-        backgroundColor: style.color,
-        borderColor: style.color,
-        color: '#fff',
-        raw: { shift, employee: shift.employee } 
-    };
-  });
-
-  const handleEventClick = (info: any) => {
-      // TUI returns { event: ... }
-      const shift = info.raw?.shift || info.event?.raw?.shift;
-      if (shift) {
-        setSelectedShift(shift);
-        setIsDetailsDialogOpen(true);
-      }
-  };
-
-  const handleDateClick = (date: Date) => {
-      setShiftDate(date);
-      setIsCreateDialogOpen(true);
-  };
-  
-  const handleRangeChange = (range: { start: Date, end: Date }) => {
-      fetchData(range.start, range.end);
   };
 
   const handleDeleteShift = async () => {
@@ -395,20 +364,52 @@ export default function VardiyaPage() {
         )}
       </PageHeader>
 
-      <div className="relative">
-          {loading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm rounded-xl">
-                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-          )}
-          
-          <ShiftCalendar 
-            events={calendarEvents}
-            onRangeChange={handleRangeChange}
-            onEventClick={handleEventClick}
-            onDateClick={handleDateClick}
-            className="min-h-[600px]"
-          />
+      <div className="mb-8">
+        <ModernCalendar events={calendarEvents} />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {shifts.map((shift) => (
+            <div key={shift.id} className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm relative overflow-hidden group">
+                <div className={`absolute top-0 left-0 w-1 h-full ${shiftStyles[shift.name]?.className.split(' ')[0] || 'bg-gray-200'}`}></div>
+                <div className="flex justify-between items-start mb-2 pl-2">
+                    <div>
+                        <h3 className="font-semibold">{shift.employee?.name}</h3>
+                        <p className="text-xs text-muted-foreground">{shift.employee?.position}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full border ${shiftStyles[shift.name]?.className}`}>
+                        {shift.name}
+                    </span>
+                </div>
+                <div className="space-y-1 pl-2 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <CalendarIcon className="w-3 h-3" />
+                        {format(parseISO(shift.date), 'd MMMM yyyy', { locale: tr })}
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        {shift.startTime} - {shift.endTime}
+                    </div>
+                </div>
+                <div className="mt-4 pl-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => {
+                            setSelectedShift(shift);
+                            setIsDetailsDialogOpen(true);
+                        }}
+                    >
+                        Detaylar
+                    </Button>
+                </div>
+            </div>
+        ))}
+        {shifts.length === 0 && !loading && (
+            <div className="col-span-full text-center py-10 text-muted-foreground">
+                Bu ay için henüz vardiya planlanmamış.
+            </div>
+        )}
       </div>
 
       {/* Details Dialog */}

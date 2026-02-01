@@ -2,76 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import { PageHeader } from '@/components/premium/PageHeader';
+import { ModernCalendar } from '@/components/premium/ModernCalendar';
 import { PuantajGrid } from '@/components/premium/PuantajGrid';
 import { PremiumCard } from '@/components/premium/PremiumCard';
 import { Button } from '@/components/ui/button';
 import { Download, Upload, Filter, CheckCircle2, Clock, XCircle, Plane, FileText } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { SmartCalendar } from '@/components/premium/SmartCalendar';
-import { Calendar as CalendarIcon, List as ListIcon } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { HelpCircle } from 'lucide-react';
 
 export default function PuantajPage() {
   const { data: session } = useSession();
   const { toast } = useToast();
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'calendar'>('grid');
-  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
 
   const userRole = (session?.user as any)?.role || 'user';
   const userName = session?.user?.name || 'Kullanıcı';
   const userEmail = session?.user?.email;
 
-  // Set default view based on role
-  useEffect(() => {
-    if (userRole !== 'admin') {
-      setViewMode('calendar');
-    }
-  }, [userRole]);
-
   // Fetch attendance for calendar view
-  useEffect(() => {
-    if (viewMode === 'calendar') {
-        const fetchAttendanceEvents = async () => {
-            try {
-                const now = new Date();
-                const month = now.getMonth() + 1;
-                const year = now.getFullYear();
-                const res = await fetch(`/api/attendance?month=${month}&year=${year}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    const events = data.map((record: any) => {
-                        let color = '#94a3b8'; // gray
-                        let title = 'Boş';
-                        switch(record.status) {
-                            case 'present': color = '#10b981'; title = 'Tam Gün'; break;
-                            case 'absent': color = '#f43f5e'; title = 'Devamsız'; break;
-                            case 'late': color = '#f59e0b'; title = 'Yarım Gün'; break;
-                            case 'leave': color = '#8b5cf6'; title = 'İzinli'; break;
-                            case 'report': color = '#3b82f6'; title = 'Raporlu'; break;
-                        }
-                        return {
-                            id: record.id,
-                            title: title, // Short title for custom render
-                            start: record.date.split('T')[0],
-                            backgroundColor: color,
-                            borderColor: color,
-                            allDay: true,
-                            extendedProps: { status: record.status }
-                        };
-                    });
-                    setCalendarEvents(events);
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        fetchAttendanceEvents();
-    }
-  }, [viewMode]);
+  // Removed viewMode logic
+
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -111,31 +62,39 @@ export default function PuantajPage() {
   }, [session, userRole, userEmail, toast]);
 
   // Placeholder stats - in a real app these would be calculated from the grid data
+  const [statsData, setStatsData] = useState({
+    present: 0,
+    late: 0,
+    absent: 0,
+    leave: 0,
+    report: 0
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+        try {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const year = now.getFullYear();
+            const res = await fetch(`/api/attendance/stats?month=${month}&year=${year}`);
+            if (res.ok) {
+                const data = await res.json();
+                setStatsData(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch stats', error);
+        }
+    };
+    fetchStats();
+  }, []);
+
   const stats = [
-    { label: 'Tam Gün', value: '0', icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10' },
-    { label: 'Yarım Gün', value: '0', icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { label: 'Devamsız', value: '0', icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10' },
-    { label: 'İzinli', value: '0', icon: Plane, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { label: 'Raporlu', value: '0', icon: FileText, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+    { label: 'Tam Gün', value: statsData.present.toString(), icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10' },
+    { label: 'Yarım Gün', value: statsData.late.toString(), icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { label: 'Devamsız', value: statsData.absent.toString(), icon: XCircle, color: 'text-red-500', bg: 'bg-red-500/10' },
+    { label: 'İzinli', value: statsData.leave.toString(), icon: Plane, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { label: 'Raporlu', value: statsData.report.toString(), icon: FileText, color: 'text-orange-500', bg: 'bg-orange-500/10' },
   ];
-
-  const renderEventContent = (eventInfo: any) => {
-    const { status } = eventInfo.event.extendedProps;
-    const Icon = {
-        present: CheckCircle2,
-        absent: XCircle,
-        late: Clock,
-        leave: Plane,
-        report: FileText
-    }[status as string] || HelpCircle;
-
-    return (
-        <div className="flex items-center gap-1 px-1 w-full h-full overflow-hidden">
-            <Icon className="w-3 h-3 flex-shrink-0 text-white" />
-            <span className="text-xs font-medium truncate text-white">{eventInfo.event.title}</span>
-        </div>
-    );
-  };
 
   return (
     <div className="space-y-6">
@@ -145,29 +104,15 @@ export default function PuantajPage() {
           ? "Personel devamlılık durumunu aylık çizelge üzerinden yönetin" 
           : `Sayın ${userName}, bu ayki devamlılık durumunuz`}
       >
-        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as 'grid' | 'calendar')} className="hidden md:block mr-2">
-            <TabsList>
-                <TabsTrigger value="grid" className="gap-2"><ListIcon className="w-4 h-4" /> Liste</TabsTrigger>
-                <TabsTrigger value="calendar" className="gap-2"><CalendarIcon className="w-4 h-4" /> Takvim</TabsTrigger>
-            </TabsList>
-        </Tabs>
-        {userRole === 'admin' && (
-          <>
-            <Button variant="outline" className="gap-2">
-              <Filter className="w-4 h-4" />
-              Filtrele
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <Upload className="w-4 h-4" />
-              Excel'den Yükle
-            </Button>
-          </>
-        )}
         <Button className="gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg shadow-green-600/20">
           <Download className="w-4 h-4" />
           Rapor İndir
         </Button>
       </PageHeader>
+
+      <div className="mb-8">
+        <ModernCalendar />
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {stats.map((stat, i) => (
@@ -189,16 +134,7 @@ export default function PuantajPage() {
         {loading ? (
            <div className="flex justify-center p-8 text-muted-foreground">Yükleniyor...</div>
         ) : (
-           viewMode === 'grid' ? (
-             <PuantajGrid employees={employees} />
-           ) : (
-             <div className="h-[700px]">
-                <SmartCalendar 
-                    events={calendarEvents} 
-                    eventContent={renderEventContent}
-                />
-             </div>
-           )
+           <PuantajGrid employees={employees} />
         )}
       </div>
     </div>

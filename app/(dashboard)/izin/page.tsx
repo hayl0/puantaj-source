@@ -49,6 +49,7 @@ interface LeaveRequest {
 }
 
 import { DateRange } from "react-day-picker";
+import { SmartCalendar } from '@/components/premium/SmartCalendar';
 
 export default function IzinPage() {
   const { data: session } = useSession();
@@ -83,6 +84,34 @@ export default function IzinPage() {
     employeeId: ''
   });
   const [submitting, setSubmitting] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+
+  // Convert leaves to calendar events
+  useEffect(() => {
+    if (leaves.length > 0) {
+        const events = leaves.map(leave => ({
+            id: leave.id,
+            title: `${leave.employee?.name || 'Personel'} - ${leave.type}`,
+            start: leave.startDate,
+            end: leave.endDate,
+            backgroundColor: leave.status === 'Approved' ? '#22c55e' : 
+                           leave.status === 'Rejected' ? '#ef4444' : '#f59e0b',
+            borderColor: 'transparent',
+            extendedProps: { type: 'leave', ...leave }
+        }));
+        setCalendarEvents(events);
+    }
+  }, [leaves]);
+
+  const renderEventContent = (eventInfo: any) => {
+    return (
+        <div className="flex items-center gap-1 overflow-hidden px-1 py-0.5 rounded-sm text-xs font-medium w-full h-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/80 shrink-0" />
+            <span className="truncate text-white">{eventInfo.event.title}</span>
+        </div>
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
