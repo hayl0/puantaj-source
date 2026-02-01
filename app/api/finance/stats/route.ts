@@ -129,8 +129,26 @@ export async function GET() {
       .sort((a, b) => b.value - a.value); // Sort by highest expense
 
     // 4. Summary Stats
-    // Annualized run rate based on current employees
-    const totalYearlyExpense = currentMonthlyExpense * 12; 
+    // Calculate total expense from actual payrolls in the last 12 months
+    const yearlyExpenses = await prisma.payroll.aggregate({
+        where: {
+            userId,
+            month: {
+                gte: format(subMonths(today, 12), 'yyyy-MM')
+            }
+        },
+        _sum: {
+            amount: true
+        }
+    });
+
+    let totalYearlyExpense = yearlyExpenses._sum.amount || 0;
+    
+    // If no actual payroll data exists, use projected annual expense based on current employees
+    // This helps new users see estimated costs before running payroll
+    if (totalYearlyExpense === 0 && currentMonthlyExpense > 0) {
+        totalYearlyExpense = currentMonthlyExpense * 12;
+    }
     
     // Calculate total income from the last 12 months (or similar period)
     const yearlyIncomes = await prisma.income.aggregate({

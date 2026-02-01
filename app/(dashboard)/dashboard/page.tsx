@@ -157,9 +157,11 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex flex-wrap gap-3">
-              <Button className="gap-2 h-12 px-6 rounded-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:shadow-primary/40">
-                <Download className="w-4 h-4" />
-                Hızlı Rapor
+              <Button asChild className="gap-2 h-12 px-6 rounded-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:shadow-primary/40">
+                <Link href="/raporlar">
+                  <Download className="w-4 h-4" />
+                  Hızlı Rapor
+                </Link>
               </Button>
             </div>
           </div>
