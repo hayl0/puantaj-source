@@ -25,7 +25,7 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 const PDFDownloadLink = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+  () => import('@/components/reports/DownloadLink'),
   { ssr: false, loading: () => <Button disabled variant="outline"><Loader2 className="w-4 h-4 animate-spin mr-2" /> Hazırlanıyor...</Button> }
 );
 

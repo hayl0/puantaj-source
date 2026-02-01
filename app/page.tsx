@@ -40,7 +40,8 @@ export default function HomePage() {
   const { scrollY } = useScroll()
   
   // Parallax effects
-  const heroY = useTransform(scrollY, [0, 500], [0, 200])
+  // Reduced parallax movement to keep the dashboard visible longer as requested
+  const heroY = useTransform(scrollY, [0, 500], [0, 50])
   // const opacity = useTransform(scrollY, [0, 300], [1, 0]) // Removed fade out effect
 
   useEffect(() => {
@@ -152,24 +153,24 @@ export default function HomePage() {
               style={{ y: heroY }}
               className="mt-20 relative w-full perspective-[2000px]"
             >
-              <div className="relative rounded-xl bg-[#0B0F19] border border-white/10 shadow-2xl overflow-hidden transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out group">
+              <div className="relative rounded-xl bg-[#0B0F19] border border-white/10 shadow-2xl overflow-x-auto scrollbar-hide transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out group">
+              <div className="min-w-[1000px]">
                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
                 
                 {/* Mockup Header */}
-                <div className="h-14 border-b border-white/10 bg-[#0B0F19] flex items-center justify-between px-4 md:px-6">
-                  <div className="flex items-center gap-2 md:gap-4">
-                    <div className="flex gap-1.5 md:gap-2">
-                      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+                <div className="h-14 border-b border-white/10 bg-[#0B0F19] flex items-center justify-between px-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
                     </div>
-                    <div className="ml-2 md:ml-4 flex items-center gap-2 px-2 md:px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] md:text-xs text-slate-400">
+                    <div className="ml-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-xs text-slate-400">
                       <Search className="w-3 h-3" />
-                      <span className="hidden sm:inline">Personel ara...</span>
-                      <span className="sm:hidden">Ara...</span>
+                      <span>Personel ara...</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 md:gap-4">
+                  <div className="flex items-center gap-4">
                     <div className="relative">
                       <Bell className="w-4 h-4 text-slate-400" />
                       <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500" />
@@ -178,15 +179,15 @@ export default function HomePage() {
                       <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
                         AD
                       </div>
-                      <span className="hidden sm:inline text-xs font-medium text-slate-300">Admin</span>
+                      <span className="text-xs font-medium text-slate-300">Admin</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Mockup Content */}
-                <div className="flex flex-col md:flex-row h-auto md:h-[500px] bg-[#0B0F19]">
+                <div className="flex flex-row h-[500px] bg-[#0B0F19]">
                    {/* Sidebar */}
-                   <div className="hidden md:flex w-56 flex-col border-r border-white/5 p-4 space-y-2 bg-[#0B0F19]">
+                   <div className="flex w-56 flex-col border-r border-white/5 p-4 space-y-2 bg-[#0B0F19]">
                       <div className="px-3 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center gap-3 text-sm font-medium border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
                         <LayoutDashboard className="w-4 h-4" />
                         Genel Bakış
@@ -237,21 +238,21 @@ export default function HomePage() {
                    </div>
                    
                    {/* Main Content */}
-                   <div className="flex-1 p-4 md:p-8 overflow-hidden bg-[#0B0F19]">
-                      <div className="flex items-center justify-between mb-6 md:mb-8">
+                   <div className="flex-1 p-8 overflow-hidden bg-[#0B0F19]">
+                      <div className="flex items-center justify-between mb-8">
                         <div>
-                          <h3 className="text-lg md:text-xl font-bold text-white mb-1">Genel Durum</h3>
-                          <p className="text-[10px] md:text-xs text-slate-500">Son güncelleme: Bugün, 14:30</p>
+                          <h3 className="text-xl font-bold text-white mb-1">Genel Durum</h3>
+                          <p className="text-xs text-slate-500">Son güncelleme: Bugün, 14:30</p>
                         </div>
                         <div className="flex gap-2">
-                          <span className="hidden sm:inline px-3 py-1.5 rounded-lg bg-white/5 text-xs font-medium text-slate-300 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">Bu Hafta</span>
+                          <span className="px-3 py-1.5 rounded-lg bg-white/5 text-xs font-medium text-slate-300 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">Bu Hafta</span>
                           <span className="px-3 py-1.5 rounded-lg bg-indigo-600 text-xs font-medium text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-colors cursor-pointer flex items-center gap-1">
                             Rapor Al <ChevronRight className="w-3 h-3" />
                           </span>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+                      <div className="grid grid-cols-4 gap-4 mb-8">
                         {/* Stats Card 1 */}
                         <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group/card hover:-translate-y-1">
                           <div className="flex justify-between items-start mb-4">
@@ -309,9 +310,9 @@ export default function HomePage() {
                         </div>
                       </div>
                       
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 h-full">
+                      <div className="grid grid-cols-3 gap-6 h-full">
                         {/* Chart Area */}
-                        <div className="col-span-1 lg:col-span-2 rounded-2xl bg-white/[0.02] border border-white/5 p-4 md:p-6 relative overflow-hidden">
+                        <div className="col-span-2 rounded-2xl bg-white/[0.02] border border-white/5 p-6 relative overflow-hidden">
                            <div className="flex items-center justify-between mb-6">
                              <div className="flex items-center gap-3">
                                <div className="h-8 w-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
@@ -361,7 +362,7 @@ export default function HomePage() {
                         </div>
 
                         {/* Recent List */}
-                        <div className="col-span-1 rounded-2xl bg-white/[0.02] border border-white/5 p-4 md:p-6 flex flex-col">
+                        <div className="col-span-1 rounded-2xl bg-white/[0.02] border border-white/5 p-6 flex flex-col">
                           <div className="flex items-center justify-between mb-6">
                              <div className="text-sm font-bold text-white">Son İşlemler</div>
                              <div className="text-[10px] text-indigo-400 font-medium cursor-pointer hover:underline">Tümünü Gör</div>
@@ -394,6 +395,7 @@ export default function HomePage() {
                       </div>
                    </div>
                 </div>
+              </div>
                 
                 {/* Glow Overlay */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-20 blur-xl -z-10 group-hover:opacity-40 transition-opacity duration-500" />

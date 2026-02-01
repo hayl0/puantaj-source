@@ -51,8 +51,11 @@ export async function GET() {
           role: true,
           companyName: true,
           taxNumber: true,
-          address: true,
           phone: true,
+          address: true,
+          plan: true,
+          stripeCurrentPeriodEnd: true,
+          stripeSubscriptionId: true,
         }
       });
     }

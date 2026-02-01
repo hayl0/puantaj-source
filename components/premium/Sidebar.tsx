@@ -3,7 +3,7 @@
 
 import { 
   Home, Users, Calendar, Clock, CreditCard, 
-  BarChart3, Settings, Briefcase
+  BarChart3, Settings, Briefcase, FileText, Megaphone
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,6 +18,8 @@ const allNavItems = [
   { icon: Clock, label: 'Mesai', href: '/mesai', roles: ['admin', 'user', 'personnel'] },
   { icon: Briefcase, label: 'İzin', href: '/izin', roles: ['admin', 'user', 'personnel'] },
   { icon: CreditCard, label: 'Maaş', href: '/maas', roles: ['admin', 'user', 'personnel'] },
+  { icon: FileText, label: 'Belgeler', href: '/belgeler', roles: ['admin', 'user', 'personnel'] },
+  { icon: Megaphone, label: 'Duyurular', href: '/duyurular', roles: ['admin', 'user', 'personnel'] },
   { icon: BarChart3, label: 'Finans', href: '/finans', roles: ['admin'] },
   { icon: BarChart3, label: 'Raporlar', href: '/raporlar', roles: ['admin'] },
   { icon: Settings, label: 'Ayarlar', href: '/ayarlar', roles: ['admin'] },

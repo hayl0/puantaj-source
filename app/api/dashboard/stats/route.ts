@@ -80,7 +80,65 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json({ error: "Not implemented for admin" }, { status: 400 });
+    // Admin Stats Logic
+    const now = new Date();
+    const start = startOfMonth(now);
+    const end = endOfMonth(now);
+
+    // 1. Total Employees
+    const totalEmployees = await prisma.employee.count({
+      where: { userId: userId }
+    });
+
+    // 2. Attendance Rate (Today)
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const activeAttendance = await prisma.attendance.count({
+      where: {
+        userId: userId, // Employees of this admin
+        date: {
+          gte: todayStart,
+          lte: todayEnd
+        },
+        status: { in: ['present', 'late', 'early_leave'] }
+      }
+    });
+
+    const attendanceRate = totalEmployees > 0 
+      ? Math.round((activeAttendance / totalEmployees) * 100) 
+      : 0;
+
+    // 3. Total Monthly Cost (Salaries)
+    const employees = await prisma.employee.findMany({
+      where: { userId: userId },
+      select: { salary: true }
+    });
+    
+    const totalMonthlyCost = employees.reduce((acc, curr) => acc + (curr.salary || 0), 0);
+
+    // 4. Pending Leaves
+    // We need to find leaves for employees of this admin
+    // Leaves have employeeId. Employee has userId (admin).
+    const pendingLeaves = await prisma.leave.count({
+      where: {
+        employee: {
+          userId: userId
+        },
+        status: 'pending'
+      }
+    });
+
+    return NextResponse.json({
+      totalEmployees,
+      attendanceRate,
+      activeCount: activeAttendance,
+      totalMonthlyCost,
+      pendingLeaves
+    });
+
   } catch (error) {
     console.error("Dashboard Stats Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

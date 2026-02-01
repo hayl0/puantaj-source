@@ -31,12 +31,12 @@ export default function PremiumHeader() {
     <header className="sticky top-0 z-30 h-20 bg-background/60 backdrop-blur-xl border-b border-white/10 px-4 md:px-8 flex items-center justify-between transition-all duration-300">
       <div className="flex items-center gap-4 flex-1 max-w-xl">
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={toggle}
-          className="lg:hidden text-muted-foreground hover:text-foreground"
+          className="lg:hidden h-12 w-12 rounded-lg border-2 border-primary/20 bg-background/50 backdrop-blur-md shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/50 transition-all active:scale-95 group"
         >
-          <Menu className="w-6 h-6" />
+          <Menu className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
         </Button>
         <div className="relative group flex-1 hidden md:block">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
@@ -54,16 +54,7 @@ export default function PremiumHeader() {
       </div>
       
       <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="relative w-10 h-10 rounded-xl hover:bg-secondary/80"
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        >
-          <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-orange-500" />
-          <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-blue-500" />
-          <span className="sr-only">Tema Değiştir</span>
-        </Button>
+        {/* Theme Toggle Removed - Forced Dark Mode */}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

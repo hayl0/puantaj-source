@@ -7,6 +7,7 @@ export default function DashboardStats() {
   const [data, setData] = useState({
     totalEmployees: 0,
     attendanceRate: 0,
+    activeCount: 0,
     totalMonthlyCost: 0,
     pendingLeaves: 0
   });
@@ -32,9 +33,9 @@ export default function DashboardStats() {
 
   const stats = [
     { 
-      title: 'Aktif Personel', 
+      title: 'Toplam Personel', 
       value: data.totalEmployees.toString(), 
-      change: 'Toplam', 
+      change: 'Kayıtlı Çalışan', 
       icon: Users,
       color: 'bg-blue-500',
       gradient: 'from-blue-500 to-blue-600',
@@ -43,9 +44,9 @@ export default function DashboardStats() {
       trend: 'neutral'
     },
     { 
-      title: 'Devam Oranı', 
-      value: `%${data.attendanceRate}`, 
-      change: 'Bugün', 
+      title: 'Anlık Çalışan', 
+      value: data.activeCount.toString(), 
+      change: `Devam: %${data.attendanceRate}`, 
       icon: TrendingUp,
       color: 'bg-green-500',
       gradient: 'from-green-500 to-green-600',
