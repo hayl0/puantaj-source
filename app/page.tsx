@@ -14,7 +14,14 @@ import {
   Smartphone,
   Menu,
   X,
-  Star
+  Star,
+  LayoutDashboard,
+  Calendar,
+  Wallet,
+  FileText,
+  Bell,
+  Search,
+  MoreHorizontal
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
@@ -27,7 +34,7 @@ export default function HomePage() {
   
   // Parallax effects
   const heroY = useTransform(scrollY, [0, 500], [0, 200])
-  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  // const opacity = useTransform(scrollY, [0, 300], [1, 0]) // Removed fade out effect
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -135,57 +142,155 @@ export default function HomePage() {
 
             {/* 3D Dashboard Mockup */}
             <motion.div 
-              style={{ y: heroY, opacity }}
+              style={{ y: heroY }}
               className="mt-20 relative w-full perspective-[2000px]"
             >
-              <div className="relative rounded-xl bg-slate-900 border border-white/10 shadow-2xl overflow-hidden transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
+              <div className="relative rounded-xl bg-[#0B0F19] border border-white/10 shadow-2xl overflow-hidden transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
                 
                 {/* Mockup Header */}
-                <div className="h-12 border-b border-white/10 bg-[#0B0F19] flex items-center px-4 gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+                <div className="h-14 border-b border-white/10 bg-[#0B0F19] flex items-center justify-between px-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+                    </div>
+                    <div className="ml-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-xs text-slate-400">
+                      <Search className="w-3 h-3" />
+                      <span>Personel ara...</span>
+                    </div>
                   </div>
-                  <div className="ml-4 h-6 w-64 rounded bg-white/5 border border-white/5" />
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <Bell className="w-4 h-4 text-slate-400" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
+                        AD
+                      </div>
+                      <span className="text-xs font-medium text-slate-300">Admin</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Mockup Content */}
-                <div className="p-8 grid grid-cols-12 gap-6 bg-[#0B0F19] aspect-[16/9]">
+                <div className="flex h-[400px] bg-[#0B0F19]">
                    {/* Sidebar */}
-                   <div className="hidden md:block col-span-2 space-y-4">
-                      <div className="h-8 w-full rounded bg-indigo-500/20" />
-                      {[1,2,3,4,5].map(i => (
-                        <div key={i} className="h-8 w-full rounded bg-white/5" />
-                      ))}
+                   <div className="hidden md:flex w-48 flex-col border-r border-white/5 p-4 space-y-2">
+                      <div className="px-3 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center gap-3 text-sm font-medium border border-indigo-500/20">
+                        <LayoutDashboard className="w-4 h-4" />
+                        Genel Bakış
+                      </div>
+                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors">
+                        <Users className="w-4 h-4" />
+                        Personel
+                      </div>
+                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors">
+                        <Calendar className="w-4 h-4" />
+                        Vardiyalar
+                      </div>
+                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors">
+                        <FileText className="w-4 h-4" />
+                        İzinler
+                      </div>
+                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors">
+                        <Wallet className="w-4 h-4" />
+                        Finans
+                      </div>
                    </div>
                    
                    {/* Main Content */}
-                   <div className="col-span-12 md:col-span-10 grid grid-cols-3 gap-6">
-                      {/* Stats Cards */}
-                      {[1,2,3].map(i => (
-                        <div key={i} className="h-32 rounded-xl bg-white/5 border border-white/5 p-4 flex flex-col justify-between">
-                          <div className="h-8 w-8 rounded bg-white/10" />
-                          <div className="space-y-2">
-                            <div className="h-6 w-16 rounded bg-white/10" />
-                            <div className="h-4 w-24 rounded bg-white/5" />
+                   <div className="flex-1 p-6 overflow-hidden">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-bold text-white">Genel Durum</h3>
+                        <div className="flex gap-2">
+                          <span className="px-2 py-1 rounded bg-white/5 text-xs text-slate-400 border border-white/10">Bu Hafta</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        {/* Stats Card 1 */}
+                        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-colors group/card">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 group-hover/card:bg-indigo-500 group-hover/card:text-white transition-colors">
+                              <Users className="w-4 h-4" />
+                            </div>
+                            <span className="text-xs text-green-400 font-medium">+12%</span>
+                          </div>
+                          <div className="text-2xl font-bold text-white mb-1">24</div>
+                          <div className="text-xs text-slate-500">Aktif Personel</div>
+                        </div>
+
+                        {/* Stats Card 2 */}
+                        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-violet-500/30 transition-colors group/card">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="p-2 rounded-lg bg-violet-500/20 text-violet-400 group-hover/card:bg-violet-500 group-hover/card:text-white transition-colors">
+                              <Clock className="w-4 h-4" />
+                            </div>
+                            <span className="text-xs text-slate-400 font-medium">Stabil</span>
+                          </div>
+                          <div className="text-2xl font-bold text-white mb-1">168s</div>
+                          <div className="text-xs text-slate-500">Toplam Mesai</div>
+                        </div>
+
+                        {/* Stats Card 3 */}
+                        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-pink-500/30 transition-colors group/card">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="p-2 rounded-lg bg-pink-500/20 text-pink-400 group-hover/card:bg-pink-500 group-hover/card:text-white transition-colors">
+                              <Wallet className="w-4 h-4" />
+                            </div>
+                            <span className="text-xs text-green-400 font-medium">+5%</span>
+                          </div>
+                          <div className="text-2xl font-bold text-white mb-1">₺42.5K</div>
+                          <div className="text-xs text-slate-500">Tahmini Gider</div>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-4 h-full">
+                        {/* Chart Area */}
+                        <div className="col-span-2 rounded-xl bg-white/[0.02] border border-white/5 p-4">
+                           <div className="flex items-center justify-between mb-4">
+                             <div className="text-xs font-medium text-slate-400">Haftalık Katılım</div>
+                             <MoreHorizontal className="w-4 h-4 text-slate-600" />
+                           </div>
+                           <div className="h-32 flex items-end gap-2 justify-between px-2">
+                             {[40, 70, 45, 80, 55, 90, 60, 75, 50, 85, 65, 95, 70, 85].map((h, i) => (
+                               <motion.div 
+                                key={i}
+                                initial={{ height: 0 }}
+                                whileInView={{ height: `${h}%` }}
+                                transition={{ duration: 1, delay: i * 0.05 }}
+                                viewport={{ once: true }}
+                                className="w-full bg-gradient-to-t from-indigo-600/50 to-indigo-400/50 rounded-t-sm hover:from-indigo-500 hover:to-indigo-300 transition-colors cursor-pointer"
+                               />
+                             ))}
+                           </div>
+                        </div>
+
+                        {/* Recent List */}
+                        <div className="col-span-1 rounded-xl bg-white/[0.02] border border-white/5 p-4">
+                          <div className="text-xs font-medium text-slate-400 mb-4">Son İşlemler</div>
+                          <div className="space-y-3">
+                            {[
+                              { name: 'Ahmet Y.', action: 'Giriş Yaptı', time: '08:30', color: 'text-green-400' },
+                              { name: 'Selin K.', action: 'İzin Talebi', time: '09:15', color: 'text-yellow-400' },
+                              { name: 'Mehmet T.', action: 'Çıkış Yaptı', time: '18:00', color: 'text-slate-400' },
+                            ].map((item, i) => (
+                              <div key={i} className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px]">
+                                  {item.name.charAt(0)}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-medium text-slate-300 truncate">{item.name}</div>
+                                  <div className={`text-[10px] ${item.color}`}>{item.action}</div>
+                                </div>
+                                <div className="text-[10px] text-slate-500">{item.time}</div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      ))}
-                      
-                      {/* Chart Area */}
-                      <div className="col-span-3 h-64 rounded-xl bg-white/5 border border-white/5 p-6 relative overflow-hidden flex items-end gap-2">
-                         {[40, 70, 45, 80, 55, 90, 60, 75, 50, 85, 65, 95].map((h, i) => (
-                           <motion.div 
-                            key={i}
-                            initial={{ height: 0 }}
-                            whileInView={{ height: `${h}%` }}
-                            transition={{ duration: 1, delay: i * 0.1 }}
-                            viewport={{ once: true }}
-                            className="flex-1 bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-sm opacity-80"
-                           />
-                         ))}
                       </div>
                    </div>
                 </div>
