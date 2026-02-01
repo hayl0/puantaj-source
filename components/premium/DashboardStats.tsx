@@ -33,9 +33,9 @@ export default function DashboardStats() {
 
   const stats = [
     { 
-      title: 'Toplam Personel', 
+      title: 'Kayıtlı Personel', 
       value: data.totalEmployees.toString(), 
-      change: 'Kayıtlı Çalışan', 
+      change: 'Toplam Çalışan', 
       icon: Users,
       color: 'bg-blue-500',
       gradient: 'from-blue-500 to-blue-600',
@@ -44,7 +44,7 @@ export default function DashboardStats() {
       trend: 'neutral'
     },
     { 
-      title: 'Anlık Çalışan', 
+      title: 'Bugün Çalışan', 
       value: data.activeCount.toString(), 
       change: `Devam: %${data.attendanceRate}`, 
       icon: TrendingUp,
