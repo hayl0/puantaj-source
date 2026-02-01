@@ -65,21 +65,52 @@ export async function POST(req: Request) {
         const employee = employees[empIndex % employees.length];
         empIndex++;
 
-        // Check if shift already exists for this employee on this day (Basic check)
+        // Parse start and end times
+        const [startHour, startMinute] = shiftType.start.split(':').map(Number);
+        const [endHour, endMinute] = shiftType.end.split(':').map(Number);
+
+        const shiftStart = new Date(currentDate);
+        shiftStart.setHours(startHour, startMinute, 0, 0);
+
+        const shiftEnd = new Date(currentDate);
+        shiftEnd.setHours(endHour, endMinute, 0, 0);
+
+        // Handle overnight shifts (end time < start time)
+        if (shiftEnd < shiftStart) {
+            shiftEnd.setDate(shiftEnd.getDate() + 1);
+        }
+
+        // Check if shift already exists for this employee on this day
+        // We check if there is any shift starting on this day
+        const dayStart = new Date(currentDate);
+        dayStart.setHours(0, 0, 0, 0);
+        
+        const dayEnd = new Date(currentDate);
+        dayEnd.setHours(23, 59, 59, 999);
+
         const existing = await prisma.shift.findFirst({
             where: {
                 employeeId: employee.id,
-                date: currentDate,
+                start: {
+                    gte: dayStart,
+                    lte: dayEnd
+                }
             }
         });
 
         if (!existing) {
+             // Map shift name to type
+             let type = 'full';
+             if (shiftType.name === 'Gündüz') type = 'morning';
+             else if (shiftType.name === 'Akşam') type = 'evening';
+             else if (shiftType.name === 'Gece') type = 'night';
+
              const newShift = await prisma.shift.create({
                 data: {
-                    name: shiftType.name,
-                    startTime: shiftType.start,
-                    endTime: shiftType.end,
-                    date: currentDate,
+                    title: shiftType.name,
+                    start: shiftStart,
+                    end: shiftEnd,
+                    type: type,
                     employeeId: employee.id,
                     userId: (session.user as any).id
                 }

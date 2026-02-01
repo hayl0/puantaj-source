@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
+import PlasmaSphere from '@/components/premium/PlasmaSphere'
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false)

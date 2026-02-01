@@ -27,7 +27,7 @@ export async function GET(req: Request) {
   }
 
   if (startDate && endDate) {
-    whereClause.date = {
+    whereClause.start = {
       gte: new Date(startDate),
       lte: new Date(endDate),
     };
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
             select: { name: true, position: true, id: true }
         }
       },
-      orderBy: { date: 'asc' }
+      orderBy: { start: 'asc' }
     });
     return NextResponse.json(shifts);
   } catch (error) {
@@ -79,14 +79,36 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Employee not found or unauthorized" }, { status: 404 });
     }
 
+    // Convert to DateTime
+    const [startH, startM] = startTime.split(':').map(Number);
+    const [endH, endM] = endTime.split(':').map(Number);
+    
+    const startDateTime = new Date(date);
+    startDateTime.setHours(startH, startM, 0, 0);
+    
+    const endDateTime = new Date(date);
+    endDateTime.setHours(endH, endM, 0, 0);
+    
+    // Handle overnight
+    if (endDateTime < startDateTime) {
+        endDateTime.setDate(endDateTime.getDate() + 1);
+    }
+    
+    // Map shift name to type
+    let type = 'full';
+    const shiftName = name || 'Mesai';
+    if (shiftName === 'Gündüz') type = 'morning';
+    else if (shiftName === 'Akşam') type = 'evening';
+    else if (shiftName === 'Gece') type = 'night';
+
     const shift = await prisma.shift.create({
       data: {
         employeeId,
         userId: currentId,
-        date: new Date(date),
-        startTime,
-        endTime,
-        name: name || 'Mesai'
+        start: startDateTime,
+        end: endDateTime,
+        title: shiftName,
+        type: type
       }
     });
 

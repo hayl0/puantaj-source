@@ -32,7 +32,7 @@ export async function GET(req: Request) {
 
     // Fetch Shifts
     const shiftsWhere: any = {
-      date: {
+      start: {
         gte: startDate,
         lte: endDate,
       }
@@ -86,21 +86,21 @@ export async function GET(req: Request) {
     const events = [
       ...shifts.map(shift => ({
         id: `shift-${shift.id}`,
-        title: `${shift.employee?.name || 'Vardiya'}: ${shift.name}`,
-        start: `${shift.date.toISOString().split('T')[0]}T${shift.startTime}`,
-        end: `${shift.date.toISOString().split('T')[0]}T${shift.endTime}`,
+        title: `${shift.employee?.name || 'Vardiya'}: ${shift.title}`,
+        start: shift.start.toISOString(),
+        end: shift.end.toISOString(),
         backgroundColor: '#3b82f6', // blue-500
         borderColor: '#3b82f6',
-        extendedProps: { type: 'shift', ...shift }
+        extendedProps: { ...shift, eventType: 'shift' }
       })),
       ...leaves.map(leave => ({
         id: `leave-${leave.id}`,
         title: `${leave.employee?.name || 'Personel'}: ${leave.type}`,
-        start: leave.startDate,
-        end: leave.endDate,
-        backgroundColor: '#ef4444', // red-500
-        borderColor: '#ef4444',
-        extendedProps: { eventType: 'leave', ...leave }
+        start: leave.startDate.toISOString(),
+        end: leave.endDate.toISOString(),
+        backgroundColor: leave.status === 'approved' ? '#22c55e' : '#f59e0b', // green-500 or amber-500
+        borderColor: leave.status === 'approved' ? '#22c55e' : '#f59e0b',
+        extendedProps: { ...leave, eventType: 'leave' }
       }))
     ];
 

@@ -30,7 +30,7 @@ export async function GET() {
       const shifts = await prisma.shift.findMany({
         where: {
           userId,
-          date: {
+          start: {
             gte: startOfDay(date),
             lte: endOfDay(date)
           }
@@ -40,14 +40,10 @@ export async function GET() {
       // Calculate total hours from shifts
       let totalHours = 0;
       shifts.forEach(shift => {
-        // Parse "HH:mm" strings
-        const [startH, startM] = shift.startTime.split(':').map(Number);
-        const [endH, endM] = shift.endTime.split(':').map(Number);
+        const durationMs = shift.end.getTime() - shift.start.getTime();
+        const durationHours = durationMs / (1000 * 60 * 60);
         
-        let duration = (endH + endM/60) - (startH + startM/60);
-        if (duration < 0) duration += 24; // Cross midnight
-        
-        totalHours += duration;
+        totalHours += durationHours;
       });
 
       // If no shifts, check attendance for overtime
@@ -88,7 +84,7 @@ export async function GET() {
         where: { userId },
         take: 5,
         include: { employee: true },
-        orderBy: { date: 'desc' }
+        orderBy: { start: 'desc' }
     });
 
     const recentActivity = recentShifts.map(shift => ({
@@ -96,7 +92,7 @@ export async function GET() {
         name: shift.employee.name,
         type: 'approved', // Shifts are auto-approved on creation in this system
         hours: 8, // Approx
-        date: format(shift.date, 'dd MMM', { locale: tr }),
+        date: format(shift.start, 'dd MMM', { locale: tr }),
         approver: 'Admin'
     }));
 
