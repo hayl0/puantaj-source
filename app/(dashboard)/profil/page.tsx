@@ -48,11 +48,11 @@ export default function ProfilePage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Ad Soyad</Label>
-              <Input defaultValue={user?.name || ''} readOnly />
+              <Input value={user?.name || ''} readOnly />
             </div>
             <div className="space-y-2">
               <Label>E-posta</Label>
-              <Input defaultValue={user?.email || ''} readOnly />
+              <Input value={user?.email || ''} readOnly />
             </div>
             <div className="space-y-2">
               <Label>Telefon</Label>

@@ -78,15 +78,15 @@ export default function AyarlarPage() {
                 <div className="grid gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Ad Soyad</Label>
-                    <Input id="name" defaultValue="Admin User" />
+                    <Input id="name" defaultValue={user?.name || ''} key={user?.name} />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" defaultValue="admin@puantaj.com" />
+                    <Input id="email" value={user?.email || ''} readOnly />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="bio">Biyografi</Label>
-                    <Input id="bio" defaultValue="Sistem Yöneticisi" />
+                    <Label htmlFor="bio">Rol</Label>
+                    <Input id="bio" value={(user as any)?.role || 'User'} readOnly />
                   </div>
                 </div>
 
