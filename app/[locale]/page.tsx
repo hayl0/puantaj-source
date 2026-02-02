@@ -73,7 +73,7 @@ export default function HomePage() {
           <div className="hidden md:flex items-center gap-8">
             <Link href="#features" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">{t('features')}</Link>
             <Link href="#solutions" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">{t('solutions')}</Link>
-            <Link href="#pricing" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">{t('pricing')}</Link>
+            {/* <Link href="#pricing" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">{t('pricing')}</Link> */}
           </div>
 
           <div className="hidden md:flex items-center gap-4">
@@ -110,7 +110,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-6 text-lg">
               <Link href="#features" onClick={() => setMobileMenuOpen(false)} className="text-slate-400">{t('features')}</Link>
               <Link href="#solutions" onClick={() => setMobileMenuOpen(false)} className="text-slate-400">{t('solutions')}</Link>
-              <Link href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-slate-400">{t('pricing')}</Link>
+              {/* <Link href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-slate-400">{t('pricing')}</Link> */}
               <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-slate-400">{t('login')}</Link>
               <Link href="/register/admin" onClick={() => setMobileMenuOpen(false)} className="text-indigo-400 font-bold">{t('register')}</Link>
             </div>
@@ -375,7 +375,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Pricing Section */}
+        {/* Pricing Section - Temporarily Disabled
         <section id="pricing" className="py-32 relative">
           <div className="container mx-auto px-6 relative z-10">
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -396,52 +396,96 @@ export default function HomePage() {
                 </button>
                 <span className={`text-sm font-medium ${billingCycle === 'yearly' ? 'text-white' : 'text-slate-500'}`}>
                   {tHome('pricing.yearly')}
-                  <span className="ml-2 text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">{tHome('pricing.save')}</span>
+                  <span className="ml-2 text-xs text-green-400 font-bold bg-green-400/10 px-2 py-1 rounded-full">
+                    {tHome('pricing.save20')}
+                  </span>
                 </span>
               </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {['starter', 'pro', 'enterprise'].map((plan) => (
-                <div key={plan} className={`p-8 rounded-2xl border transition-all duration-300 relative group ${plan === 'pro' ? 'bg-white/5 border-indigo-500/50 shadow-2xl shadow-indigo-500/10 scale-105 z-10' : 'bg-[#030712] border-white/10 hover:border-white/20'}`}>
-                  {plan === 'pro' && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      MOST POPULAR
+              {[
+                {
+                  name: tHome('pricing.plans.starter.name'),
+                  price: billingCycle === 'monthly' ? "0" : "0",
+                  period: billingCycle === 'monthly' ? "/mo" : "/yr",
+                  desc: tHome('pricing.plans.starter.desc'),
+                  features: [
+                    tHome('pricing.plans.starter.features.0'),
+                    tHome('pricing.plans.starter.features.1'),
+                    tHome('pricing.plans.starter.features.2'),
+                    tHome('pricing.plans.starter.features.3'),
+                    tHome('pricing.plans.starter.features.4')
+                  ],
+                  cta: tHome('pricing.plans.starter.cta'),
+                  popular: false
+                },
+                {
+                  name: tHome('pricing.plans.pro.name'),
+                  price: billingCycle === 'monthly' ? "299" : "2990",
+                  period: billingCycle === 'monthly' ? "/mo" : "/yr",
+                  desc: tHome('pricing.plans.pro.desc'),
+                  features: [
+                    tHome('pricing.plans.pro.features.0'),
+                    tHome('pricing.plans.pro.features.1'),
+                    tHome('pricing.plans.pro.features.2'),
+                    tHome('pricing.plans.pro.features.3'),
+                    tHome('pricing.plans.pro.features.4')
+                  ],
+                  cta: tHome('pricing.plans.pro.cta'),
+                  popular: true
+                },
+                {
+                  name: tHome('pricing.plans.enterprise.name'),
+                  price: tHome('pricing.plans.enterprise.price'),
+                  period: "",
+                  desc: tHome('pricing.plans.enterprise.desc'),
+                  features: [
+                    tHome('pricing.plans.enterprise.features.0'),
+                    tHome('pricing.plans.enterprise.features.1'),
+                    tHome('pricing.plans.enterprise.features.2'),
+                    tHome('pricing.plans.enterprise.features.3'),
+                    tHome('pricing.plans.enterprise.features.4')
+                  ],
+                  cta: tHome('pricing.plans.enterprise.cta'),
+                  popular: false
+                }
+              ].map((plan, i) => (
+                <div key={i} className={`relative p-8 rounded-2xl border ${plan.popular ? 'bg-white/10 border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.2)]' : 'bg-white/5 border-white/5'} flex flex-col`}>
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-500 text-white text-xs font-bold rounded-full shadow-lg">
+                      {tHome('pricing.mostPopular')}
                     </div>
                   )}
-                  
-                  <h3 className="text-xl font-bold mb-2">{tHome(`pricing.plans.${plan}.name`)}</h3>
-                  <p className="text-slate-400 text-sm mb-6 h-10">{tHome(`pricing.plans.${plan}.desc`)}</p>
-                  
                   <div className="mb-8">
-                    <span className="text-4xl font-bold">₺{tHome(`pricing.plans.${plan}.price`)}</span>
-                    <span className="text-slate-500">/{billingCycle === 'monthly' ? 'mo' : 'yr'}</span>
+                    <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                    <div className="flex items-baseline gap-1 mb-4">
+                      <span className="text-4xl font-bold">₺{plan.price}</span>
+                      <span className="text-slate-400">{plan.period}</span>
+                    </div>
+                    <p className="text-slate-400 text-sm">
+                      {plan.desc}
+                    </p>
                   </div>
-
-                  <Button variant={plan === 'pro' ? 'premium' : 'outline'} className="w-full mb-8">
-                    {tHome('pricing.cta')}
-                  </Button>
-
-                  <ul className="space-y-4">
-                    {[0, 1, 2, 3, 4].map((i) => {
-                      try {
-                        const featureKey = `pricing.plans.${plan}.features.${i}`
-                        const feature = tHome(featureKey)
-                        if (feature === featureKey) return null
-                        return (
-                          <li key={i} className="flex items-center gap-3 text-sm text-slate-300">
-                            <Check className={`w-4 h-4 ${plan === 'pro' ? 'text-indigo-400' : 'text-slate-500'}`} />
-                            {feature}
-                          </li>
-                        )
-                      } catch (e) { return null }
-                    })}
-                  </ul>
+                  <div className="space-y-4 mb-8 flex-1">
+                    {plan.features.map((feature, j) => (
+                      <div key={j} className="flex items-start gap-3 text-sm text-slate-300">
+                        <Check className="w-4 h-4 text-indigo-400 mt-0.5 shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/register/admin" className="w-full">
+                    <Button variant={plan.popular ? 'premium' : 'glass'} className="w-full">
+                      {plan.cta}
+                    </Button>
+                  </Link>
                 </div>
               ))}
             </div>
           </div>
         </section>
+        */}
 
         {/* FAQ Section */}
         <section className="py-32 bg-[#0B0F19] relative">
@@ -503,7 +547,7 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Link href="https://twitter.com/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
+              {/* <Link href="https://twitter.com/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
                 <Twitter className="w-4 h-4" />
               </Link>
               <Link href="https://instagram.com/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
@@ -511,7 +555,7 @@ export default function HomePage() {
               </Link>
               <Link href="https://linkedin.com/company/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
                 <Linkedin className="w-4 h-4" />
-              </Link>
+              </Link> */}
 
             </div>
           </div>
