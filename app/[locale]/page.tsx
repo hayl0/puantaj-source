@@ -503,18 +503,16 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
+              <Link href="https://twitter.com/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
                 <Twitter className="w-4 h-4" />
               </Link>
-              <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
+              <Link href="https://instagram.com/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
                 <Instagram className="w-4 h-4" />
               </Link>
-              <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
+              <Link href="https://linkedin.com/company/puantajpro" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
                 <Linkedin className="w-4 h-4" />
               </Link>
-              <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 hover:text-white transition-colors">
-                <Github className="w-4 h-4" />
-              </Link>
+
             </div>
           </div>
           
