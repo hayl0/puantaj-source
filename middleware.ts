@@ -112,6 +112,8 @@ export default async function middleware(request: NextRequest) {
 }
  
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ['/', '/(tr|en|de|fr|es|it|pt|ru|zh|ja|ko|ar)/:path*']
+  // Match all pathnames except for
+  // - … if they start with `/api`, `/_next` or `/_vercel`
+  // - … the ones containing a dot (e.g. `favicon.ico`)
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };
