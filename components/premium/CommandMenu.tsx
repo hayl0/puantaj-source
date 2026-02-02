@@ -114,7 +114,7 @@ export function CommandMenu() {
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Hesap">
-          <CommandItem onSelect={() => runCommand(() => signOut())}>
+          <CommandItem onSelect={() => runCommand(() => signOut({ callbackUrl: '/' }))}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Çıkış Yap</span>
           </CommandItem>

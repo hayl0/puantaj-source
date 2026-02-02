@@ -11,6 +11,7 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   name          String?
+  image         String?
   password      String
   role          String    @default("user")
   emailVerified DateTime?
@@ -72,6 +73,7 @@ model Employee {
   id            String    @id @default(cuid())
   name          String
   email         String?   @unique
+  image         String?   // Employee profile photo (base64 or url)
   password      String?   // Hashed password for login
   department    String
   position      String

@@ -9,6 +9,9 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['@react-pdf/renderer', 'iyzipay'],
+  turbopack: {
+    // Turbopack configuration
+  },
 }
 
 module.exports = withPWA(nextConfig)

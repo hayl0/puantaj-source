@@ -42,6 +42,7 @@ export default function AyarlarPage() {
     address: '',
     phone: '',
     plan: 'free',
+    image: null as string | null,
     stripeCurrentPeriodEnd: null as string | null,
     stripeSubscriptionId: null as string | null
   });
@@ -63,6 +64,7 @@ export default function AyarlarPage() {
             address: data.address || '',
             phone: data.phone || '',
             plan: data.plan || 'free',
+            image: data.image || null,
             stripeCurrentPeriodEnd: data.stripeCurrentPeriodEnd || null,
             stripeSubscriptionId: data.stripeSubscriptionId || null
           });
@@ -207,9 +209,18 @@ export default function AyarlarPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // In a real app, you would upload this file to storage (AWS S3, etc.)
-      // For now, we'll just show a success message
-      toast.success("Profil fotoğrafı yüklendi (Demo)");
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Dosya boyutu 2MB'dan büyük olamaz");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setFormData(prev => ({ ...prev, image: base64String }));
+        toast.success("Profil fotoğrafı seçildi. Kaydetmeyi unutmayın.");
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -219,7 +230,6 @@ export default function AyarlarPage() {
     { id: 'billing', label: 'Plan ve Fatura', icon: CreditCard, description: 'Abonelik ve ödemeler' },
     { id: 'notifications', label: 'Bildirimler', icon: Bell, description: 'E-posta ve bildirim tercihleri' },
     { id: 'security', label: 'Güvenlik', icon: Shield, description: 'Şifre ve hesap güvenliği' },
-    { id: 'appearance', label: 'Görünüm', icon: Palette, description: 'Tema ve arayüz ayarları' },
   ];
 
   if (loading) {
@@ -263,7 +273,7 @@ export default function AyarlarPage() {
             <div className="glass-card rounded-2xl border border-white/10 p-4 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                 <div className="flex items-center gap-3 mb-3">
                     <Avatar className="w-10 h-10 border border-white/10">
-                        <AvatarImage src={`https://ui-avatars.com/api/?name=${formData.name}&background=random`} />
+                        <AvatarImage src={formData.image || `https://ui-avatars.com/api/?name=${formData.name}&background=random`} />
                         <AvatarFallback>AD</AvatarFallback>
                     </Avatar>
                     <div className="overflow-hidden">

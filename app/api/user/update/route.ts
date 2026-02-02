@@ -14,7 +14,7 @@ export async function PATCH(req: Request) {
   
   try {
     const body = await req.json();
-    const { name, companyName, taxNumber, address, phone } = body;
+    const { name, companyName, taxNumber, address, phone, image } = body;
 
     let updatedUser;
 
@@ -26,6 +26,7 @@ export async function PATCH(req: Request) {
           name: name || undefined,
           phone: phone || undefined,
           address: address || undefined,
+          image: image || undefined,
         },
       });
       
@@ -35,7 +36,8 @@ export async function PATCH(req: Request) {
         role: 'personnel',
         // Ensure fields are returned even if not updated
         phone: updatedUser.phone || '',
-        address: updatedUser.address || ''
+        address: updatedUser.address || '',
+        image: updatedUser.image || null
       };
     } else {
       updatedUser = await prisma.user.update({
@@ -46,6 +48,7 @@ export async function PATCH(req: Request) {
           taxNumber: taxNumber || undefined,
           address: address || undefined,
           phone: phone || undefined,
+          image: image || undefined,
         },
       });
     }

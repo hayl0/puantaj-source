@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import AuthProvider from '@/components/auth-provider';
 import { CommandMenu } from '@/components/premium/CommandMenu';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelToolbar } from '@vercel/toolbar/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -68,6 +70,8 @@ export default function RootLayout({
             <InstallPrompt />
             <Toaster />
             <SonnerToaster />
+            <SpeedInsights />
+            <VercelToolbar />
           </AuthProvider>
         </ThemeProvider>
       </body>

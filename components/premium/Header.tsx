@@ -93,7 +93,7 @@ export default function PremiumHeader() {
                 <p className="text-xs text-muted-foreground">{userRole}</p>
               </div>
               <Avatar className="h-10 w-10 border-2 border-white dark:border-slate-800 shadow-lg ring-2 ring-transparent group-hover:ring-primary transition-all">
-                <AvatarImage src="/placeholder-user.jpg" />
+                <AvatarImage src={session?.user?.image || "/placeholder-user.jpg"} />
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-bold">{userInitials}</AvatarFallback>
               </Avatar>
             </div>
@@ -123,7 +123,7 @@ export default function PremiumHeader() {
             <DropdownMenuSeparator className="bg-border/50" />
             <DropdownMenuItem 
               className="focus:bg-red-500/10 text-red-600 focus:text-red-600 cursor-pointer rounded-lg"
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: '/' })}
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Çıkış Yap</span>

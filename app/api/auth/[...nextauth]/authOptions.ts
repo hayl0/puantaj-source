@@ -172,6 +172,7 @@ export const authOptions: NextAuthOptions = {
                 email: employee.email!,
                 name: employee.name,
                 role: "personnel", // Distinct role for employees
+                image: employee.image,
               };
             } else {
                 console.log("Employee Password Invalid");
@@ -211,6 +212,7 @@ export const authOptions: NextAuthOptions = {
       if (session?.user) {
         (session.user as any).role = token.role;
         (session.user as any).id = token.id;
+        session.user.image = token.picture;
       }
       return session;
     },

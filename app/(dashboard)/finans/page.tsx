@@ -8,17 +8,44 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp, TrendingDown, DollarSign, 
-  ArrowUpRight, ArrowDownRight, Download, Filter, Loader2
+  ArrowUpRight, ArrowDownRight, Download, Filter, Loader2, Plus
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
 import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { redirect } from 'next/navigation';
 
 export default function FinancePage() {
   const { data: session } = useSession();
   const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
+  const [isIncomeDialogOpen, setIsIncomeDialogOpen] = useState(false);
+  const [incomeForm, setIncomeForm] = useState({
+    amount: '',
+    description: '',
+    date: new Date().toISOString().split('T')[0],
+    category: 'Satis'
+  });
   const [data, setData] = useState({
     incomeData: [],
     expenseCategories: [],
@@ -36,23 +63,96 @@ export default function FinancePage() {
     redirect('/dashboard');
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/finance/stats');
-        if (res.ok) {
-          const jsonData = await res.json();
-          setData(jsonData);
-        }
-      } catch (error) {
-        console.error('Error fetching finance stats:', error);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/finance/stats');
+      if (res.ok) {
+        const jsonData = await res.json();
+        setData(jsonData);
       }
-    };
-    
+    } catch (error) {
+      console.error('Error fetching finance stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (session) fetchData();
   }, [session]);
+
+  const handleCreateIncome = async () => {
+    if (!incomeForm.amount || !incomeForm.date) {
+      toast.error("Lütfen tutar ve tarih giriniz");
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/finance/income', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(incomeForm)
+      });
+
+      if (res.ok) {
+        toast.success("Gelir başarıyla eklendi");
+        setIsIncomeDialogOpen(false);
+        setIncomeForm({
+          amount: '',
+          description: '',
+          date: new Date().toISOString().split('T')[0],
+          category: 'Satis'
+        });
+        fetchData();
+      } else {
+        toast.error("Gelir eklenirken bir hata oluştu");
+      }
+    } catch (error) {
+      console.error("Error creating income:", error);
+      toast.error("Bir hata oluştu");
+    }
+  };
+
+  const handleDownloadReport = () => {
+    if (!data.incomeData.length) {
+      toast.error("İndirilecek veri bulunamadı");
+      return;
+    }
+
+    try {
+      // CSV Header
+      let csvContent = "Ay,Gelir,Gider,Net Durum\n";
+
+      // CSV Rows
+      data.incomeData.forEach((row: any) => {
+        const net = row.income - row.expense;
+        csvContent += `${row.month},${row.income},${row.expense},${net}\n`;
+      });
+
+      // Add Summary Section
+      csvContent += "\n\n--- Ozet Raporu ---\n";
+      csvContent += `Toplam Net Kar,${data.summary.totalNetProfit}\n`;
+      csvContent += `Aylik Gelir,${data.summary.monthlyIncome}\n`;
+      csvContent += `Aylik Gider,${data.summary.monthlyExpense}\n`;
+      csvContent += `Yillik Buyume,%${data.summary.yearlyGrowth}\n`;
+
+      // Create Blob and Download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `Finans_Raporu_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success("Rapor başarıyla indirildi");
+    } catch (error) {
+      console.error("Rapor indirme hatası:", error);
+      toast.error("Rapor oluşturulurken bir hata oluştu");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -64,7 +164,81 @@ export default function FinancePage() {
           <Filter className="w-4 h-4" />
           Filtrele
         </Button>
-        <Button className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/20">
+        
+        <Dialog open={isIncomeDialogOpen} onOpenChange={setIsIncomeDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 border-0">
+              <Plus className="w-4 h-4" />
+              Gelir Ekle
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Yeni Gelir Ekle</DialogTitle>
+              <DialogDescription>
+                Şirket kasasına giren yeni bir geliri kaydedin.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="amount" className="text-right">Tutar</Label>
+                <div className="col-span-3 relative">
+                  <span className="absolute left-3 top-2.5 text-muted-foreground">₺</span>
+                  <Input 
+                    id="amount" 
+                    type="number" 
+                    value={incomeForm.amount}
+                    onChange={(e) => setIncomeForm({...incomeForm, amount: e.target.value})}
+                    className="pl-8" 
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="date" className="text-right">Tarih</Label>
+                <Input 
+                  id="date" 
+                  type="date" 
+                  value={incomeForm.date}
+                  onChange={(e) => setIncomeForm({...incomeForm, date: e.target.value})}
+                  className="col-span-3" 
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="category" className="text-right">Kategori</Label>
+                <Select 
+                  value={incomeForm.category} 
+                  onValueChange={(value) => setIncomeForm({...incomeForm, category: value})}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Kategori seçin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Satis">Satış</SelectItem>
+                    <SelectItem value="Hizmet">Hizmet</SelectItem>
+                    <SelectItem value="Yatirim">Yatırım</SelectItem>
+                    <SelectItem value="Diger">Diğer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">Açıklama</Label>
+                <Input 
+                  id="description" 
+                  value={incomeForm.description}
+                  onChange={(e) => setIncomeForm({...incomeForm, description: e.target.value})}
+                  className="col-span-3" 
+                  placeholder="Opsiyonel açıklama"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleCreateIncome}>Kaydet</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Button onClick={handleDownloadReport} className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/20">
           <Download className="w-4 h-4" />
           Rapor İndir
         </Button>
