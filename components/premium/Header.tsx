@@ -41,7 +41,7 @@ export default function PremiumHeader() {
         </Button>
         
         <div className="hidden md:block mr-4 shrink-0">
-          <Logo />
+          <Logo className="text-2xl" />
         </div>
 
         <div className="relative group flex-1 hidden md:block">
