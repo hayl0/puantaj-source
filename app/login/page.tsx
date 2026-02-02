@@ -54,9 +54,7 @@ export default function LoginPage() {
       <div className="glass-card p-8 md:p-12 rounded-3xl w-full max-w-lg relative z-10 animate-float border border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="text-center mb-10">
           <Link href="/" className="inline-block hover:scale-105 transition-transform mb-6">
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/20 mx-auto">
-              <span className="text-4xl font-bold text-white">P</span>
-            </div>
+            <Logo showText={false} iconClassName="w-24 h-24 rounded-3xl" />
           </Link>
           <h1 className="text-4xl font-bold tracking-tight mb-2 text-white">Hoş Geldiniz</h1>
           <p className="text-slate-400">Puantaj Pro Yönetim Paneli</p>

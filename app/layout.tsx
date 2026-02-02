@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   description: 'Geleceğin çalışma alanı. Personel takibi, vardiya planlama ve maaş hesaplamalarını tek bir modern platformda birleştirin.',
   keywords: ['personel takip', 'puantaj', 'vardiya', 'maaş hesaplama', 'ik yazılımı', 'insan kaynakları'],
   authors: [{ name: 'Puantaj Pro Team' }],
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

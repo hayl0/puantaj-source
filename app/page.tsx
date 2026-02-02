@@ -32,6 +32,7 @@ import {
   BarChart3
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/Logo'
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid'
 import PlasmaSphere from '@/components/premium/PlasmaSphere'
 
@@ -60,11 +61,8 @@ export default function HomePage() {
       {/* Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#030712]/80 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-              <span className="text-xl font-bold text-white">P</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">Puantaj<span className="text-indigo-500">Pro</span></span>
+          <Link href="/" className="group">
+            <Logo />
           </Link>
 
           {/* Desktop Nav */}

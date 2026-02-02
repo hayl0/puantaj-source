@@ -52,10 +52,7 @@ export default function PremiumSidebar() {
   return (
     <aside className="w-72 h-screen sticky top-0 bg-background/60 backdrop-blur-xl border-r border-white/10 flex flex-col shadow-2xl z-40 overflow-hidden">
       <div className="p-8 pb-4 shrink-0">
-        <Logo 
-          className="text-2xl" 
-          iconClassName="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/20" 
-        />
+        <Logo className="text-2xl" />
       </div>
 
       <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto custom-scrollbar">
