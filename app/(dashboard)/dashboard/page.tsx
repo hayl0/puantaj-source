@@ -16,6 +16,7 @@ import {
   Database
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import DashboardStats from '@/components/premium/DashboardStats';
 import { RevenueChart, WorkHoursChart, DepartmentChart } from '@/components/premium/Charts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -279,7 +280,10 @@ export default function DashboardPage() {
                   "Bu ay Yazılım departmanında fazla mesai oranları geçen aya göre %15 arttı. Ekip yorgunluğu riskini azaltmak için vardiya planlamasını optimize etmeyi düşünebilirsiniz."
                 </p>
                 
-                <Button className="w-full bg-white text-indigo-700 hover:bg-indigo-50 border-0 shadow-lg">
+                <Button 
+                  className="w-full bg-white text-indigo-700 hover:bg-indigo-50 border-0 shadow-lg"
+                  onClick={() => toast.info("AI Analiz modülü yakında hizmetinizde olacak.")}
+                >
                   Detayları İncele
                 </Button>
               </div>

@@ -50,22 +50,15 @@ export default function PremiumSidebar() {
   });
 
   return (
-    <aside className="w-72 bg-background/60 backdrop-blur-xl border-r border-white/10 flex flex-col shadow-2xl z-40">
-      <div className="p-8 pb-4">
+    <aside className="w-72 h-screen sticky top-0 bg-background/60 backdrop-blur-xl border-r border-white/10 flex flex-col shadow-2xl z-40 overflow-hidden">
+      <div className="p-8 pb-4 shrink-0">
         <Logo 
-          textClassName="text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400" 
+          className="text-2xl" 
+          iconClassName="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/20" 
         />
-        <div className="mt-6 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/10 backdrop-blur-sm">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold mb-0.5">
-            {isAdmin ? 'YÖNETİCİ HESABI' : 'PERSONEL HESABI'}
-          </p>
-          <p className="text-sm font-bold text-foreground truncate">
-            {session?.user?.name || 'Kullanıcı'}
-          </p>
-        </div>
       </div>
-      
-      <nav className="flex-1 px-4 space-y-2 overflow-y-auto py-4">
+
+      <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto custom-scrollbar">
         {filteredNavItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           return (

@@ -6,9 +6,11 @@ interface PremiumCardProps extends React.ComponentProps<typeof Card> {
   children: React.ReactNode;
   className?: string;
   gradient?: boolean;
+  title?: string;
+  description?: string;
 }
 
-export function PremiumCard({ children, className, gradient, ...props }: PremiumCardProps) {
+export function PremiumCard({ children, className, gradient, title, description, ...props }: PremiumCardProps) {
   return (
     <Card 
       className={cn(
@@ -18,7 +20,13 @@ export function PremiumCard({ children, className, gradient, ...props }: Premium
       )} 
       {...props}
     >
-      <CardContent className="p-6">
+      {(title || description) && (
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+      )}
+      <CardContent className={cn("p-6", (title || description) && "pt-0")}>
         {children}
       </CardContent>
     </Card>

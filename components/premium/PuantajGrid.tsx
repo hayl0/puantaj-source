@@ -260,15 +260,15 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
         </div>
       </div>
 
-      <div className="glass-card rounded-[2.5rem] border border-black/5 dark:border-white/10 overflow-hidden shadow-2xl bg-white/40 dark:bg-black/40 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/5">
-        <div className="overflow-x-auto relative custom-scrollbar">
+      <div className="glass-card rounded-[1.5rem] md:rounded-[2.5rem] border border-black/5 dark:border-white/10 overflow-hidden shadow-2xl bg-white/40 dark:bg-black/40 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/5">
+        <div className="overflow-auto relative custom-scrollbar max-h-[70vh]">
           <table className="w-full text-sm border-separate border-spacing-0">
             <thead>
               <tr>
-                <th className="p-6 text-left font-bold text-muted-foreground sticky left-0 z-20 bg-white/95 dark:bg-[#030712]/95 backdrop-blur-xl border-b border-r border-black/5 dark:border-white/5 min-w-[240px] shadow-[4px_0_24px_-4px_rgba(0,0,0,0.05)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.5)]">
-                  <div className="flex items-center gap-3 pl-2">
-                    <span className="w-1.5 h-6 bg-primary rounded-full" />
-                    <span className="text-lg tracking-tight text-foreground">Personel Listesi</span>
+                <th className="p-4 md:p-6 text-left font-bold text-muted-foreground sticky left-0 top-0 z-30 bg-white/95 dark:bg-[#030712]/95 backdrop-blur-xl border-b border-r border-black/5 dark:border-white/5 min-w-[150px] md:min-w-[240px] shadow-[4px_0_24px_-4px_rgba(0,0,0,0.05)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.5)]">
+                  <div className="flex items-center gap-2 md:gap-3 pl-1 md:pl-2">
+                    <span className="w-1 md:w-1.5 h-5 md:h-6 bg-primary rounded-full" />
+                    <span className="text-sm md:text-lg tracking-tight text-foreground">Personel Listesi</span>
                   </div>
                 </th>
                 {days.map(day => {
@@ -278,19 +278,19 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                   
                   return (
                     <th key={day} className={cn(
-                      "p-0 min-w-[48px] h-[72px] text-center border-b border-black/5 dark:border-white/5 relative group/day transition-colors",
-                      isWeekend ? 'bg-black/[0.02] dark:bg-white/[0.02]' : '',
+                      "p-0 min-w-[40px] md:min-w-[48px] h-[60px] md:h-[72px] text-center border-b border-black/5 dark:border-white/5 sticky top-0 z-10 backdrop-blur-xl transition-colors",
+                      isWeekend ? 'bg-black/[0.04] dark:bg-white/[0.04]' : 'bg-white/90 dark:bg-[#030712]/90',
                       isToday ? 'bg-primary/5' : ''
                     )}>
-                      <div className="flex flex-col items-center justify-center w-full h-full gap-1">
+                      <div className="flex flex-col items-center justify-center w-full h-full gap-0.5 md:gap-1">
                         <span className={cn(
-                          "text-[10px] uppercase tracking-wider font-bold transition-colors",
+                          "text-[9px] md:text-[10px] uppercase tracking-wider font-bold transition-colors",
                           isToday ? 'text-primary' : 'text-muted-foreground/50'
                         )}>
                           {date.toLocaleDateString('tr-TR', { weekday: 'short' }).slice(0, 2)}
                         </span>
                         <div className={cn(
-                          "w-8 h-8 flex items-center justify-center rounded-full text-base font-bold tabular-nums transition-all group-hover/day:scale-110",
+                          "w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-sm md:text-base font-bold tabular-nums transition-all group-hover/day:scale-110",
                           isToday ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' : 'text-foreground/70'
                         )}>
                           {day}
@@ -311,16 +311,16 @@ export function PuantajGrid({ employees, onStatsChange }: PuantajGridProps) {
                   transition={{ delay: idx * 0.03 }}
                   className="group hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="p-4 sticky left-0 z-20 bg-white/95 dark:bg-[#0b0f1a]/95 backdrop-blur-xl border-r border-black/5 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-[#111522]/95 transition-colors shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.2)]">
-                    <div className="flex items-center gap-4 pl-2">
-                      <Avatar className="h-10 w-10 border-2 border-white dark:border-white/10 ring-2 ring-transparent group-hover:ring-primary/20 transition-all shadow-md">
-                        <AvatarFallback className="bg-gradient-to-tr from-violet-500 to-fuchsia-500 text-white text-xs font-black tracking-wider">
+                  <td className="p-3 md:p-4 sticky left-0 z-20 bg-white/95 dark:bg-[#0b0f1a]/95 backdrop-blur-xl border-r border-black/5 dark:border-white/5 group-hover:bg-white/90 dark:group-hover:bg-[#111522]/95 transition-colors shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_-4px_rgba(0,0,0,0.2)]">
+                    <div className="flex items-center gap-2 md:gap-4 pl-1 md:pl-2">
+                      <Avatar className="h-8 w-8 md:h-10 md:w-10 border-2 border-white dark:border-white/10 ring-2 ring-transparent group-hover:ring-primary/20 transition-all shadow-md">
+                        <AvatarFallback className="bg-gradient-to-tr from-violet-500 to-fuchsia-500 text-white text-[10px] md:text-xs font-black tracking-wider">
                           {employee.name.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-bold text-foreground group-hover:text-primary transition-colors">{employee.name}</span>
-                        <span className="text-[10px] font-medium text-muted-foreground/70 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full w-fit">{employee.department || 'Genel'}</span>
+                        <span className="font-bold text-xs md:text-sm text-foreground group-hover:text-primary transition-colors line-clamp-1">{employee.name}</span>
+                        <span className="text-[9px] md:text-[10px] font-medium text-muted-foreground/70 bg-black/5 dark:bg-white/10 px-1.5 md:px-2 py-0.5 rounded-full w-fit line-clamp-1">{employee.department || 'Genel'}</span>
                       </div>
                     </div>
                   </td>

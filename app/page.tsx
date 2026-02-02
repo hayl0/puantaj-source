@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
@@ -245,7 +246,12 @@ export default function HomePage() {
                           <p className="text-xs text-slate-500">Son güncelleme: Bugün, 14:30</p>
                         </div>
                         <div className="flex gap-2">
-                          <span className="px-3 py-1.5 rounded-lg bg-white/5 text-xs font-medium text-slate-300 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">Bu Hafta</span>
+                          <span 
+                            onClick={() => toast.info("Demo modunda tarih aralığı değiştirilemez")}
+                            className="px-3 py-1.5 rounded-lg bg-white/5 text-xs font-medium text-slate-300 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                          >
+                            Bu Hafta
+                          </span>
                           <span className="px-3 py-1.5 rounded-lg bg-indigo-600 text-xs font-medium text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-colors cursor-pointer flex items-center gap-1">
                             Rapor Al <ChevronRight className="w-3 h-3" />
                           </span>
@@ -365,7 +371,12 @@ export default function HomePage() {
                         <div className="col-span-1 rounded-2xl bg-white/[0.02] border border-white/5 p-6 flex flex-col">
                           <div className="flex items-center justify-between mb-6">
                              <div className="text-sm font-bold text-white">Son İşlemler</div>
-                             <div className="text-[10px] text-indigo-400 font-medium cursor-pointer hover:underline">Tümünü Gör</div>
+                             <div 
+                               onClick={() => toast.info("Demo modunda tüm işlemleri görüntüleyemezsiniz")}
+                               className="text-[10px] text-indigo-400 font-medium cursor-pointer hover:underline"
+                             >
+                               Tümünü Gör
+                             </div>
                           </div>
                           
                           <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar">

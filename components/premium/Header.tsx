@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useSidebar } from '@/components/providers/SidebarProvider';
+import { Logo } from '@/components/ui/Logo';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +39,11 @@ export default function PremiumHeader() {
         >
           <Menu className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
         </Button>
+        
+        <div className="hidden md:block mr-4 shrink-0">
+          <Logo />
+        </div>
+
         <div className="relative group flex-1 hidden md:block">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <input
