@@ -206,7 +206,16 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.role = (user as any).role;
         token.id = user.id;
-        token.picture = (user as any).image;
+        
+        // Prevent large base64 images from bloating the cookie and causing errors
+        const image = (user as any).image;
+        if (image && image.startsWith('data:')) {
+           // If it's a base64 string, don't put it in the token.
+           // The client should fetch it from /api/user/me
+           token.picture = null; 
+        } else {
+           token.picture = image;
+        }
       }
       return token;
     },
