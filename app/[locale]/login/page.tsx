@@ -38,8 +38,9 @@ export default function LoginPage() {
         router.push('/dashboard');
         router.refresh();
       }
-    } catch (error) {
-      setError('Bir hata oluştu');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setError(`Bir hata oluştu: ${error?.message || 'Bilinmeyen hata'}`);
     } finally {
       setLoading(false);
     }
