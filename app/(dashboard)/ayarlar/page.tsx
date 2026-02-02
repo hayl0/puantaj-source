@@ -572,59 +572,6 @@ export default function AyarlarPage() {
                         </div>
                     )}
 
-                    {activeTab === 'appearance' && (
-                        <PremiumCard title="Görünüm Ayarları">
-                            <div className="space-y-6">
-                                <div className="space-y-4">
-                                    <Label className="text-base">Tema Seçimi</Label>
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <button 
-                                            onClick={() => setTheme("light")}
-                                            className={cn(
-                                                "p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all",
-                                                theme === "light" ? "border-primary bg-primary/5" : "border-transparent bg-secondary/50 hover:bg-secondary"
-                                            )}
-                                        >
-                                            <div className="w-full h-20 rounded-lg bg-[#f0f0f0] border border-gray-200 shadow-sm relative overflow-hidden">
-                                                <div className="absolute top-0 left-0 right-0 h-4 bg-white border-b"></div>
-                                                <div className="absolute top-6 left-2 w-16 h-8 bg-white rounded shadow-sm"></div>
-                                            </div>
-                                            <span className="font-medium text-sm">Aydınlık</span>
-                                        </button>
-                                        
-                                        <button 
-                                            onClick={() => setTheme("dark")}
-                                            className={cn(
-                                                "p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all",
-                                                theme === "dark" ? "border-primary bg-primary/5" : "border-transparent bg-secondary/50 hover:bg-secondary"
-                                            )}
-                                        >
-                                            <div className="w-full h-20 rounded-lg bg-[#1a1a1a] border border-gray-800 shadow-sm relative overflow-hidden">
-                                                <div className="absolute top-0 left-0 right-0 h-4 bg-[#2a2a2a] border-b border-gray-800"></div>
-                                                <div className="absolute top-6 left-2 w-16 h-8 bg-[#2a2a2a] rounded shadow-sm"></div>
-                                            </div>
-                                            <span className="font-medium text-sm">Karanlık</span>
-                                        </button>
-
-                                        <button 
-                                            onClick={() => setTheme("system")}
-                                            className={cn(
-                                                "p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all",
-                                                theme === "system" ? "border-primary bg-primary/5" : "border-transparent bg-secondary/50 hover:bg-secondary"
-                                            )}
-                                        >
-                                            <div className="w-full h-20 rounded-lg bg-gradient-to-br from-[#f0f0f0] to-[#1a1a1a] border border-gray-500/20 shadow-sm relative overflow-hidden">
-                                                <div className="absolute inset-0 flex items-center justify-center">
-                                                    <Smartphone className="w-6 h-6 text-muted-foreground" />
-                                                </div>
-                                            </div>
-                                            <span className="font-medium text-sm">Sistem</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </PremiumCard>
-                    )}
                 </motion.div>
             </AnimatePresence>
         </div>
