@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "Features",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "login": "Login",
+    "register": "Get Started Free",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "HomePage": {
+    "badge": "AI Powered Personnel Management",
+    "heroTitlePrefix": "Workspace of",
+    "heroTitleSuffix": "the Future",
+    "heroDescription": "Combine personnel tracking, shift planning and payroll calculations in a single modern platform. Say goodbye to complex Excel spreadsheets.",
+    "getStarted": "Get Started Now",
+    "liveDemo": "Live Demo",
+    "mockup": {
+      "searchPlaceholder": "Search personnel...",
+      "adminRole": "Admin",
+      "sidebar": {
+        "overview": "Overview",
+        "personnel": "Personnel",
+        "attendance": "Attendance",
+        "salaries": "Salaries"
+      },
+      "stats": {
+        "totalPersonnel": "Total Personnel",
+        "lastMonth": "last month",
+        "activeShifts": "Active Shifts",
+        "workingNow": "Working now",
+        "monthlyCost": "Monthly Cost"
+      }
+    },
+    "features": {
+      "title": "Everything Under Control",
+      "description": "All the tools modern businesses need combined in a single powerful platform.",
+      "items": {
+        "personnel": {
+          "title": "Personnel Management",
+          "desc": "All employee data, personal files and performance tracking on a single screen."
+        },
+        "shifts": {
+          "title": "Smart Shifts",
+          "desc": "Prevent conflicts and increase efficiency with AI-powered shift planning."
+        },
+        "payroll": {
+          "title": "Automated Payroll",
+          "desc": "Automatically calculate salaries and overtime from attendance data."
+        },
+        "reporting": {
+          "title": "Reporting",
+          "desc": "Monitor your business status instantly with detailed analysis and charts."
+        },
+        "security": {
+          "title": "Secure Infrastructure",
+          "desc": "GDPR compliant, encrypted data storage and backup system."
+        },
+        "mobile": {
+          "title": "Mobile App",
+          "desc": "iOS and Android compatible mobile app for your employees."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "What Our Users Say?",
+      "description": "Success stories of businesses using Puantaj Pro.",
+      "items": {
+        "1": {
+          "quote": "We moved personnel tracking from Excel sheets to Puantaj Pro. Our efficiency increased by 40%, payroll calculations now take minutes.",
+          "role": "HR Manager"
+        },
+        "2": {
+          "quote": "Shift planning was a nightmare for us. Puantaj Pro's drag-and-drop interface and automatic conflict control is a lifesaver.",
+          "role": "Operations Director"
+        },
+        "3": {
+          "quote": "We use the QR code feature to track our field teams. We get reliable data thanks to location-based verification.",
+          "role": "General Manager"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "Start Managing Your Team",
+      "titleLine2": "Today",
+      "description": "Try all features free for 14 days. No credit card required.",
+      "button": "Create Account Now"
+    },
+    "pricing": {
+      "title": "Flexible Pricing",
+      "description": "Choose the best plan for your business size.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save 20%",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "9",
+          "desc": "Ideal for small teams.",
+          "features": ["10 Personnel", "Basic Reporting", "Shift Planning", "Email Support", "Secure Data Storage"]
+        },
+        "pro": {
+          "name": "Professional",
+          "price": "29",
+          "desc": "For growing businesses.",
+          "features": ["50 Personnel", "Advanced Reporting", "AI Shift Planning", "Priority Support", "Mobile App"]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "99",
+          "desc": "For large organizations.",
+          "features": ["Unlimited Personnel", "Custom Integrations", "24/7 Support", "Dedicated Server", "SLA Guarantee"]
+        }
+      },
+      "cta": "Choose Plan"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Find answers to your questions here.",
+      "items": {
+        "1": {
+          "q": "Is there a free trial?",
+          "a": "Yes, you can try all features for free for 14 days without a credit card."
+        },
+        "2": {
+          "q": "Can I cancel anytime?",
+          "a": "Absolutely. There is no commitment, you can cancel your subscription at any time."
+        },
+        "3": {
+          "q": "Is the mobile app included?",
+          "a": "Yes, our iOS and Android mobile apps are included in Professional and Enterprise plans."
+        },
+        "4": {
+          "q": "Is my data safe?",
+          "a": "Your data is protected with 256-bit SSL encryption and backed up daily."
+        }
+      }
+    },
+    "footer": {
+      "rights": "All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use",
+      "contact": "Contact",
+      "blog": "Blog"
+    }
+  }
+}

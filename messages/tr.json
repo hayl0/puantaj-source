@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "Özellikler",
+    "solutions": "Çözümler",
+    "pricing": "Fiyatlandırma",
+    "login": "Giriş Yap",
+    "register": "Ücretsiz Başla",
+    "dashboard": "Panel",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap"
+  },
+  "HomePage": {
+    "badge": "Yapay Zeka Destekli Personel Yönetimi",
+    "heroTitlePrefix": "Geleceğin",
+    "heroTitleSuffix": "Çalışma Alanı",
+    "heroDescription": "Puantaj Pro ile personel takibi, vardiya planlama ve maaş hesaplamalarını tek bir modern platformda birleştirin. Karmaşık Excel tablolarına veda edin.",
+    "getStarted": "Hemen Başlayın",
+    "liveDemo": "Canlı Demo",
+    "mockup": {
+      "searchPlaceholder": "Personel ara...",
+      "adminRole": "Admin",
+      "sidebar": {
+        "overview": "Genel Bakış",
+        "personnel": "Personel",
+        "attendance": "Puantaj",
+        "salaries": "Maaşlar"
+      },
+      "stats": {
+        "totalPersonnel": "Toplam Personel",
+        "lastMonth": "geçen ay",
+        "activeShifts": "Aktif Vardiya",
+        "workingNow": "Şu an çalışan",
+        "monthlyCost": "Aylık Maliyet"
+      }
+    },
+    "features": {
+      "title": "Her Şey Kontrol Altında",
+      "description": "Modern işletmelerin ihtiyaç duyduğu tüm araçlar, tek bir güçlü platformda birleşti.",
+      "items": {
+        "personnel": {
+          "title": "Personel Yönetimi",
+          "desc": "Tüm çalışan verileri, özlük dosyaları ve performans takibi tek ekranda."
+        },
+        "shifts": {
+          "title": "Akıllı Vardiya",
+          "desc": "Yapay zeka destekli vardiya planlama ile çakışmaları önleyin, verimi artırın."
+        },
+        "payroll": {
+          "title": "Otomatik Bordro",
+          "desc": "Puantaj verilerinden otomatik maaş ve mesai hesaplaması yapın."
+        },
+        "reporting": {
+          "title": "Raporlama",
+          "desc": "Detaylı analizler ve grafiklerle işletmenizin durumunu anlık izleyin."
+        },
+        "security": {
+          "title": "Güvenli Altyapı",
+          "desc": "KVKK uyumlu, şifreli veri saklama ve yedekleme sistemi."
+        },
+        "mobile": {
+          "title": "Mobil Uygulama",
+          "desc": "Çalışanlarınız için iOS ve Android uyumlu mobil uygulama."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Kullanıcılarımız Ne Diyor?",
+      "description": "Puantaj Pro'yu kullanan işletmelerin başarı hikayeleri.",
+      "items": {
+        "1": {
+          "quote": "Personel takibini Excel tablolarından Puantaj Pro'ya taşıdık. Verimliliğimiz %40 arttı, maaş hesaplamaları artık dakikalar sürüyor.",
+          "role": "İnsan Kaynakları Müdürü"
+        },
+        "2": {
+          "quote": "Vardiya planlaması bizim için kabustu. Puantaj Pro'nun sürükle-bırak arayüzü ve otomatik çakışma kontrolü hayat kurtarıcı.",
+          "role": "Operasyon Direktörü"
+        },
+        "3": {
+          "quote": "Saha ekiplerimizin takibi için QR kod özelliğini kullanıyoruz. Konum bazlı doğrulama sayesinde güvenilir veriler elde ediyoruz.",
+          "role": "Genel Müdür"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "Ekibinizi Yönetmeye",
+      "titleLine2": "Bugün Başlayın",
+      "description": "14 gün boyunca tüm özellikleri ücretsiz deneyin. Kredi kartı gerekmez.",
+      "button": "Hemen Hesap Oluşturun"
+    },
+    "pricing": {
+      "title": "Esnek Fiyatlandırma",
+      "description": "İşletmenizin büyüklüğüne göre en uygun planı seçin.",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "save": "%20 İndirim",
+      "plans": {
+        "starter": {
+          "name": "Başlangıç",
+          "price": "199",
+          "desc": "Küçük ekipler için ideal.",
+          "features": ["10 Personel", "Temel Raporlama", "Vardiya Planlama", "E-posta Desteği", "Güvenli Veri Saklama"]
+        },
+        "pro": {
+          "name": "Profesyonel",
+          "price": "499",
+          "desc": "Büyüyen işletmeler için.",
+          "features": ["50 Personel", "Gelişmiş Raporlama", "Yapay Zeka Vardiya", "Öncelikli Destek", "Mobil Uygulama"]
+        },
+        "enterprise": {
+          "name": "Kurumsal",
+          "price": "999",
+          "desc": "Büyük organizasyonlar için.",
+          "features": ["Sınırsız Personel", "Özel Entegrasyonlar", "7/24 Destek", "Özel Sunucu", "SLA Garantisi"]
+        }
+      },
+      "cta": "Planı Seç"
+    },
+    "faq": {
+      "title": "Sıkça Sorulan Sorular",
+      "description": "Aklınıza takılan soruların cevaplarını burada bulabilirsiniz.",
+      "items": {
+        "1": {
+          "q": "Ücretsiz deneme süresi var mı?",
+          "a": "Evet, tüm özellikleri 14 gün boyunca kredi kartı gerektirmeden ücretsiz deneyebilirsiniz."
+        },
+        "2": {
+          "q": "İstediğim zaman iptal edebilir miyim?",
+          "a": "Kesinlikle. Herhangi bir taahhüt yoktur, aboneliğinizi dilediğiniz zaman iptal edebilirsiniz."
+        },
+        "3": {
+          "q": "Mobil uygulama dahil mi?",
+          "a": "Evet, Profesyonel ve Kurumsal planlarımızda iOS ve Android mobil uygulamamız dahildir."
+        },
+        "4": {
+          "q": "Verilerim güvende mi?",
+          "a": "Verileriniz 256-bit SSL şifreleme ile korunmakta ve günlük olarak yedeklenmektedir."
+        }
+      }
+    },
+    "footer": {
+      "rights": "Tüm hakları saklıdır.",
+      "privacy": "Gizlilik Politikası",
+      "terms": "Kullanım Şartları",
+      "contact": "İletişim",
+      "blog": "Blog"
+    }
+  }
+}

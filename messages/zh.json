@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "功能",
+    "solutions": "解决方案",
+    "pricing": "价格",
+    "login": "登录",
+    "register": "免费开始",
+    "dashboard": "仪表板",
+    "settings": "设置",
+    "logout": "退出"
+  },
+  "HomePage": {
+    "badge": "AI驱动的人事管理",
+    "heroTitlePrefix": "未来的",
+    "heroTitleSuffix": "工作空间",
+    "heroDescription": "在一个现代平台上结合人事跟踪、轮班计划和薪资计算。告别复杂的Excel表格。",
+    "getStarted": "立即开始",
+    "liveDemo": "现场演示",
+    "mockup": {
+      "searchPlaceholder": "搜索人员...",
+      "adminRole": "管理员",
+      "sidebar": {
+        "overview": "概览",
+        "personnel": "人员",
+        "attendance": "考勤",
+        "salaries": "薪资"
+      },
+      "stats": {
+        "totalPersonnel": "总人员",
+        "lastMonth": "上个月",
+        "activeShifts": "活跃班次",
+        "workingNow": "正在工作",
+        "monthlyCost": "月度成本"
+      }
+    },
+    "features": {
+      "title": "一切尽在掌握",
+      "description": "现代企业所需的所有工具都结合在一个强大的平台上。",
+      "items": {
+        "personnel": {
+          "title": "人事管理",
+          "desc": "在一个屏幕上查看所有员工数据、个人档案和绩效跟踪。"
+        },
+        "shifts": {
+          "title": "智能排班",
+          "desc": "通过AI驱动的排班计划防止冲突并提高效率。"
+        },
+        "payroll": {
+          "title": "自动化薪资",
+          "desc": "根据考勤数据自动计算薪资和加班费。"
+        },
+        "reporting": {
+          "title": "报告",
+          "desc": "通过详细的分析和图表即时监控您的业务状态。"
+        },
+        "security": {
+          "title": "安全基础设施",
+          "desc": "符合GDPR，加密数据存储和备份系统。"
+        },
+        "mobile": {
+          "title": "移动应用",
+          "desc": "兼容iOS和Android的员工移动应用。"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "用户评价",
+      "description": "使用Puantaj Pro的企业的成功故事。",
+      "items": {
+        "1": {
+          "quote": "我们将人事跟踪从Excel表格转移到了Puantaj Pro。效率提高了40%。",
+          "role": "人力资源经理"
+        },
+        "2": {
+          "quote": "排班曾经是一场噩梦。Puantaj Pro的界面简直是救星。",
+          "role": "运营总监"
+        },
+        "3": {
+          "quote": "我们使用二维码功能跟踪外勤团队。数据可靠。",
+          "role": "总经理"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "开始管理您的团队",
+      "titleLine2": "今天",
+      "description": "免费试用所有功能14天。无需信用卡。",
+      "button": "立即创建账户"
+    },
+    "pricing": {
+      "title": "灵活定价",
+      "description": "选择最适合您企业规模的计划。",
+      "monthly": "月付",
+      "yearly": "年付",
+      "save": "节省20%",
+      "plans": {
+        "starter": {
+          "name": "入门版",
+          "price": "9",
+          "desc": "适合小团队。",
+          "features": ["10名人员", "基础报告", "排班计划", "邮件支持"]
+        },
+        "pro": {
+          "name": "专业版",
+          "price": "29",
+          "desc": "适合成长型企业。",
+          "features": ["50名人员", "高级报告", "AI排班", "优先支持", "移动应用"]
+        },
+        "enterprise": {
+          "name": "企业版",
+          "price": "99",
+          "desc": "适合大型组织。",
+          "features": ["无限人员", "定制集成", "24/7支持", "专用服务器", "SLA保证"]
+        }
+      },
+      "cta": "选择计划"
+    },
+    "faq": {
+      "title": "常见问题",
+      "description": "在此处查找问题的答案。",
+      "items": {
+        "1": {
+          "q": "有免费试用吗？",
+          "a": "是的，您可以免费试用所有功能14天。"
+        },
+        "2": {
+          "q": "我可以随时取消吗？",
+          "a": "当然。没有任何承诺。"
+        },
+        "3": {
+          "q": "包含移动应用吗？",
+          "a": "是的，我们的iOS和Android应用包含在专业版和企业版计划中。"
+        },
+        "4": {
+          "q": "我的数据安全吗？",
+          "a": "您的数据受到256位SSL加密保护，并每天备份。"
+        }
+      }
+    },
+    "footer": {
+      "rights": "保留所有权利。",
+      "privacy": "隐私政策",
+      "terms": "使用条款",
+      "contact": "联系我们",
+      "blog": "博客"
+    }
+  }
+}

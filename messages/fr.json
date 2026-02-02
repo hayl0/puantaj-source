@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "Fonctionnalités",
+    "solutions": "Solutions",
+    "pricing": "Tarifs",
+    "login": "Connexion",
+    "register": "Commencer",
+    "dashboard": "Tableau de bord",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "HomePage": {
+    "badge": "Gestion du Personnel par IA",
+    "heroTitlePrefix": "L'espace de travail",
+    "heroTitleSuffix": "du Futur",
+    "heroDescription": "Combinez le suivi du personnel, la planification des quarts et le calcul de la paie dans une seule plateforme moderne.",
+    "getStarted": "Commencer maintenant",
+    "liveDemo": "Démo en direct",
+    "mockup": {
+      "searchPlaceholder": "Rechercher du personnel...",
+      "adminRole": "Admin",
+      "sidebar": {
+        "overview": "Vue d'ensemble",
+        "personnel": "Personnel",
+        "attendance": "Présence",
+        "salaries": "Salaires"
+      },
+      "stats": {
+        "totalPersonnel": "Total Personnel",
+        "lastMonth": "mois dernier",
+        "activeShifts": "Quarts actifs",
+        "workingNow": "Au travail",
+        "monthlyCost": "Coût mensuel"
+      }
+    },
+    "features": {
+      "title": "Tout sous contrôle",
+      "description": "Tous les outils dont les entreprises modernes ont besoin combinés dans une seule plateforme puissante.",
+      "items": {
+        "personnel": {
+          "title": "Gestion du Personnel",
+          "desc": "Toutes les données des employés, dossiers personnels et suivi des performances sur un seul écran."
+        },
+        "shifts": {
+          "title": "Quarts Intelligents",
+          "desc": "Évitez les conflits et augmentez l'efficacité avec la planification des quarts par IA."
+        },
+        "payroll": {
+          "title": "Paie Automatisée",
+          "desc": "Calculez automatiquement les salaires et les heures supplémentaires à partir des données de présence."
+        },
+        "reporting": {
+          "title": "Rapports",
+          "desc": "Surveillez l'état de votre entreprise instantanément avec des analyses détaillées."
+        },
+        "security": {
+          "title": "Infrastructure Sécurisée",
+          "desc": "Conforme RGPD, stockage de données chiffré et système de sauvegarde."
+        },
+        "mobile": {
+          "title": "Application Mobile",
+          "desc": "Application mobile compatible iOS et Android pour vos employés."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Ce que disent nos utilisateurs ?",
+      "description": "Histoires de réussite d'entreprises utilisant Puantaj Pro.",
+      "items": {
+        "1": {
+          "quote": "Nous sommes passés des feuilles Excel à Puantaj Pro. Notre efficacité a augmenté de 40%.",
+          "role": "DRH"
+        },
+        "2": {
+          "quote": "La planification des quarts était un cauchemar. L'interface glisser-déposer de Puantaj Pro est une bouée de sauvetage.",
+          "role": "Directeur des Opérations"
+        },
+        "3": {
+          "quote": "Nous utilisons la fonction QR code pour suivre nos équipes sur le terrain. Données fiables garanties.",
+          "role": "Directeur Général"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "Commencez à gérer votre équipe",
+      "titleLine2": "Aujourd'hui",
+      "description": "Essayez toutes les fonctionnalités gratuitement pendant 14 jours. Aucune carte de crédit requise.",
+      "button": "Créer un compte"
+    },
+    "pricing": {
+      "title": "Tarification Flexible",
+      "description": "Choisissez le meilleur plan pour la taille de votre entreprise.",
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "save": "Économisez 20%",
+      "plans": {
+        "starter": {
+          "name": "Démarrage",
+          "price": "9",
+          "desc": "Idéal pour les petites équipes.",
+          "features": ["10 Personnel", "Rapports de base", "Planification", "Support Email"]
+        },
+        "pro": {
+          "name": "Professionnel",
+          "price": "29",
+          "desc": "Pour les entreprises en croissance.",
+          "features": ["50 Personnel", "Rapports avancés", "Planification IA", "Support Prioritaire", "App Mobile"]
+        },
+        "enterprise": {
+          "name": "Entreprise",
+          "price": "99",
+          "desc": "Pour les grandes organisations.",
+          "features": ["Personnel illimité", "Intégrations personnalisées", "Support 24/7", "Serveur Dédié", "Garantie SLA"]
+        }
+      },
+      "cta": "Choisir le plan"
+    },
+    "faq": {
+      "title": "Questions Fréquentes",
+      "description": "Trouvez des réponses à vos questions ici.",
+      "items": {
+        "1": {
+          "q": "Y a-t-il un essai gratuit ?",
+          "a": "Oui, vous pouvez essayer toutes les fonctionnalités gratuitement pendant 14 jours."
+        },
+        "2": {
+          "q": "Puis-je annuler à tout moment ?",
+          "a": "Absolument. Il n'y a aucun engagement."
+        },
+        "3": {
+          "q": "L'application mobile est-elle incluse ?",
+          "a": "Oui, nos applications iOS et Android sont incluses dans les plans Professionnel et Entreprise."
+        },
+        "4": {
+          "q": "Mes données sont-elles en sécurité ?",
+          "a": "Vos données sont protégées par un chiffrement SSL 256 bits et sauvegardées quotidiennement."
+        }
+      }
+    },
+    "footer": {
+      "rights": "Tous droits réservés.",
+      "privacy": "Confidentialité",
+      "terms": "Conditions",
+      "contact": "Contact",
+      "blog": "Blog"
+    }
+  }
+}

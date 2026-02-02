@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "Funzionalità",
+    "solutions": "Soluzioni",
+    "pricing": "Prezzi",
+    "login": "Accedi",
+    "register": "Inizia gratis",
+    "dashboard": "Dashboard",
+    "settings": "Impostazioni",
+    "logout": "Esci"
+  },
+  "HomePage": {
+    "badge": "Gestione del Personale con IA",
+    "heroTitlePrefix": "Lo spazio di lavoro",
+    "heroTitleSuffix": "del Futuro",
+    "heroDescription": "Combina il monitoraggio del personale, la pianificazione dei turni e il calcolo delle buste paga in un'unica piattaforma moderna.",
+    "getStarted": "Inizia ora",
+    "liveDemo": "Demo dal vivo",
+    "mockup": {
+      "searchPlaceholder": "Cerca personale...",
+      "adminRole": "Admin",
+      "sidebar": {
+        "overview": "Panoramica",
+        "personnel": "Personale",
+        "attendance": "Presenze",
+        "salaries": "Stipendi"
+      },
+      "stats": {
+        "totalPersonnel": "Totale Personale",
+        "lastMonth": "mese scorso",
+        "activeShifts": "Turni Attivi",
+        "workingNow": "Al lavoro",
+        "monthlyCost": "Costo Mensile"
+      }
+    },
+    "features": {
+      "title": "Tutto sotto controllo",
+      "description": "Tutti gli strumenti di cui le aziende moderne hanno bisogno combinati in un'unica potente piattaforma.",
+      "items": {
+        "personnel": {
+          "title": "Gestione del Personale",
+          "desc": "Tutti i dati dei dipendenti e il monitoraggio delle prestazioni in un'unica schermata."
+        },
+        "shifts": {
+          "title": "Turni Intelligenti",
+          "desc": "Preveni i conflitti e aumenta l'efficienza con la pianificazione dei turni basata sull'IA."
+        },
+        "payroll": {
+          "title": "Buste Paga Automatizzate",
+          "desc": "Calcola automaticamente stipendi e straordinari dai dati di presenza."
+        },
+        "reporting": {
+          "title": "Reportistica",
+          "desc": "Monitora lo stato della tua azienda istantaneamente con analisi e grafici dettagliati."
+        },
+        "security": {
+          "title": "Infrastruttura Sicura",
+          "desc": "Conforme al GDPR, archiviazione dati crittografata e sistema di backup."
+        },
+        "mobile": {
+          "title": "App Mobile",
+          "desc": "App mobile compatibile con iOS e Android per i tuoi dipendenti."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Cosa dicono i nostri utenti?",
+      "description": "Storie di successo di aziende che utilizzano Puantaj Pro.",
+      "items": {
+        "1": {
+          "quote": "Siamo passati dai fogli Excel a Puantaj Pro. La nostra efficienza è aumentata del 40%.",
+          "role": "Responsabile HR"
+        },
+        "2": {
+          "quote": "La pianificazione dei turni era un incubo. L'interfaccia di Puantaj Pro è una salvezza.",
+          "role": "Direttore Operativo"
+        },
+        "3": {
+          "quote": "Usiamo la funzione codice QR per tracciare i nostri team sul campo. Dati affidabili.",
+          "role": "Direttore Generale"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "Inizia a gestire il tuo team",
+      "titleLine2": "Oggi",
+      "description": "Prova tutte le funzionalità gratuitamente per 14 giorni. Nessuna carta di credito richiesta.",
+      "button": "Crea account ora"
+    },
+    "pricing": {
+      "title": "Prezzi Flessibili",
+      "description": "Scegli il piano migliore per le dimensioni della tua azienda.",
+      "monthly": "Mensile",
+      "yearly": "Annuale",
+      "save": "Risparmia 20%",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "9",
+          "desc": "Ideale per piccoli team.",
+          "features": ["10 Personale", "Report base", "Pianificazione turni", "Supporto Email"]
+        },
+        "pro": {
+          "name": "Professional",
+          "price": "29",
+          "desc": "Per aziende in crescita.",
+          "features": ["50 Personale", "Report avanzati", "Pianificazione IA", "Supporto Prioritario", "App Mobile"]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "99",
+          "desc": "Per grandi organizzazioni.",
+          "features": ["Personale illimitato", "Integrazioni personalizzate", "Supporto 24/7", "Server Dedicato", "Garanzia SLA"]
+        }
+      },
+      "cta": "Scegli piano"
+    },
+    "faq": {
+      "title": "Domande Frequenti",
+      "description": "Trova le risposte alle tue domande qui.",
+      "items": {
+        "1": {
+          "q": "C'è una prova gratuita?",
+          "a": "Sì, puoi provare tutte le funzionalità gratuitamente per 14 giorni."
+        },
+        "2": {
+          "q": "Posso annullare in qualsiasi momento?",
+          "a": "Assolutamente. Non c'è alcun impegno."
+        },
+        "3": {
+          "q": "L'app mobile è inclusa?",
+          "a": "Sì, le nostre app iOS e Android sono incluse nei piani Professional ed Enterprise."
+        },
+        "4": {
+          "q": "I miei dati sono al sicuro?",
+          "a": "I tuoi dati sono protetti con crittografia SSL a 256 bit e sottoposti a backup giornaliero."
+        }
+      }
+    },
+    "footer": {
+      "rights": "Tutti i diritti riservati.",
+      "privacy": "Privacy",
+      "terms": "Termini",
+      "contact": "Contatti",
+      "blog": "Blog"
+    }
+  }
+}

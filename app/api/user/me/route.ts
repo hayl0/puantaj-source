@@ -24,8 +24,9 @@ export async function GET() {
           email: true,
           department: true,
           position: true,
-          phone: true,    // Now exists
-          address: true,  // Now exists
+          phone: true,
+          address: true,
+          image: true,
         }
       });
       
@@ -53,6 +54,7 @@ export async function GET() {
           taxNumber: true,
           phone: true,
           address: true,
+          image: true,
           plan: true,
           stripeCurrentPeriodEnd: true,
           stripeSubscriptionId: true,

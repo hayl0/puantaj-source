@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as SonnerToaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -10,6 +10,8 @@ import { CommandMenu } from '@/components/premium/CommandMenu';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from '@vercel/toolbar/next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -52,33 +54,40 @@ export const viewport = {
   themeColor: '#4f46e5',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  const messages = await getMessages();
+
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <div className="min-h-screen bg-background">
-              {children}
-            </div>
-            <CommandMenu />
-            <InstallPrompt />
-            <Toaster />
-            <SonnerToaster />
-            <SpeedInsights />
-            <VercelToolbar />
-          </AuthProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            forcedTheme="dark"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <AuthProvider>
+              <div className="min-h-screen bg-background">
+                {children}
+              </div>
+              <CommandMenu />
+              <InstallPrompt />
+              <Toaster />
+              <SonnerToaster />
+              <SpeedInsights />
+              <VercelToolbar />
+            </AuthProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

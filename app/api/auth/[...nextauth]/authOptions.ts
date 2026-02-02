@@ -139,7 +139,8 @@ export const authOptions: NextAuthOptions = {
                 id: user.id,
                 email: user.email,
                 name: user.name,
-                role: user.role, // 'admin' or 'user'
+                role: user.role,
+                image: user.image,
               };
             } else {
                 console.log("User Password Invalid");
@@ -205,6 +206,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.role = (user as any).role;
         token.id = user.id;
+        token.picture = (user as any).image;
       }
       return token;
     },
