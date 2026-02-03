@@ -81,11 +81,11 @@ export default function HomePage() {
             <Link href="/login" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               {t('login')}
             </Link>
-            <Link href="/register/admin">
-              <Button className="bg-white text-black hover:bg-slate-200 rounded-full px-6 font-medium transition-all hover:scale-105 active:scale-95">
+            <Button asChild className="bg-white text-black hover:bg-slate-200 rounded-full px-6 font-medium transition-all hover:scale-105 active:scale-95">
+              <Link href="/register/admin">
                 {t('register')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -143,16 +143,16 @@ export default function HomePage() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                <Link href="/register/admin">
-                  <Button variant="premium" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
+                <Button asChild variant="premium" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
+                  <Link href="/register/admin">
                     {tHome('getStarted')} <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </Link>
-                <Link href="/dashboard">
-                  <Button variant="glass" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
+                  </Link>
+                </Button>
+                <Button asChild variant="glass" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
+                  <Link href="/dashboard">
                     {tHome('liveDemo')}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </motion.div>
 
@@ -523,11 +523,11 @@ export default function HomePage() {
             <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
               {tHome('cta.description')}
             </p>
-            <Link href="/register/admin">
-              <Button className="h-16 px-10 rounded-full bg-white text-black hover:bg-slate-200 text-xl font-bold transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)]">
+            <Button asChild className="h-16 px-10 rounded-full bg-white text-black hover:bg-slate-200 text-xl font-bold transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)]">
+              <Link href="/register/admin">
                 {tHome('cta.button')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
