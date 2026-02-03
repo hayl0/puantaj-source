@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from 'next-themes';
+import { supabase } from '@/lib/supabase';
 
 type SettingsTab = 'profile' | 'company' | 'billing' | 'notifications' | 'security' | 'appearance';
 
@@ -29,6 +30,7 @@ export default function AyarlarPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -272,7 +274,7 @@ export default function AyarlarPage() {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
@@ -280,13 +282,32 @@ export default function AyarlarPage() {
         return;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setFormData(prev => ({ ...prev, image: base64String }));
-        toast.success("Profil fotoğrafı seçildi. Kaydetmeyi unutmayın.");
-      };
-      reader.readAsDataURL(file);
+      setUploading(true);
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${formData.email}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+
+        setFormData(prev => ({ ...prev, image: publicUrl }));
+        toast.success("Profil fotoğrafı yüklendi. Kaydetmeyi unutmayın.");
+      } catch (error: any) {
+        console.error('Error uploading image:', error);
+        toast.error('Resim yüklenirken hata oluştu: ' + (error.message || 'Bilinmeyen hata'));
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
@@ -390,9 +411,9 @@ export default function AyarlarPage() {
                                             Kişisel markanızı yansıtmak için profesyonel bir fotoğraf yükleyin. 
                                             JPG, PNG veya GIF (maks. 2MB).
                                         </p>
-                                        <Button variant="outline" size="sm" onClick={handlePhotoUpload}>
-                                            <Camera className="w-4 h-4 mr-2" />
-                                            Fotoğraf Yükle
+                                        <Button variant="outline" size="sm" onClick={handlePhotoUpload} disabled={uploading}>
+                                            {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Camera className="w-4 h-4 mr-2" />}
+                                            {uploading ? 'Yükleniyor...' : 'Fotoğraf Yükle'}
                                         </Button>
                                     </div>
                                 </div>
