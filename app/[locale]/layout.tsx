@@ -126,7 +126,7 @@ export default async function RootLayout({
               <InstallPrompt />
               <Toaster />
               <SonnerToaster />
-              <SpeedInsights />
+              <SpeedInsights scriptSrc="https://va.vercel-scripts.com/v1/speed-insights/script.debug.js" />
               <VercelToolbar />
             </AuthProvider>
           </ThemeProvider>
