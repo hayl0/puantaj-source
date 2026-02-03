@@ -1,6 +1,6 @@
 "use client"
 
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
