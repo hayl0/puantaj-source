@@ -11,7 +11,11 @@ export interface DocumentTemplate {
 const Header = ({ title }: { title: string }) => (
   <div className="flex items-center justify-between border-b-2 border-gray-200 pb-6 mb-8">
     <div className="flex items-center gap-4">
-      <Logo showText={true} className="text-gray-900" iconClassName="bg-indigo-600 text-white" />
+      <Logo 
+        showText={true} 
+        className="text-gray-900 bg-gray-100/50 p-2 rounded-xl border border-gray-200" 
+        iconClassName="bg-indigo-600 text-white rounded-lg" 
+      />
     </div>
     <div className="text-right">
       <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
