@@ -59,8 +59,15 @@ function addSecurityHeaders(response: Response) {
 }
 
 export default async function middleware(request: NextRequest) {
-  // Explicitly bypass /api routes
-  if (request.nextUrl.pathname.startsWith('/api')) {
+  const pathname = request.nextUrl.pathname;
+
+  // Explicitly bypass static files, _next, and api
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    pathname.includes('.') // Files with extensions
+  ) {
     return;
   }
 
