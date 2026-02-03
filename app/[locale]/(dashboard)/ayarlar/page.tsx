@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { supabase } from '@/lib/supabase';
 
 type SettingsTab = 'profile' | 'company' | 'billing' | 'notifications' | 'security' | 'appearance';
 
@@ -30,9 +29,7 @@ export default function AyarlarPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Form States
   const [formData, setFormData] = useState({
@@ -269,48 +266,6 @@ export default function AyarlarPage() {
     }
   };
 
-  const handlePhotoUpload = () => {
-    // Trigger hidden file input
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("Dosya boyutu 2MB'dan büyük olamaz");
-        return;
-      }
-
-      setUploading(true);
-      try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${formData.email}/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('avatars')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          throw uploadError;
-        }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(filePath);
-
-        setFormData(prev => ({ ...prev, image: publicUrl }));
-        toast.success("Profil fotoğrafı yüklendi. Kaydetmeyi unutmayın.");
-      } catch (error: any) {
-        console.error('Error uploading image:', error);
-        toast.error('Resim yüklenirken hata oluştu: ' + (error.message || 'Bilinmeyen hata'));
-      } finally {
-        setUploading(false);
-      }
-    }
-  };
-
   const menuItems = [
     { id: 'profile', label: 'Profil Bilgileri', icon: User, description: 'Kişisel bilgilerinizi yönetin' },
     { id: 'company', label: 'Şirket Ayarları', icon: Building2, description: 'Şirket ve vergi bilgileri' },
@@ -387,38 +342,6 @@ export default function AyarlarPage() {
                 >
                     {activeTab === 'profile' && (
                         <div className="space-y-6">
-                            <PremiumCard title="Profil Fotoğrafı" className="overflow-visible">
-                                <div className="flex flex-col md:flex-row items-center gap-6">
-                                    <div className="relative group cursor-pointer" onClick={handlePhotoUpload}>
-                                        <Avatar className="w-24 h-24 md:w-32 md:h-32 border-4 border-background shadow-2xl transition-transform group-hover:scale-105">
-                                            <AvatarImage src={`https://ui-avatars.com/api/?name=${formData.name}&background=random`} />
-                                            <AvatarFallback className="text-2xl">AD</AvatarFallback>
-                                        </Avatar>
-                                        <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Camera className="w-8 h-8 text-white" />
-                                        </div>
-                                        <input 
-                                            type="file" 
-                                            ref={fileInputRef} 
-                                            className="hidden" 
-                                            accept="image/*"
-                                            onChange={handleFileChange}
-                                        />
-                                    </div>
-                                    <div className="text-center md:text-left space-y-2">
-                                        <h3 className="font-semibold text-lg">Profil Fotoğrafınızı Güncelleyin</h3>
-                                        <p className="text-sm text-muted-foreground max-w-sm">
-                                            Kişisel markanızı yansıtmak için profesyonel bir fotoğraf yükleyin. 
-                                            JPG, PNG veya GIF (maks. 2MB).
-                                        </p>
-                                        <Button variant="outline" size="sm" onClick={handlePhotoUpload} disabled={uploading}>
-                                            {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Camera className="w-4 h-4 mr-2" />}
-                                            {uploading ? 'Yükleniyor...' : 'Fotoğraf Yükle'}
-                                        </Button>
-                                    </div>
-                                </div>
-                            </PremiumCard>
-
                             <PremiumCard title="Kişisel Bilgiler">
                                 <div className="grid gap-6">
                                     <div className="grid md:grid-cols-2 gap-4">
