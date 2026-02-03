@@ -13,6 +13,8 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['@react-pdf/renderer', 'iyzipay'],
+  output: 'standalone',
+  productionBrowserSourceMaps: false,
   turbopack: {
     // Turbopack configuration
   },

@@ -8,6 +8,9 @@ export default function PlasmaSphere() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Only load Three.js on client side
+    if (typeof window === 'undefined') return;
+
     if (!containerRef.current) return;
 
     // --- CONFIGURATION OBJECT ---
