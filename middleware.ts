@@ -59,6 +59,11 @@ function addSecurityHeaders(response: Response) {
 }
 
 export default async function middleware(request: NextRequest) {
+  // Explicitly bypass /api routes
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    return;
+  }
+
   const { headers, cookies } = request;
   const hasCookie = cookies.has('NEXT_LOCALE');
   
