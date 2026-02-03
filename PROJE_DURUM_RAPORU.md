@@ -57,3 +57,11 @@
 ### 4. ☁️ Yedekleme Sistemi
 - **Durum:** Manuel.
 - **Plan:** Veritabanının periyodik olarak otomatik yedeklenmesi (Cron jobs).
+
+---
+
+## 🛠 Son Teknik Güncellemeler (03.02.2026)
+- **Vercel Build Fix:** `prisma.config.ts` kaldırılarak Next.js build hatası giderildi.
+- **Middleware:** Next.js 16 uyumluluğu için `middleware.ts` -> `proxy.ts` geçişi yapıldı.
+- **Güvenlik:** CSP (Content Security Policy) başlıkları güncellenerek buton ve script engellemeleri kaldırıldı.
+- **Prisma:** v6.3.1 sürümüne yükseltildi.
