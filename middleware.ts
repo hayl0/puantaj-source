@@ -98,7 +98,6 @@ export default async function middleware(request: NextRequest) {
   return response;
 }
 
-
 export const config = {
   matcher: [
     // Enable a redirect to a matching locale at the root
