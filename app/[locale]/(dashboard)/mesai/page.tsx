@@ -16,6 +16,11 @@ import { useTheme } from 'next-themes';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 export default function MesaiPage() {
   const { theme } = useTheme();
@@ -28,21 +33,75 @@ export default function MesaiPage() {
     recentActivity: []
   });
 
-  useEffect(() => {
-      const fetchData = async () => {
-          if (!session) return;
-          try {
-              const res = await fetch('/api/overtime/stats');
-              if (res.ok) {
-                  const jsonData = await res.json();
-                  setData(jsonData);
-              }
-          } catch (error) {
-              console.error('Error fetching overtime stats:', error);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [formData, setFormData] = useState({
+    employeeId: '',
+    date: new Date().toISOString().split('T')[0],
+    startTime: '18:00',
+    endTime: '20:00',
+    description: ''
+  });
+
+  const fetchData = async () => {
+      if (!session) return;
+      try {
+          const res = await fetch('/api/overtime/stats');
+          if (res.ok) {
+              const jsonData = await res.json();
+              setData(jsonData);
           }
-      };
+      } catch (error) {
+          console.error('Error fetching overtime stats:', error);
+      }
+  };
+
+  useEffect(() => {
       fetchData();
+      
+      // Fetch employees for dropdown
+      if (session) {
+        fetch('/api/employees')
+          .then(res => res.json())
+          .then(data => {
+            if (Array.isArray(data)) setEmployees(data);
+          })
+          .catch(err => console.error(err));
+      }
   }, [session]);
+
+  const handleSubmit = async () => {
+    if (!formData.employeeId || !formData.date || !formData.startTime || !formData.endTime) {
+      toast.error('Lütfen tüm alanları doldurun');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/overtime/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      if (res.ok) {
+        toast.success('Mesai talebi başarıyla oluşturuldu');
+        setIsDialogOpen(false);
+        fetchData(); // Refresh stats
+        setFormData({
+          employeeId: '',
+          date: new Date().toISOString().split('T')[0],
+          startTime: '18:00',
+          endTime: '20:00',
+          description: ''
+        });
+      } else {
+        toast.error('Talep oluşturulurken bir hata oluştu');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Bir hata oluştu');
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -56,10 +115,76 @@ export default function MesaiPage() {
           <Download className="w-4 h-4" />
           Rapor
         </Button>
-        <Button className="gap-2 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 shadow-lg shadow-orange-500/20">
-          <Plus className="w-4 h-4" />
-          Talep Oluştur
-        </Button>
+        
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 shadow-lg shadow-orange-500/20">
+              <Plus className="w-4 h-4" />
+              Talep Oluştur
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Yeni Mesai Talebi</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label>Personel</Label>
+                <Select 
+                  value={formData.employeeId} 
+                  onValueChange={(val) => setFormData({...formData, employeeId: val})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Personel Seçin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employees.map(emp => (
+                      <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label>Tarih</Label>
+                <Input 
+                  type="date" 
+                  value={formData.date} 
+                  onChange={(e) => setFormData({...formData, date: e.target.value})} 
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Başlangıç Saati</Label>
+                  <Input 
+                    type="time" 
+                    value={formData.startTime} 
+                    onChange={(e) => setFormData({...formData, startTime: e.target.value})} 
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Bitiş Saati</Label>
+                  <Input 
+                    type="time" 
+                    value={formData.endTime} 
+                    onChange={(e) => setFormData({...formData, endTime: e.target.value})} 
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Açıklama / Gerekçe</Label>
+                <Input 
+                  value={formData.description} 
+                  onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                  placeholder="Örn: Yıl sonu envanter sayımı"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>İptal</Button>
+              <Button onClick={handleSubmit}>Oluştur</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </PageHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
