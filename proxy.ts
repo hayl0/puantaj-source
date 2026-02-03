@@ -43,7 +43,7 @@ const countryToLocale: Record<string, string> = {
   US: 'en', GB: 'en', CA: 'en', AU: 'en', NZ: 'en', IE: 'en', IN: 'en'
 };
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { headers, cookies } = request;
   const hasCookie = cookies.has('NEXT_LOCALE');
   
