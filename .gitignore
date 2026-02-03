@@ -46,3 +46,4 @@ public/worker-*.js
 # mobile
 ios/build/
 android/build/
+.next
