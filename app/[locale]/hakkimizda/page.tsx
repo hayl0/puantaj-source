@@ -1,6 +1,6 @@
 
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, CheckCircle, Users, Target, Shield } from 'lucide-react'
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid'

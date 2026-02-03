@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, User, Building, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid';
 import PlasmaSphere from '@/components/premium/PlasmaSphere';
 

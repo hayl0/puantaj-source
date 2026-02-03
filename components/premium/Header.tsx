@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTheme } from 'next-themes';
 import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { useSidebar } from '@/components/providers/SidebarProvider';
 import { Logo } from '@/components/ui/Logo';
 import { ThemeToggle } from '@/components/theme-toggle';

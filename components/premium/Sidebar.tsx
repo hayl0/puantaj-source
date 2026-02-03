@@ -5,7 +5,7 @@ import {
   Home, Users, Calendar, Clock, CreditCard, 
   BarChart3, Settings, Briefcase, FileText, Megaphone
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
