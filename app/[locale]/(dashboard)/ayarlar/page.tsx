@@ -201,6 +201,72 @@ export default function AyarlarPage() {
     }
   };
 
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  const handlePasswordUpdate = async () => {
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      toast.error("Yeni şifreler eşleşmiyor");
+      return;
+    }
+
+    if (!passwordForm.currentPassword || !passwordForm.newPassword) {
+      toast.error("Lütfen tüm alanları doldurun");
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/user/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword
+        })
+      });
+
+      if (res.ok) {
+        toast.success("Şifreniz başarıyla güncellendi");
+        setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Şifre güncellenemedi");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Bir hata oluştu");
+    }
+  };
+
+  const handleDownloadData = async () => {
+    try {
+      toast.loading("Verileriniz hazırlanıyor...");
+      const res = await fetch('/api/user/data');
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `puantaj-data-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        toast.dismiss();
+        toast.success("Verileriniz indirildi");
+      } else {
+        throw new Error("Download failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.dismiss();
+      toast.error("Veri indirme başarısız");
+    }
+  };
+
   const handlePhotoUpload = () => {
     // Trigger hidden file input
     fileInputRef.current?.click();
@@ -527,22 +593,37 @@ export default function AyarlarPage() {
                                     <div className="grid gap-2">
                                         <Label htmlFor="current-password">Mevcut Şifre</Label>
                                         <div className="relative">
-                                            <Input id="current-password" type="password" />
+                                            <Input 
+                                                id="current-password" 
+                                                type="password" 
+                                                value={passwordForm.currentPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
+                                            />
                                             <Lock className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
                                         </div>
                                     </div>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div className="grid gap-2">
                                             <Label htmlFor="new-password">Yeni Şifre</Label>
-                                            <Input id="new-password" type="password" />
+                                            <Input 
+                                                id="new-password" 
+                                                type="password" 
+                                                value={passwordForm.newPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                                            />
                                         </div>
                                         <div className="grid gap-2">
                                             <Label htmlFor="confirm-password">Yeni Şifre (Tekrar)</Label>
-                                            <Input id="confirm-password" type="password" />
+                                            <Input 
+                                                id="confirm-password" 
+                                                type="password" 
+                                                value={passwordForm.confirmPassword}
+                                                onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                                            />
                                         </div>
                                     </div>
                                     <div className="flex justify-end">
-                                        <Button onClick={() => toast.success("Şifreniz başarıyla güncellendi")}>
+                                        <Button onClick={handlePasswordUpdate}>
                                             <Save className="w-4 h-4 mr-2" />
                                             Şifreyi Güncelle
                                         </Button>
@@ -558,7 +639,7 @@ export default function AyarlarPage() {
                                             Hesabınıza ait tüm verilerin bir kopyasını (JSON formatında) indirin.
                                         </p>
                                     </div>
-                                    <Button variant="outline" onClick={() => toast.success("Verileriniz hazırlanıyor. Hazır olduğunda e-posta ile gönderilecektir.")}>
+                                    <Button variant="outline" onClick={handleDownloadData}>
                                         <Download className="w-4 h-4 mr-2" />
                                         Talep Et
                                     </Button>

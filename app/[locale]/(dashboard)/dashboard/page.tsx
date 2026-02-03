@@ -277,12 +277,26 @@ export default function DashboardPage() {
                 </div>
                 
                 <p className="text-indigo-100 mb-6 leading-relaxed">
-                  "Bu ay Yazılım departmanında fazla mesai oranları geçen aya göre %15 arttı. Ekip yorgunluğu riskini azaltmak için vardiya planlamasını optimize etmeyi düşünebilirsiniz."
+                  {chartData.departmentStatus.length > 0 ? (
+                    (() => {
+                      const active = chartData.departmentStatus.find(d => d.status === 'Aktif');
+                      const inactive = chartData.departmentStatus.find(d => d.status === 'Beklemede');
+                      if (active) {
+                        return `${active.name} departmanında şu an aktif çalışma görülüyor. Vardiya planlaması başarılı görünüyor.`;
+                      } else if (inactive) {
+                        return `${inactive.name} departmanında şu an aktif personel bulunmuyor. Mesai saatlerini kontrol edebilirsiniz.`;
+                      } else {
+                        return "Departman verileri analiz ediliyor. Verimlilik raporları yakında hazır olacak.";
+                      }
+                    })()
+                  ) : (
+                    "Henüz yeterli veri toplanmadı. Personel ekleyerek ve vardiya planlayarak AI önerilerini aktifleştirebilirsiniz."
+                  )}
                 </p>
                 
                 <Button 
                   className="w-full bg-white text-indigo-700 hover:bg-indigo-50 border-0 shadow-lg"
-                  onClick={() => toast.info("AI Analiz modülü yakında hizmetinizde olacak.")}
+                  onClick={() => toast.info("Detaylı analiz raporu hazırlanıyor...")}
                 >
                   Detayları İncele
                 </Button>

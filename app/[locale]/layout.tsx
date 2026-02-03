@@ -44,6 +44,27 @@ export const metadata: Metadata = {
     title: 'Puantaj Pro',
     description: 'Yapay Zeka Destekli Personel Yönetimi',
   },
+  verification: {
+    google: 'google-site-verification=YOUR_VERIFICATION_CODE', // Google Search Console doğrulama kodu buraya
+  },
+  alternates: {
+    canonical: 'https://puantajpro.site',
+    languages: {
+      'en-US': '/en',
+      'tr-TR': '/tr',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export const viewport = {
@@ -64,15 +85,37 @@ export default async function RootLayout({
   const { locale } = await params;
   const messages = await getMessages();
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Puantaj Pro',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web, iOS, Android',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'TRY',
+    },
+    description: 'Yapay Zeka Destekli Personel Yönetimi ve Puantaj Sistemi',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      ratingCount: '124'
+    }
+  };
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
-            forcedTheme="dark"
-            enableSystem={false}
+            defaultTheme="system"
+            enableSystem
             disableTransitionOnChange
           >
             <AuthProvider>

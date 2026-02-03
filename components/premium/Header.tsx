@@ -8,6 +8,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useSidebar } from '@/components/providers/SidebarProvider';
 import { Logo } from '@/components/ui/Logo';
+import { ThemeToggle } from '@/components/theme-toggle';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,7 +61,7 @@ export default function PremiumHeader() {
       </div>
       
       <div className="flex items-center gap-4">
-        {/* Theme Toggle Removed - Forced Dark Mode */}
+        <ThemeToggle />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
