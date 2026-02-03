@@ -1,6 +1,6 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -47,10 +47,14 @@ function addSecurityHeaders(response: Response) {
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' blob: data: https:; font-src 'self' data: https:; connect-src 'self' https:;"
-  );
+  
+  // RELAXED CSP for troubleshooting NextAuth and Vercel Toolbar issues
+  // Removed strict connect-src and script-src restrictions
+  // response.headers.set(
+  //   'Content-Security-Policy',
+  //   "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' blob: data: https:; font-src 'self' data: https:; connect-src 'self' https:;"
+  // );
+  
   response.headers.set(
     'Strict-Transport-Security',
     'max-age=31536000; includeSubDomains; preload'
@@ -68,7 +72,7 @@ export default async function middleware(request: NextRequest) {
     pathname.startsWith('/static') ||
     pathname.includes('.') // Files with extensions
   ) {
-    return;
+    return NextResponse.next();
   }
 
   const { headers, cookies } = request;
@@ -116,7 +120,5 @@ export const config = {
     // - … if they start with `/api`, `/_next` or `/_vercel`
     // - … the ones containing a dot (e.g. `favicon.ico`)
     '/((?!api|_next|_vercel|.*\\..*).*)',
-    // However, match all pathnames within `/users`, optionally with a locale prefix
-    // '/([\\w-]+)?/users/(.+)'
   ]
 };
