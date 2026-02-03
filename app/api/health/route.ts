@@ -7,7 +7,8 @@ export async function GET() {
     await prisma.$connect();
     // Simple query to check connection
     const userCount = await prisma.user.count();
-    return NextResponse.json({ status: 'ok', database: 'connected', userCount });
+    const isSecretSet = !!process.env.NEXTAUTH_SECRET;
+    return NextResponse.json({ status: 'ok', database: 'connected', userCount, isSecretSet });
   } catch (error: any) {
     console.error('Health Check Failed:', error);
     return NextResponse.json({ status: 'error', database: 'disconnected', error: error.message }, { status: 500 });
