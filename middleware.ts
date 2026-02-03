@@ -110,6 +110,7 @@ export const config = {
 
     // Enable redirects that add missing locales
     // (e.g. `/pathnames` -> `/en/pathnames`)
-    '/((?!_next|_vercel|.*\\..*).*)'
+    // Exclude api, _next, _vercel, and files with dots
+    '/((?!api|_next|_vercel|.*\\..*).*)'
   ]
 };
