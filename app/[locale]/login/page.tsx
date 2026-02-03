@@ -16,6 +16,31 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
+
+  const handleResendVerification = async () => {
+    setResendLoading(true);
+    setResendSuccess(false);
+    try {
+      const res = await fetch('/api/auth/resend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.message || 'Kod gönderilemedi');
+      
+      setResendSuccess(true);
+      setError('');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -93,9 +118,28 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm flex items-center animate-in fade-in slide-in-from-top-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2" />
-              {error}
+            <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm flex flex-col gap-2 animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2" />
+                {error}
+              </div>
+              {(error.includes('doğrulanmamış') || error.includes('doğrulayın')) && (
+                <button
+                  type="button"
+                  onClick={handleResendVerification}
+                  disabled={resendLoading}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 underline self-start ml-3.5"
+                >
+                  {resendLoading ? 'Kod Gönderiliyor...' : 'Doğrulama Kodunu Tekrar Gönder'}
+                </button>
+              )}
+            </div>
+          )}
+
+          {resendSuccess && (
+            <div className="p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl text-sm flex items-center animate-in fade-in slide-in-from-top-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2" />
+              Doğrulama kodu email adresinize gönderildi. Lütfen kontrol edin.
             </div>
           )}
 
