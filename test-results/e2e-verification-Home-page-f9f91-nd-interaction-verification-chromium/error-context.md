@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - link [ref=e7] [cursor=pointer]:
+        - /url: /en
+        - img [ref=e11]
+      - heading "Hoş Geldiniz" [level=1] [ref=e16]
+      - paragraph [ref=e17]: Puantaj Pro Yönetim Paneli
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - text: Email Adresi
+        - generic [ref=e20]:
+          - img [ref=e21]
+          - textbox "admin@puantaj.com" [ref=e24]
+      - generic [ref=e25]:
+        - text: Şifre
+        - generic [ref=e26]:
+          - img [ref=e27]
+          - textbox "••••••••" [ref=e30]
+      - button "Giriş Yap" [ref=e31] [cursor=pointer]:
+        - text: Giriş Yap
+        - img [ref=e32]
+    - generic [ref=e34]:
+      - paragraph [ref=e35]: Hesabınız yok mu?
+      - generic [ref=e36]:
+        - link "Yönetici Şirket Kaydı" [ref=e37] [cursor=pointer]:
+          - /url: /en/register/admin
+          - generic [ref=e38]: Yönetici
+          - generic [ref=e39]: Şirket Kaydı
+        - link "Personel Çalışan Kaydı" [ref=e40] [cursor=pointer]:
+          - /url: /en/register/personnel
+          - generic [ref=e41]: Personel
+          - generic [ref=e42]: Çalışan Kaydı
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - alert [ref=e43]
+```

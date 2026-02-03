@@ -1,0 +1,189 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - link "PuantajPro Personel Yönetimi" [ref=e7]:
+          - /url: /en
+          - generic [ref=e8]:
+            - img [ref=e11]
+            - generic [ref=e16]:
+              - generic [ref=e17]: PuantajPro
+              - generic [ref=e18]: Personel Yönetimi
+        - generic [ref=e19]:
+          - button "Dil Değiştir / Switch Language" [ref=e20] [cursor=pointer]:
+            - img
+            - generic [ref=e21]: Dil Değiştir / Switch Language
+          - button [ref=e22] [cursor=pointer]:
+            - img [ref=e23]
+    - main [ref=e24]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e30]: AI Powered Personnel Management
+          - heading "Workspace of the Future" [level=1] [ref=e31]:
+            - text: Workspace of
+            - text: the Future
+          - paragraph [ref=e32]: Combine personnel tracking, shift planning and payroll calculations in a single modern platform. Say goodbye to complex Excel spreadsheets.
+          - generic [ref=e33]:
+            - link "Get Started Now" [ref=e34]:
+              - /url: /en/register/admin
+              - text: Get Started Now
+              - img
+            - link "Live Demo" [ref=e35]:
+              - /url: /en/dashboard
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic [ref=e49]: Search personnel...
+            - generic [ref=e50]:
+              - img [ref=e52]
+              - generic [ref=e56]:
+                - generic [ref=e57]: AD
+                - generic [ref=e58]: Admin
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - generic [ref=e61]:
+                - img [ref=e62]
+                - text: Overview
+              - generic [ref=e67] [cursor=pointer]:
+                - img [ref=e68]
+                - text: Personnel
+              - generic [ref=e73] [cursor=pointer]:
+                - img [ref=e74]
+                - text: Attendance
+              - generic [ref=e76] [cursor=pointer]:
+                - img [ref=e77]
+                - text: Salaries
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - generic [ref=e84]: Total Personnel
+                  - img [ref=e85]
+                - generic [ref=e90]: "48"
+                - generic [ref=e91]:
+                  - img [ref=e92]
+                  - text: +12% last month
+              - generic [ref=e95]:
+                - generic [ref=e96]:
+                  - generic [ref=e97]: Active Shifts
+                  - img [ref=e98]
+                - generic [ref=e101]: "12"
+                - generic [ref=e102]: Working now
+              - generic [ref=e103]:
+                - generic [ref=e104]:
+                  - generic [ref=e105]: Monthly Cost
+                  - img [ref=e106]
+                - generic [ref=e107]: ₺842.5K
+                - generic [ref=e108]: +5% last month
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - heading "Everything Under Control" [level=2] [ref=e137]
+          - paragraph [ref=e138]: All the tools modern businesses need combined in a single powerful platform.
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - img [ref=e142]
+            - heading "Personnel Management" [level=3] [ref=e147]
+            - paragraph [ref=e148]: All employee data, personal files and performance tracking on a single screen.
+          - generic [ref=e149]:
+            - img [ref=e151]
+            - heading "Smart Shifts" [level=3] [ref=e153]
+            - paragraph [ref=e154]: Prevent conflicts and increase efficiency with AI-powered shift planning.
+          - generic [ref=e155]:
+            - img [ref=e157]
+            - heading "Automated Payroll" [level=3] [ref=e160]
+            - paragraph [ref=e161]: Automatically calculate salaries and overtime from attendance data.
+          - generic [ref=e162]:
+            - img [ref=e164]
+            - heading "Reporting" [level=3] [ref=e167]
+            - paragraph [ref=e168]: Monitor your business status instantly with detailed analysis and charts.
+          - generic [ref=e169]:
+            - img [ref=e171]
+            - heading "Secure Infrastructure" [level=3] [ref=e173]
+            - paragraph [ref=e174]: GDPR compliant, encrypted data storage and backup system.
+          - generic [ref=e175]:
+            - img [ref=e177]
+            - heading "Mobile App" [level=3] [ref=e179]
+            - paragraph [ref=e180]: iOS and Android compatible mobile app for your employees.
+      - generic [ref=e183]:
+        - generic [ref=e184]:
+          - heading "What Our Users Say?" [level=2] [ref=e185]
+          - paragraph [ref=e186]: Success stories of businesses using Puantaj Pro.
+        - generic [ref=e187]:
+          - generic [ref=e188]:
+            - img [ref=e190]
+            - paragraph [ref=e192]: "\"We moved personnel tracking from Excel sheets to Puantaj Pro. Our efficiency increased by 40%, payroll calculations now take minutes.\""
+            - generic [ref=e193]:
+              - generic [ref=e194]: AY
+              - generic [ref=e195]:
+                - generic [ref=e196]: Ahmet Yılmaz
+                - generic [ref=e197]: HR Manager, TechSoft A.Ş.
+          - generic [ref=e198]:
+            - img [ref=e200]
+            - paragraph [ref=e202]: "\"Shift planning was a nightmare for us. Puantaj Pro's drag-and-drop interface and automatic conflict control is a lifesaver.\""
+            - generic [ref=e203]:
+              - generic [ref=e204]: AD
+              - generic [ref=e205]:
+                - generic [ref=e206]: Ayşe Demir
+                - generic [ref=e207]: Operations Director, Lojistik Plus
+          - generic [ref=e208]:
+            - img [ref=e210]
+            - paragraph [ref=e212]: "\"We use the QR code feature to track our field teams. We get reliable data thanks to location-based verification.\""
+            - generic [ref=e213]:
+              - generic [ref=e214]: MK
+              - generic [ref=e215]:
+                - generic [ref=e216]: Mehmet Kaya
+                - generic [ref=e217]: General Manager, Kaya İnşaat
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - heading "Frequently Asked Questions" [level=2] [ref=e221]
+          - paragraph [ref=e222]: Find answers to your questions here.
+        - generic [ref=e223]:
+          - heading "Is there a free trial?" [level=3] [ref=e225]:
+            - button "Is there a free trial?" [ref=e226] [cursor=pointer]:
+              - text: Is there a free trial?
+              - img [ref=e227]
+          - heading "Can I cancel anytime?" [level=3] [ref=e230]:
+            - button "Can I cancel anytime?" [ref=e231] [cursor=pointer]:
+              - text: Can I cancel anytime?
+              - img [ref=e232]
+          - heading "Is the mobile app included?" [level=3] [ref=e235]:
+            - button "Is the mobile app included?" [ref=e236] [cursor=pointer]:
+              - text: Is the mobile app included?
+              - img [ref=e237]
+          - heading "Is my data safe?" [level=3] [ref=e240]:
+            - button "Is my data safe?" [ref=e241] [cursor=pointer]:
+              - text: Is my data safe?
+              - img [ref=e242]
+      - generic [ref=e246]:
+        - heading "Start Managing Your Team Today" [level=2] [ref=e247]:
+          - text: Start Managing Your Team
+          - text: Today
+        - paragraph [ref=e248]: Try all features free for 14 days. No credit card required.
+        - link "Create Account Now" [ref=e249]:
+          - /url: /en/register/admin
+    - contentinfo [ref=e250]:
+      - generic [ref=e251]:
+        - generic [ref=e252]:
+          - generic [ref=e254]:
+            - img [ref=e257]
+            - generic [ref=e262]:
+              - generic [ref=e263]: PuantajPro
+              - generic [ref=e264]: Personel Yönetimi
+          - generic [ref=e265]:
+            - link "Privacy Policy" [ref=e266]:
+              - /url: "#"
+            - link "Terms of Use" [ref=e267]:
+              - /url: "#"
+            - link "Contact" [ref=e268]:
+              - /url: "#"
+            - link "Blog" [ref=e269]:
+              - /url: "#"
+        - generic [ref=e270]: © 2026 Puantaj Pro. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - alert [ref=e271]
+```
