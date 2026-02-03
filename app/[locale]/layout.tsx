@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     description: 'Yapay Zeka Destekli Personel Yönetimi',
   },
   verification: {
-    google: 'google-site-verification=YOUR_VERIFICATION_CODE', // Google Search Console doğrulama kodu buraya
+    google: 'pWbzR_jYvQnIg33y_9-lziKnrWjTKdJSRwsdaaqZSac', // Google Search Console doğrulama kodu
   },
   alternates: {
     canonical: 'https://puantajpro.site',
