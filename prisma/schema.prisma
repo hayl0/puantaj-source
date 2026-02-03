@@ -11,36 +11,154 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   name          String?
+  image         String?
   password      String
   role          String    @default("user")
+  emailVerified DateTime?
+  verificationCode String?
+  
+  // Company Info
+  companyName   String?
+  taxNumber     String?
+  address       String?
+  phone         String?
+
+  // Stripe Subscription
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  plan                   String    @default("free") // "free" | "pro"
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  employees     Employee[]
+  attendances   Attendance[]
+  payrolls      Payroll[]
+  leaves        Leave[]
+  shifts        Shift[]
+  incomes       Income[]
+  announcements Announcement[]
+}
+
+model Income {
+  id          String   @id @default(cuid())
+  amount      Float
+  description String?
+  date        DateTime
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model Payroll {
+  id            String    @id @default(cuid())
+  month         String    // Format: YYYY-MM
+  amount        Float
+  status        String    // pending, paid
+  generatedAt   DateTime  @default(now())
+  paidAt        DateTime?
+
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId    String
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
 }
 
 model Employee {
   id            String    @id @default(cuid())
   name          String
+  email         String?   @unique
+  image         String?   // Employee profile photo (base64 or url)
+  password      String?   // Hashed password for login
   department    String
   position      String
   salary        Float
+  paymentType   String    @default("monthly") // monthly, hourly, daily
+  emailVerified DateTime?
+  verificationCode String?
   hireDate      DateTime
+  
+  // Contact Info
+  phone         String?
+  address       String?
+
   createdAt     DateTime  @default(now())
   
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
+
+  attendances   Attendance[]
+  payrolls      Payroll[]
+  leaves        Leave[]
+  shifts        Shift[]
 }
 
 model Attendance {
   id            String    @id @default(cuid())
   date          DateTime
-  checkIn       DateTime
-  checkOut      DateTime
-  hours         Float
+  checkIn       DateTime?
+  checkOut      DateTime?
+  hours         Float?
   status        String
   
-  employee      Employee  @relation(fields: [employeeId], references: [id])
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId    String
   
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
+
+  @@unique([employeeId, date])
+}
+
+model Leave {
+  id          String    @id @default(cuid())
+  type        String    // Yıllık İzin, Hastalık İzni, Mazeret İzni
+  startDate   DateTime
+  endDate     DateTime
+  days        Int
+  status      String    @default("pending") // pending, approved, rejected
+  reason      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId  String
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model Announcement {
+  id          String    @id @default(cuid())
+  title       String
+  content     String
+  date        DateTime  @default(now())
+  important   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model Shift {
+  id          String    @id @default(cuid())
+  title       String    // Vardiya Başlığı (Sabah, Akşam vb.)
+  start       DateTime
+  end         DateTime
+  type        String    // morning, evening, night, full
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId  String
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }

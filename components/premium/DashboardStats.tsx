@@ -1,62 +1,143 @@
-import { Users, TrendingUp, DollarSign, Target, Clock, Calendar } from 'lucide-react';
+
+import { Users, TrendingUp, Wallet, Clock, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 export default function DashboardStats() {
+  const [data, setData] = useState({
+    totalEmployees: 0,
+    attendanceRate: 0,
+    activeCount: 0,
+    totalMonthlyCost: 0,
+    pendingLeaves: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/dashboard/stats');
+        if (res.ok) {
+          const jsonData = await res.json();
+          setData(jsonData);
+        }
+      } catch (error) {
+        console.error('Stats fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   const stats = [
     { 
-      title: 'Aktif Personel', 
-      value: '47', 
-      change: '+3 bu ay', 
+      title: 'Kayıtlı Personel', 
+      value: data.totalEmployees.toString(), 
+      change: 'Toplam Çalışan', 
       icon: Users,
       color: 'bg-blue-500',
-      trend: 'up'
+      gradient: 'from-blue-500 to-blue-600',
+      shadow: 'shadow-blue-500/30',
+      bg: 'bg-blue-500/10',
+      trend: 'neutral'
     },
     { 
-      title: 'Devam Oranı', 
-      value: '94.2%', 
-      change: '+2.1%', 
+      title: 'Bugün Çalışan', 
+      value: data.activeCount.toString(), 
+      change: `Devam: %${data.attendanceRate}`, 
       icon: TrendingUp,
       color: 'bg-green-500',
-      trend: 'up'
+      gradient: 'from-green-500 to-green-600',
+      shadow: 'shadow-green-500/30',
+      bg: 'bg-green-500/10',
+      trend: 'neutral'
     },
     { 
-      title: 'Aylık Gelir', 
-      value: '₺125,430', 
-      change: '+8.5%', 
-      icon: DollarSign,
+      title: 'Aylık Maliyet', 
+      value: `₺${data.totalMonthlyCost.toLocaleString('tr-TR')}`, 
+      change: 'Tahmini Maaş', 
+      icon: Wallet,
       color: 'bg-purple-500',
-      trend: 'up'
+      gradient: 'from-purple-500 to-purple-600',
+      shadow: 'shadow-purple-500/30',
+      bg: 'bg-purple-500/10',
+      trend: 'neutral'
     },
     { 
-      title: 'Hedef Tamamlama', 
-      value: '78%', 
-      change: '+12%', 
-      icon: Target,
+      title: 'Bekleyen İzinler', 
+      value: data.pendingLeaves.toString(), 
+      change: 'Onay Bekliyor', 
+      icon: Clock,
       color: 'bg-orange-500',
-      trend: 'up'
+      gradient: 'from-orange-500 to-orange-600',
+      shadow: 'shadow-orange-500/30',
+      bg: 'bg-orange-500/10',
+      trend: 'neutral'
     },
   ];
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    show: { y: 0, opacity: 1 }
+  };
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-32 rounded-2xl bg-white/5 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <motion.div 
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+    >
       {stats.map((stat) => (
-        <div key={stat.title} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-          <div className="flex items-start justify-between">
+        <motion.div 
+          key={stat.title} 
+          variants={item}
+          whileHover={{ y: -5, transition: { duration: 0.2 } }}
+          className="relative overflow-hidden rounded-2xl p-6 border border-white/10 bg-background/50 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all group"
+        >
+          {/* Background decorative blob */}
+          <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full ${stat.bg} opacity-50 group-hover:opacity-100 transition-opacity blur-2xl`} />
+          
+          <div className="relative z-10 flex items-start justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{stat.title}</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-              <div className="flex items-center mt-2">
-                <span className={`text-sm ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-sm font-medium text-muted-foreground mb-1">{stat.title}</p>
+              <h3 className="text-3xl font-bold tracking-tight text-foreground mb-2">{stat.value}</h3>
+              
+              <div className="flex items-center gap-2">
+                <span className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full ${stat.bg} text-foreground/80`}>
                   {stat.change}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">geçen aya göre</span>
               </div>
             </div>
-            <div className={`${stat.color} p-3 rounded-xl`}>
+            
+            <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.gradient} shadow-lg ${stat.shadow}`}>
               <stat.icon className="w-6 h-6 text-white" />
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

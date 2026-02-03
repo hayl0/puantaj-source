@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+
+.calendarContainer {
+  --primary-color: #2F4F4F; /* Dark Slate Gray */
+  --secondary-color: #E6E6FA; /* Light Lavender */
+  --accent-color: #FFD700; /* Gold */
+  --text-color: #F5F5DC; /* Beige */
+  --light-text-color: rgba(245, 245, 220, 0.7);
+  --dark-accent-color: #8B4513; /* Saddle Brown */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; Removed to fit in container */
+  height: 600px; /* Fixed height for dashboard */
+  width: 100%;
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-color);
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.calendarContent {
+  background: var(--background-overlay);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 40px;
+  border: 1px solid rgba(245, 245, 220, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+}
+
+.dateDisplay h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin: 0;
+}
+
+.dateDisplay p {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--light-text-color);
+  margin: 0;
+}
+
+.timeDisplay {
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.calendarGrid {
+  margin-top: 30px;
+}
+
+.dayLabels, .daysContainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dayLabels div {
+  font-weight: 600;
+  color: var(--accent-color);
+  padding: 10px 0;
+}
+
+.daysContainer {
+  margin-top: 10px;
+}
+
+.calendarDay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 5px;
+  border: 1px solid rgba(245, 245, 220, 0.05);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  position: relative;
+  min-height: 60px;
+}
+
+.calendarDay:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.calendarDay.inactive {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.calendarDay.hasNote::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+}
+
+.eventDots {
+  display: flex;
+  gap: 3px;
+  position: absolute;
+  bottom: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+.eventDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+}
+
+.today {
+  border: 2px solid var(--accent-color);
+  font-weight: bold;
+}
+
+.selected {
+  background-color: rgba(255, 215, 0, 0.2);
+  border: 1px solid var(--accent-color);
+}
+
+.notesPanel {
+  margin-top: 30px;
+}
+
+.notesToggleBtn, .saveNoteBtn {
+  background: var(--accent-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notesToggleBtn:hover, .saveNoteBtn:hover {
+  background-color: #F0C400;
+}
+
+.notesContent {
+  /* display: none; Managed by React conditional rendering */
+  margin-top: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notesInput {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--secondary-color);
+  background-color: rgba(245, 245, 220, 0.1);
+  color: var(--text-color);
+  font-family: 'Montserrat', sans-serif;
+  resize: vertical;
+}
+
+.notesInput::placeholder {
+  color: var(--light-text-color);
+}
+
+.saveNoteBtn {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.notesList {
+  list-style: none;
+  margin-top: 20px;
+  text-align: left;
+  padding: 0;
+}
+
+.noteItem {
+  background: rgba(245, 245, 220, 0.1);
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteNoteBtn {
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 5px;
+}

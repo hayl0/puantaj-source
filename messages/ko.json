@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "기능",
+    "solutions": "솔루션",
+    "pricing": "가격",
+    "login": "로그인",
+    "register": "무료 시작",
+    "dashboard": "대시보드",
+    "settings": "설정",
+    "logout": "로그아웃"
+  },
+  "HomePage": {
+    "badge": "AI 기반 인사 관리",
+    "heroTitlePrefix": "미래의",
+    "heroTitleSuffix": "워크스페이스",
+    "heroDescription": "인사 추적, 교대 근무 계획 및 급여 계산을 단일 최신 플랫폼에 결합하십시오. 복잡한 Excel 시트와 작별하십시오.",
+    "getStarted": "지금 시작하기",
+    "liveDemo": "라이브 데모",
+    "mockup": {
+      "searchPlaceholder": "인원 검색...",
+      "adminRole": "관리자",
+      "sidebar": {
+        "overview": "개요",
+        "personnel": "인원",
+        "attendance": "출석",
+        "salaries": "급여"
+      },
+      "stats": {
+        "totalPersonnel": "총 인원",
+        "lastMonth": "지난달",
+        "activeShifts": "활성 교대",
+        "workingNow": "현재 근무 중",
+        "monthlyCost": "월간 비용"
+      }
+    },
+    "features": {
+      "title": "모든 것을 통제",
+      "description": "현대 비즈니스에 필요한 모든 도구가 하나의 강력한 플랫폼에 결합되었습니다.",
+      "items": {
+        "personnel": {
+          "title": "인사 관리",
+          "desc": "모든 직원 데이터, 개인 파일 및 성과 추적을 한 화면에서."
+        },
+        "shifts": {
+          "title": "스마트 교대 근무",
+          "desc": "AI 기반 교대 근무 계획으로 충돌을 방지하고 효율성을 높입니다."
+        },
+        "payroll": {
+          "title": "자동 급여",
+          "desc": "출석 데이터에서 급여와 초과 근무 수당을 자동으로 계산합니다."
+        },
+        "reporting": {
+          "title": "보고",
+          "desc": "상세한 분석 및 차트로 비즈니스 상태를 즉시 모니터링하십시오."
+        },
+        "security": {
+          "title": "보안 인프라",
+          "desc": "GDPR 준수, 암호화된 데이터 저장 및 백업 시스템."
+        },
+        "mobile": {
+          "title": "모바일 앱",
+          "desc": "직원을 위한 iOS 및 Android 호환 모바일 앱."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "사용자 후기",
+      "description": "Puantaj Pro를 사용하는 기업의 성공 사례.",
+      "items": {
+        "1": {
+          "quote": "Excel 시트에서 Puantaj Pro로 전환했습니다. 효율성이 40% 증가했습니다.",
+          "role": "인사 관리자"
+        },
+        "2": {
+          "quote": "교대 근무 계획은 악몽이었습니다. Puantaj Pro의 인터페이스는 구세주입니다.",
+          "role": "운영 이사"
+        },
+        "3": {
+          "quote": "현장 팀 추적을 위해 QR 코드 기능을 사용합니다. 신뢰할 수 있는 데이터입니다.",
+          "role": "총괄 매니저"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "팀 관리 시작",
+      "titleLine2": "오늘",
+      "description": "14일 동안 모든 기능을 무료로 사용해 보십시오. 신용 카드가 필요하지 않습니다.",
+      "button": "계정 만들기"
+    },
+    "pricing": {
+      "title": "유연한 가격",
+      "description": "비즈니스 규모에 가장 적합한 요금제를 선택하십시오.",
+      "monthly": "월간",
+      "yearly": "연간",
+      "save": "20% 절약",
+      "plans": {
+        "starter": {
+          "name": "스타터",
+          "price": "9",
+          "desc": "소규모 팀에 적합합니다.",
+          "features": ["10명 인원", "기본 보고", "교대 근무 계획", "이메일 지원"]
+        },
+        "pro": {
+          "name": "프로페셔널",
+          "price": "29",
+          "desc": "성장하는 기업을 위해.",
+          "features": ["50명 인원", "고급 보고", "AI 교대 근무 계획", "우선 지원", "모바일 앱"]
+        },
+        "enterprise": {
+          "name": "엔터프라이즈",
+          "price": "99",
+          "desc": "대규모 조직을 위해.",
+          "features": ["무제한 인원", "맞춤형 통합", "24/7 지원", "전용 서버", "SLA 보장"]
+        }
+      },
+      "cta": "요금제 선택"
+    },
+    "faq": {
+      "title": "자주 묻는 질문",
+      "description": "여기에서 질문에 대한 답을 찾으십시오.",
+      "items": {
+        "1": {
+          "q": "무료 체험이 있습니까?",
+          "a": "예, 신용 카드 없이 14일 동안 모든 기능을 무료로 사용해 볼 수 있습니다."
+        },
+        "2": {
+          "q": "언제든지 취소할 수 있습니까?",
+          "a": "물론입니다. 약정은 없습니다."
+        },
+        "3": {
+          "q": "모바일 앱이 포함되어 있습니까?",
+          "a": "예, iOS 및 Android 앱은 프로페셔널 및 엔터프라이즈 요금제에 포함되어 있습니다."
+        },
+        "4": {
+          "q": "내 데이터는 안전합니까?",
+          "a": "데이터는 256비트 SSL 암호화로 보호되며 매일 백업됩니다."
+        }
+      }
+    },
+    "footer": {
+      "rights": "모든 권리 보유.",
+      "privacy": "개인 정보 보호",
+      "terms": "이용 약관",
+      "contact": "문의",
+      "blog": "블로그"
+    }
+  }
+}

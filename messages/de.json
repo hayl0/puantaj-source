@@ -1,0 +1,149 @@
+{
+  "Common": {
+    "title": "Puantaj Pro",
+    "features": "Funktionen",
+    "solutions": "Lösungen",
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "register": "Kostenlos starten",
+    "dashboard": "Dashboard",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+  "HomePage": {
+    "badge": "KI-gestützte Personalverwaltung",
+    "heroTitlePrefix": "Arbeitsplatz der",
+    "heroTitleSuffix": "Zukunft",
+    "heroDescription": "Kombinieren Sie Personalverfolgung, Schichtplanung und Gehaltsabrechnung in einer einzigen modernen Plattform. Verabschieden Sie sich von komplexen Excel-Tabellen.",
+    "getStarted": "Jetzt starten",
+    "liveDemo": "Live-Demo",
+    "mockup": {
+      "searchPlaceholder": "Personal suchen...",
+      "adminRole": "Admin",
+      "sidebar": {
+        "overview": "Übersicht",
+        "personnel": "Personal",
+        "attendance": "Anwesenheit",
+        "salaries": "Gehälter"
+      },
+      "stats": {
+        "totalPersonnel": "Gesamtpersonal",
+        "lastMonth": "letzter Monat",
+        "activeShifts": "Aktive Schichten",
+        "workingNow": "Gerade arbeitend",
+        "monthlyCost": "Monatliche Kosten"
+      }
+    },
+    "features": {
+      "title": "Alles unter Kontrolle",
+      "description": "Alle Tools, die moderne Unternehmen benötigen, in einer Plattform vereint.",
+      "items": {
+        "personnel": {
+          "title": "Personalmanagement",
+          "desc": "Alle Mitarbeiterdaten, Personalakten und Leistungsverfolgung auf einem Bildschirm."
+        },
+        "shifts": {
+          "title": "Intelligente Schichten",
+          "desc": "Verhindern Sie Konflikte und steigern Sie die Effizienz mit KI-gestützter Schichtplanung."
+        },
+        "payroll": {
+          "title": "Automatisierte Lohnabrechnung",
+          "desc": "Berechnen Sie Gehälter und Überstunden automatisch aus Anwesenheitsdaten."
+        },
+        "reporting": {
+          "title": "Berichterstattung",
+          "desc": "Überwachen Sie Ihren Geschäftsstatus sofort mit detaillierten Analysen und Diagrammen."
+        },
+        "security": {
+          "title": "Sichere Infrastruktur",
+          "desc": "DSGVO-konform, verschlüsselte Datenspeicherung und Backup-System."
+        },
+        "mobile": {
+          "title": "Mobile App",
+          "desc": "iOS- und Android-kompatible mobile App für Ihre Mitarbeiter."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Was unsere Nutzer sagen?",
+      "description": "Erfolgsgeschichten von Unternehmen, die Puantaj Pro nutzen.",
+      "items": {
+        "1": {
+          "quote": "Wir haben die Personalverfolgung von Excel-Tabellen auf Puantaj Pro umgestellt. Unsere Effizienz stieg um 40%, die Lohnabrechnung dauert jetzt nur noch Minuten.",
+          "role": "HR-Manager"
+        },
+        "2": {
+          "quote": "Schichtplanung war für uns ein Albtraum. Die Drag-and-Drop-Schnittstelle von Puantaj Pro und die automatische Konfliktkontrolle sind ein Lebensretter.",
+          "role": "Betriebsleiter"
+        },
+        "3": {
+          "quote": "Wir nutzen die QR-Code-Funktion, um unsere Außendienstteams zu verfolgen. Dank standortbezogener Überprüfung erhalten wir zuverlässige Daten.",
+          "role": "Geschäftsführer"
+        }
+      }
+    },
+    "cta": {
+      "titleLine1": "Beginnen Sie mit dem Management",
+      "titleLine2": "Ihres Teams Heute",
+      "description": "Testen Sie alle Funktionen 14 Tage lang kostenlos. Keine Kreditkarte erforderlich.",
+      "button": "Konto jetzt erstellen"
+    },
+    "pricing": {
+      "title": "Flexible Preise",
+      "description": "Wählen Sie den besten Plan für Ihre Unternehmensgröße.",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "save": "20% Sparen",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "9",
+          "desc": "Ideal für kleine Teams.",
+          "features": ["10 Personal", "Grundlegende Berichte", "Schichtplanung", "E-Mail-Support"]
+        },
+        "pro": {
+          "name": "Professional",
+          "price": "29",
+          "desc": "Für wachsende Unternehmen.",
+          "features": ["50 Personal", "Erweiterte Berichte", "KI-Schichtplanung", "Priorisierter Support", "Mobile App"]
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "99",
+          "desc": "Für große Organisationen.",
+          "features": ["Unbegrenztes Personal", "Individuelle Integrationen", "24/7 Support", "Dedizierter Server", "SLA-Garantie"]
+        }
+      },
+      "cta": "Plan wählen"
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "description": "Hier finden Sie Antworten auf Ihre Fragen.",
+      "items": {
+        "1": {
+          "q": "Gibt es eine kostenlose Testversion?",
+          "a": "Ja, Sie können alle Funktionen 14 Tage lang kostenlos ohne Kreditkarte testen."
+        },
+        "2": {
+          "q": "Kann ich jederzeit kündigen?",
+          "a": "Absolut. Es gibt keine Verpflichtung, Sie können Ihr Abonnement jederzeit kündigen."
+        },
+        "3": {
+          "q": "Ist die mobile App enthalten?",
+          "a": "Ja, unsere iOS- und Android-Apps sind in den Professional- und Enterprise-Plänen enthalten."
+        },
+        "4": {
+          "q": "Sind meine Daten sicher?",
+          "a": "Ihre Daten sind durch 256-Bit-SSL-Verschlüsselung geschützt und werden täglich gesichert."
+        }
+      }
+    },
+    "footer": {
+      "rights": "Alle Rechte vorbehalten.",
+      "privacy": "Datenschutz",
+      "terms": "Nutzungsbedingungen",
+      "contact": "Kontakt",
+      "blog": "Blog"
+    }
+  }
+}
