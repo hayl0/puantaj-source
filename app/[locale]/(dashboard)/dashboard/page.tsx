@@ -41,7 +41,13 @@ export default function DashboardPage() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
-  const [chartData, setChartData] = useState({
+  const [chartData, setChartData] = useState<{
+    revenueData: any[];
+    workHoursData: any[];
+    deptData: any[];
+    activities: any[];
+    departmentStatus: any[];
+  }>({
     revenueData: [],
     workHoursData: [],
     deptData: [],
