@@ -58,7 +58,7 @@ function addSecurityHeaders(response: Response) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 }
 
-export default async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { headers, cookies } = request;
   const hasCookie = cookies.has('NEXT_LOCALE');
   
@@ -100,16 +100,11 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Enable a redirect to a matching locale at the root
-    '/',
-
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
-    '/(tr|en|de|fr|es|it|pt|ru|zh|ja|ko|ar)/:path*',
-
-    // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/en/pathnames`)
-    // Exclude api, _next, _vercel, and files with dots
-    '/((?!api|_next|_vercel|.*\\..*).*)'
+    // Match all pathnames except for
+    // - … if they start with `/api`, `/_next` or `/_vercel`
+    // - … the ones containing a dot (e.g. `favicon.ico`)
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+    // However, match all pathnames within `/users`, optionally with a locale prefix
+    // '/([\\w-]+)?/users/(.+)'
   ]
 };
