@@ -35,7 +35,13 @@ export default function LoginPage() {
       setResendSuccess(true);
       setError('');
     } catch (err: any) {
-      setError(err.message);
+      console.error('Resend error:', err);
+      // Handle known config errors specially
+      if (err.message?.includes('SMTP')) {
+        setError('Sistem Yapılandırma Hatası: Email sunucusu ayarlanmamış.');
+      } else {
+        setError(err.message || 'Kod gönderilirken bir hata oluştu');
+      }
     } finally {
       setResendLoading(false);
     }

@@ -14,6 +14,10 @@ export async function sendVerificationEmail(email: string, code: string) {
   try {
     // If credentials are missing, log to console (Dev Mode)
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      if (process.env.NODE_ENV === 'production') {
+         console.error('SMTP credentials missing in production!');
+         throw new Error('Sistem Hatası: Email servisi yapılandırılmamış (SMTP Ayarları Eksik). Lütfen yönetici ile iletişime geçin.');
+      }
       console.log(`[DEV MODE] Email Verification Code for ${email}: ${code}`);
       return { success: true, dev: true };
     }
