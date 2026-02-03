@@ -43,6 +43,21 @@ const countryToLocale: Record<string, string> = {
   US: 'en', GB: 'en', CA: 'en', AU: 'en', NZ: 'en', IE: 'en', IN: 'en'
 };
 
+function addSecurityHeaders(response: Response) {
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' data:;"
+  );
+  response.headers.set(
+    'Strict-Transport-Security',
+    'max-age=31536000; includeSubDomains; preload'
+  );
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+}
+
 export default async function middleware(request: NextRequest) {
   const { headers, cookies } = request;
   const hasCookie = cookies.has('NEXT_LOCALE');
@@ -73,13 +88,13 @@ export default async function middleware(request: NextRequest) {
       });
       
       const response = await handleI18nRouting(newRequest);
-
+      addSecurityHeaders(response);
       return response;
     }
   }
 
   const response = await handleI18nRouting(request);
-
+  addSecurityHeaders(response);
   return response;
 }
 
