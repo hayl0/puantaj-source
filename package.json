@@ -14,9 +14,12 @@
     "cookie": "^0.7.2",
     "dompurify": "^3.2.4",
     "tar": "^7.5.7",
-    "path-to-regexp": "^6.3.0"
+    "path-to-regexp": "^6.3.0",
+    "glob": "^10.3.10",
+    "rimraf": "^5.0.5",
+    "@xmldom/xmldom": "^0.8.10"
   },
-  "overrides": {
+  "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@capacitor/android": "^8.0.2",
     "@capacitor/core": "^8.0.2",
@@ -94,6 +97,6 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.19",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "^5.4.0"
   }
 }
