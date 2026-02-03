@@ -9,18 +9,29 @@ export interface DocumentTemplate {
 }
 
 const Header = ({ title }: { title: string }) => (
-  <div className="flex items-center justify-between border-b-2 border-gray-200 pb-6 mb-8">
-    <div className="flex items-center gap-4">
-      <Logo 
-        showText={true} 
-        className="text-gray-900 bg-gray-100/50 p-2 rounded-xl border border-gray-200" 
-        iconClassName="bg-indigo-600 text-white rounded-lg" 
-      />
+  <div className="flex items-center justify-between border-b-2 border-gray-900 pb-6 mb-12 relative overflow-hidden">
+    {/* Decorative Diagonal Stripes (from the image inspiration) */}
+    <div className="absolute top-0 right-0 w-32 h-32 opacity-[0.03] pointer-events-none">
+        <div className="absolute inset-0 transform rotate-45 translate-x-16 -translate-y-16 border-l-[40px] border-gray-900 h-[200%]"></div>
     </div>
-    <div className="text-right">
-      <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-      <p className="text-sm text-gray-500 mt-1">Doküman No: {Math.floor(Math.random() * 10000)}</p>
-      <p className="text-sm text-gray-500">Tarih: {new Date().toLocaleDateString('tr-TR')}</p>
+    
+    <div className="flex items-center gap-4 relative z-10">
+      <div className="bg-gray-900 p-3 rounded-2xl shadow-xl">
+        <Logo 
+          showText={true} 
+          className="text-white" 
+          iconClassName="bg-white text-gray-900 rounded-lg" 
+          textClassName="text-white"
+        />
+      </div>
+    </div>
+    <div className="text-right relative z-10">
+      <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase">{title}</h1>
+      <div className="flex flex-col items-end mt-2 space-y-1">
+        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-2 py-0.5 rounded">Resmi Evrak</span>
+        <p className="text-xs font-medium text-gray-500">Ref No: #PR-{Math.floor(Math.random() * 10000)}</p>
+        <p className="text-xs font-medium text-gray-500">Tarih: {new Date().toLocaleDateString('tr-TR')}</p>
+      </div>
     </div>
   </div>
 );
