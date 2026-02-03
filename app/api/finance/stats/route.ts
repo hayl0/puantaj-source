@@ -144,12 +144,6 @@ export async function GET() {
 
     let totalYearlyExpense = yearlyExpenses._sum.amount || 0;
     
-    // If no actual payroll data exists, use projected annual expense based on current employees
-    // This helps new users see estimated costs before running payroll
-    if (totalYearlyExpense === 0 && currentMonthlyExpense > 0) {
-        totalYearlyExpense = currentMonthlyExpense * 12;
-    }
-    
     // Calculate total income from the last 12 months (or similar period)
     const yearlyIncomes = await prisma.income.aggregate({
         where: {
