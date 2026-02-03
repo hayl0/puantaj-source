@@ -2,9 +2,6 @@
   "name": "puantaj-pro",
   "version": "1.0.0",
   "private": true,
-  "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "npx prisma generate && npx prisma db push && next build --webpack",
