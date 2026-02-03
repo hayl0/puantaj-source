@@ -58,7 +58,7 @@ function addSecurityHeaders(response: Response) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 }
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { headers, cookies } = request;
   const hasCookie = cookies.has('NEXT_LOCALE');
   
