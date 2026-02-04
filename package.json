@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf .next && npx prisma generate && npx prisma db push && next build",
+    "build": "rm -rf .next && npx prisma generate && next build",
     "mobile:sync": "npx cap sync",
     "mobile:open:ios": "npx cap open ios",
     "mobile:open:android": "npx cap open android",
