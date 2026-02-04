@@ -36,12 +36,15 @@ export default function PremiumHeader() {
           variant="outline"
           size="icon"
           onClick={toggle}
-          className="lg:hidden h-12 w-12 rounded-lg border-2 border-primary/20 bg-background/50 backdrop-blur-md shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/50 transition-all active:scale-95 group"
+          className="lg:hidden h-10 w-10 md:h-12 md:w-12 rounded-lg border-2 border-primary/20 bg-background/50 backdrop-blur-md shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/50 transition-all active:scale-95 group"
         >
-          <Menu className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
+          <Menu className="w-5 h-5 md:w-7 md:h-7 text-primary group-hover:scale-110 transition-transform" />
         </Button>
         
-        <div className="hidden md:block mr-4 shrink-0">
+        <div className="block lg:hidden ml-2 md:ml-4 shrink-0">
+          <Logo className="text-xl md:text-2xl" />
+        </div>
+        <div className="hidden lg:block mr-4 shrink-0">
           <Logo className="text-2xl" />
         </div>
 
