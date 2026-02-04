@@ -127,7 +127,7 @@ export default async function RootLayout({
               <Toaster />
               <SonnerToaster />
               <SpeedInsights scriptSrc="https://va.vercel-scripts.com/v1/speed-insights/script.debug.js" />
-              <VercelToolbar />
+              {/* <VercelToolbar /> - Disabled for production */}
             </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
