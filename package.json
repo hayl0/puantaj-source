@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && npx prisma db push && next build --webpack",
+    "build": "rm -rf .next && npx prisma generate && npx prisma db push && next build",
     "mobile:sync": "npx cap sync",
     "mobile:open:ios": "npx cap open ios",
     "mobile:open:android": "npx cap open android",
@@ -98,8 +98,5 @@
     "tailwindcss": "^3.4.19",
     "tsx": "^4.21.0",
     "typescript": "^5.4.0"
-  },
-  "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
   }
 }
