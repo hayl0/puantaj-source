@@ -30,19 +30,19 @@ export default function PremiumHeader() {
   const userRole = (user as any)?.role === 'admin' ? 'Yönetici' : 'Personel';
 
   return (
-    <header className="sticky top-0 z-30 h-auto min-h-[5rem] pt-[env(safe-area-inset-top)] bg-background/60 backdrop-blur-xl border-b border-white/10 px-4 md:px-8 flex items-center justify-between transition-all duration-300">
-      <div className="flex items-center gap-4 flex-1 max-w-xl py-3">
+    <header className="sticky top-0 z-30 h-auto min-h-[5rem] pt-[env(safe-area-inset-top)] bg-background/60 backdrop-blur-xl border-b border-white/10 px-4 md:px-8 flex items-center justify-between transition-all duration-300 safe-top">
+      <div className="flex items-center gap-4 flex-1 max-w-xl py-4 md:py-3">
         <Button
           variant="outline"
           size="icon"
           onClick={toggle}
-          className="lg:hidden h-10 w-10 md:h-12 md:w-12 rounded-lg border-2 border-primary/20 bg-background/50 backdrop-blur-md shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/50 transition-all active:scale-95 group"
+          className="lg:hidden h-12 w-12 rounded-xl border-2 border-primary/20 bg-background/50 backdrop-blur-md shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:border-primary/50 transition-all active:scale-95 group"
         >
-          <Menu className="w-5 h-5 md:w-7 md:h-7 text-primary group-hover:scale-110 transition-transform" />
+          <Menu className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
         </Button>
         
-        <div className="block lg:hidden ml-2 md:ml-4 shrink-0">
-          <Logo className="text-xl md:text-2xl" />
+        <div className="block lg:hidden ml-2 shrink-0">
+          <Logo className="text-xl" />
         </div>
         <div className="hidden lg:block mr-4 shrink-0">
           <Logo className="text-2xl" />
@@ -63,14 +63,16 @@ export default function PremiumHeader() {
         </div>
       </div>
       
-      <div className="flex items-center gap-4">
-        <ThemeToggle />
+      <div className="flex items-center gap-2 md:gap-4">
+        <div className="hidden md:block">
+          <ThemeToggle />
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative w-12 h-12 rounded-xl hover:bg-secondary/80">
-              <Bell className="w-6 h-6 text-muted-foreground" />
-              <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-background animate-pulse" />
+            <Button variant="ghost" size="icon" className="relative w-10 h-10 md:w-12 md:h-12 rounded-xl hover:bg-secondary/80">
+              <Bell className="w-5 h-5 md:w-6 md:h-6 text-muted-foreground" />
+              <span className="absolute top-2 right-2 md:top-3 md:right-3 w-2 h-2 md:w-2.5 md:h-2.5 bg-red-500 rounded-full border-2 border-background animate-pulse" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80 glass-card border-border/50 p-0">
@@ -87,16 +89,16 @@ export default function PremiumHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
         
-        <div className="h-8 w-[1px] bg-border/50 mx-2" />
+        <div className="h-6 w-[1px] bg-border/50 mx-1 md:h-8 md:mx-2" />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-3 pl-2 cursor-pointer group">
+            <div className="flex items-center gap-3 pl-1 md:pl-2 cursor-pointer group">
               <div className="text-right hidden md:block group-hover:opacity-80 transition-opacity">
                 <p className="text-sm font-semibold text-foreground">{userName}</p>
                 <p className="text-xs text-muted-foreground">{userRole}</p>
               </div>
-              <Avatar className="h-10 w-10 border-2 border-white dark:border-slate-800 shadow-lg ring-2 ring-transparent group-hover:ring-primary transition-all">
+              <Avatar className="h-10 w-10 md:h-10 md:w-10 border-2 border-white dark:border-slate-800 shadow-lg ring-2 ring-transparent group-hover:ring-primary transition-all">
                 <AvatarImage src={session?.user?.image || "/placeholder-user.jpg"} />
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-bold">{userInitials}</AvatarFallback>
               </Avatar>
@@ -109,9 +111,20 @@ export default function PremiumHeader() {
                 <p className="text-xs leading-none text-muted-foreground">
                   {userEmail}
                 </p>
+                <p className="text-xs font-semibold text-primary mt-1 md:hidden">
+                  {userRole}
+                </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border/50" />
+            <DropdownMenuItem className="md:hidden">
+               <div className="flex items-center w-full justify-between" onClick={(e) => {
+                 e.preventDefault();
+                 setTheme(theme === 'dark' ? 'light' : 'dark');
+               }}>
+                 <span className="flex items-center"><Sun className="mr-2 h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" /> Tema Değiştir</span>
+               </div>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/profil" className="w-full cursor-pointer flex items-center focus:bg-primary/10 rounded-lg">
                 <User className="mr-2 h-4 w-4 text-primary" />
