@@ -79,6 +79,12 @@
 
 /* Glassmorphism Utilities */
 @layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   .glass {
     @apply bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl supports-[backdrop-filter]:bg-background/60;
   }
