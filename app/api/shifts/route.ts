@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   const userRole = (session.user as any).role;
   const currentId = (session.user as any).id;
   
-  let whereClause: any = {};
+  const whereClause: any = {};
 
   if (userRole === 'personnel') {
       // Personnel sees only their own shifts

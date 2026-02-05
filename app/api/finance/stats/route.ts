@@ -142,7 +142,7 @@ export async function GET() {
         }
     });
 
-    let totalYearlyExpense = yearlyExpenses._sum.amount || 0;
+    const totalYearlyExpense = yearlyExpenses._sum.amount || 0;
     
     // Calculate total income from the last 12 months (or similar period)
     const yearlyIncomes = await prisma.income.aggregate({

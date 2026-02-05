@@ -191,7 +191,7 @@ export default function WeatherWidget() {
     const cloud2 = createDetailedCloud(0.7, -0.1, 0.3, 0.9);
     cloudGroup.add(cloud1, cloud2);
     cloudGroup.position.y = -0.2;
-    let autoRotateSpeed = 0.002;
+    const autoRotateSpeed = 0.002;
 
     // Rain
     function createRaindropsForCloud(cloud: THREE.Group) {

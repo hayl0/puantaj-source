@@ -25,7 +25,7 @@ export async function GET(req: Request) {
     const userRole = (session.user as any).role;
     const userId = (session.user as any).id;
 
-    let whereClause: any = {
+    const whereClause: any = {
       date: {
         gte: startDate,
         lte: endDate,

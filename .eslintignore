@@ -1,3 +1,9 @@
-node_modules
 .next
-puantaj-source
+node_modules
+out
+dist
+android
+ios
+coverage
+*.min.js
+public
