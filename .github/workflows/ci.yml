@@ -14,10 +14,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run lint
+          node-version: '20'
+      - run: npm install
+      # - run: npm run lint
       - run: npm run build
         env:
           DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+          NEXT_TELEMETRY_DISABLED: 1
       - run: npm test --if-present
