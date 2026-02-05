@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, ArrowRight, Loader2, User } from 'lucide-react';
+import { Lock, Mail, ArrowRight, Loader2, UserCircle } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { Logo } from '@/components/ui/Logo';
 import { BackgroundGrid } from '@/components/premium/BackgroundGrid';
 import PlasmaSphere from '@/components/premium/PlasmaSphere';
 
-export default function LoginPage() {
+export default function PersonnelLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -36,7 +36,6 @@ export default function LoginPage() {
       setError('');
     } catch (err: any) {
       console.error('Resend error:', err);
-      // Handle known config errors specially
       if (err.message?.includes('SMTP')) {
         setError('Sistem Yapılandırma Hatası: Email sunucusu ayarlanmamış.');
       } else {
@@ -78,9 +77,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#030712] text-white relative overflow-hidden selection:bg-indigo-500/30">
-      {/* Background Effects */}
+    <div className="min-h-screen flex items-center justify-center bg-[#030712] text-white relative overflow-hidden selection:bg-blue-500/30">
+      {/* Background Effects - Using Blue/Cyan for Personnel to differentiate */}
       <BackgroundGrid fixed />
+      <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-cyan-500/10 pointer-events-none" />
       <PlasmaSphere />
 
       <div className="glass-card p-8 md:p-12 rounded-3xl w-full max-w-lg relative z-10 animate-float border border-white/10 bg-white/5 backdrop-blur-xl">
@@ -88,21 +88,24 @@ export default function LoginPage() {
           <Link href="/" className="inline-block hover:scale-105 transition-transform mb-6">
             <Logo showText={false} iconClassName="w-24 h-24 rounded-3xl" />
           </Link>
-          <h1 className="text-4xl font-bold tracking-tight mb-2 text-white">Hoş Geldiniz</h1>
-          <p className="text-slate-400">Puantaj Pro Yönetim Paneli</p>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <UserCircle className="w-8 h-8 text-blue-400" />
+            <h1 className="text-3xl font-bold tracking-tight text-white">Personel Girişi</h1>
+          </div>
+          <p className="text-slate-400">Çalışan Paneli</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="text-sm font-medium ml-1 text-slate-300">Email Adresi</label>
             <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 focus:border-indigo-500/50 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none text-white placeholder:text-slate-600"
-                placeholder="admin@puantaj.com"
+                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 focus:border-blue-500/50 rounded-xl focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-white placeholder:text-slate-600"
+                placeholder="personel@sirket.com"
                 required
               />
             </div>
@@ -111,12 +114,12 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium ml-1 text-slate-300">Şifre</label>
             <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 focus:border-indigo-500/50 rounded-xl focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none text-white placeholder:text-slate-600"
+                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 focus:border-blue-500/50 rounded-xl focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-white placeholder:text-slate-600"
                 placeholder="••••••••"
                 required
               />
@@ -124,7 +127,7 @@ export default function LoginPage() {
             <div className="flex justify-end">
               <Link 
                 href="/forgot-password"
-                className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline transition-colors"
+                className="text-xs text-blue-400 hover:text-blue-300 hover:underline transition-colors"
               >
                 Şifremi Unuttum
               </Link>
@@ -142,7 +145,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleResendVerification}
                   disabled={resendLoading}
-                  className="text-xs text-indigo-400 hover:text-indigo-300 underline self-start ml-3.5"
+                  className="text-xs text-blue-400 hover:text-blue-300 underline self-start ml-3.5"
                 >
                   {resendLoading ? 'Kod Gönderiliyor...' : 'Doğrulama Kodunu Tekrar Gönder'}
                 </button>
@@ -160,7 +163,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/25 flex items-center justify-center group disabled:opacity-70"
+            className="w-full py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center group disabled:opacity-70"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -174,31 +177,25 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-8 pt-6 border-t border-white/10">
-          <Link 
-            href="/login/personnel"
-            className="w-full mb-6 py-3 px-4 rounded-xl border border-blue-500/20 bg-blue-500/10 hover:bg-blue-500/20 transition-all text-sm font-medium text-center text-blue-300 hover:text-blue-200 flex items-center justify-center gap-2 group"
-          >
-            <User className="w-4 h-4" />
-            Personel Girişi İçin Tıklayın
-          </Link>
-
-          <p className="text-center text-sm text-slate-400 mb-4">Hesabınız yok mu?</p>
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <Link 
-              href="/register/admin"
-              className="py-2 px-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-sm font-medium text-center flex flex-col items-center gap-1 group"
-            >
-              <span className="text-indigo-400 font-semibold group-hover:scale-105 transition-transform">Yönetici</span>
-              <span className="text-xs text-slate-500">Şirket Kaydı</span>
-            </Link>
-            <Link 
-              href="/register/personnel"
-              className="py-2 px-4 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-sm font-medium text-center flex flex-col items-center gap-1 group"
-            >
-              <span className="text-blue-400 font-semibold group-hover:scale-105 transition-transform">Personel</span>
-              <span className="text-xs text-slate-500">Çalışan Kaydı</span>
-            </Link>
-          </div>
+           <div className="flex flex-col gap-4">
+              <Link 
+                href="/login"
+                className="w-full py-3 px-4 rounded-xl border border-white/10 hover:bg-white/5 transition-all text-sm font-medium text-center text-slate-300 hover:text-white flex items-center justify-center gap-2 group"
+              >
+                <Lock className="w-4 h-4 text-indigo-400 group-hover:text-indigo-300" />
+                Yönetici Girişine Dön
+              </Link>
+              
+              <div className="text-center">
+                <p className="text-xs text-slate-500 mb-2">Hesabınız yok mu?</p>
+                <Link 
+                  href="/register/personnel"
+                  className="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Personel Olarak Kaydol
+                </Link>
+              </div>
+           </div>
         </div>
       </div>
     </div>
