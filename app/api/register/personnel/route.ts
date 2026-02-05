@@ -43,6 +43,9 @@ export async function POST(req: Request) {
     const hashedPassword = await hash(password, 10);
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     
+    // Check if email service is configured
+    const isEmailConfigured = !!(process.env.SMTP_USER && process.env.SMTP_PASS);
+
     const employee = await prisma.employee.create({
       data: {
         name,
@@ -54,18 +57,28 @@ export async function POST(req: Request) {
         salary: 0,
         hireDate: new Date(),
         verificationCode,
-        // emailVerified null by default
+        // Auto-verify if email service is not configured
+        emailVerified: isEmailConfigured ? null : new Date(),
       },
     });
 
-    // Send verification email
-    await sendVerificationEmail(email, verificationCode);
+    let emailSent = false;
+    if (isEmailConfigured) {
+       try {
+         const result = await sendVerificationEmail(email, verificationCode);
+         emailSent = result.success;
+       } catch (e) {
+         console.error("Email sending failed:", e);
+       }
+    }
 
     return NextResponse.json(
       { 
-        message: 'Kayıt başarılı. Lütfen email adresinizi doğrulayın.', 
+        message: isEmailConfigured && emailSent 
+          ? 'Kayıt başarılı. Lütfen email adresinizi doğrulayın.' 
+          : 'Kayıt başarılı. Giriş yapabilirsiniz.', 
         employeeId: employee.id,
-        needsVerification: true,
+        needsVerification: isEmailConfigured && emailSent,
         email: employee.email 
       },
       { status: 201 }

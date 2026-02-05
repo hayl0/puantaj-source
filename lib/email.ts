@@ -12,11 +12,13 @@ const transporter = nodemailer.createTransport({
 
 export async function sendVerificationEmail(email: string, code: string) {
   try {
-    // If credentials are missing, log to console (Dev Mode)
+    // If credentials are missing
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      const msg = 'SMTP credentials missing. Email sending skipped.';
       if (process.env.NODE_ENV === 'production') {
-         console.error('SMTP credentials missing in production!');
-         throw new Error('Sistem Hatası: Email servisi yapılandırılmamış (SMTP Ayarları Eksik). Lütfen yönetici ile iletişime geçin.');
+         console.warn(msg + ' (Production)');
+         // Don't throw error, just return false so the caller knows
+         return { success: false, error: 'SMTP_MISSING' };
       }
       console.log(`[DEV MODE] Email Verification Code for ${email}: ${code}`);
       return { success: true, dev: true };
