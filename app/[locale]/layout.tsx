@@ -17,57 +17,68 @@ import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'Puantaj Pro | Yapay Zeka Destekli Personel Yönetimi',
-  description: 'Geleceğin çalışma alanı. Personel takibi, vardiya planlama ve maaş hesaplamalarını tek bir modern platformda birleştirin.',
-  keywords: ['personel takip', 'puantaj', 'vardiya', 'maaş hesaplama', 'ik yazılımı', 'insan kaynakları'],
-  authors: [{ name: 'Puantaj Pro Team' }],
-  icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
-  },
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'Puantaj Pro',
-  },
-  openGraph: {
-    title: 'Puantaj Pro | Yapay Zeka Destekli Personel Yönetimi',
-    description: 'İşletmenizi dijitalleştirin, verimliliği artırın.',
-    url: 'https://puantajpro.site',
-    siteName: 'Puantaj Pro',
-    locale: 'tr_TR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Puantaj Pro',
-    description: 'Yapay Zeka Destekli Personel Yönetimi',
-  },
-  verification: {
-    google: 'pWbzR_jYvQnIg33y_9-lziKnrWjTKdJSRwsdaaqZSac', // Google Search Console doğrulama kodu
-  },
-  alternates: {
-    canonical: 'https://puantajpro.site',
-    languages: {
-      'en-US': '/en',
-      'tr-TR': '/tr',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const baseUrl = 'https://puantajpro.site';
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title: {
+      template: '%s | Puantaj Pro',
+      default: 'Puantaj Pro | Yapay Zeka Destekli Personel Yönetimi',
     },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    description: 'Geleceğin çalışma alanı. Personel takibi, vardiya planlama ve maaş hesaplamalarını tek bir modern platformda birleştirin.',
+    keywords: ['personel takip', 'puantaj', 'vardiya', 'maaş hesaplama', 'ik yazılımı', 'insan kaynakları'],
+    authors: [{ name: 'Puantaj Pro Team' }],
+    icons: {
+      icon: '/icon.svg',
+      shortcut: '/icon.svg',
+      apple: '/icon.svg',
+    },
+    manifest: '/manifest.json',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: 'Puantaj Pro',
+    },
+    openGraph: {
+      title: 'Puantaj Pro | Yapay Zeka Destekli Personel Yönetimi',
+      description: 'İşletmenizi dijitalleştirin, verimliliği artırın.',
+      url: `${baseUrl}/${locale}`,
+      siteName: 'Puantaj Pro',
+      locale: locale === 'tr' ? 'tr_TR' : 'en_US', // Basic mapping, can be improved
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Puantaj Pro',
+      description: 'Yapay Zeka Destekli Personel Yönetimi',
+    },
+    verification: {
+      google: 'pWbzR_jYvQnIg33y_9-lziKnrWjTKdJSRwsdaaqZSac',
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        'tr': `${baseUrl}/tr`,
+        'en': `${baseUrl}/en`,
+        'de': `${baseUrl}/de`,
+        // Add other languages if needed
+      },
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-};
+  };
+}
 
 export const viewport = {
   width: 'device-width',
