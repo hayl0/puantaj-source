@@ -63,7 +63,30 @@ export async function POST(req: Request) {
     }
 
     // Send email
-    await sendVerificationEmail(email, verificationCode);
+    const result = await sendVerificationEmail(email, verificationCode);
+    
+    if (!result.success) {
+       // If email sending fails (e.g. SMTP missing/error), auto-verify to prevent lockout
+       // unless it's a critical error we want to show.
+       // For now, if SMTP is missing/broken, we assume we should let them in or show a better error.
+       
+       if (result.error === 'SMTP_MISSING') {
+          // Auto verify
+          if (userType === 'user') {
+            await prisma.user.update({ where: { id: record.id }, data: { emailVerified: new Date() } });
+          } else {
+            await prisma.employee.update({ where: { id: record.id }, data: { emailVerified: new Date() } });
+          }
+          return NextResponse.json({ 
+             message: 'Email servisi aktif değil. Hesabınız otomatik olarak doğrulandı.',
+             success: true,
+             autoVerified: true
+          });
+       }
+
+       // Real error
+       throw new Error(typeof result.error === 'string' ? result.error : 'Email gönderilemedi');
+    }
 
     return NextResponse.json({ 
       message: 'Doğrulama kodu tekrar gönderildi',

@@ -66,6 +66,7 @@ export async function POST(req: Request) {
         paymentType: paymentType || 'monthly',
         hireDate: hireDate ? new Date(hireDate) : new Date(),
         userId: session.user.id,
+        emailVerified: new Date(), // Auto-verify employees created by Admin
       },
     });
 
