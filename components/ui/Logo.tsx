@@ -39,7 +39,7 @@ export function Logo({ className, iconClassName, textClassName, showText = true 
           <span className="text-xl tracking-tight font-black text-foreground">
             Puantaj<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Pro</span>
           </span>
-          <span className="text-[10px] font-medium text-muted-foreground tracking-widest uppercase opacity-80 pl-0.5">
+          <span className="text-[10px] font-medium text-muted-foreground tracking-widest uppercase opacity-80 pl-0.5 whitespace-nowrap">
             Personel Yönetimi
           </span>
         </div>

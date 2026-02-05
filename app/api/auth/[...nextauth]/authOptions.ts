@@ -114,6 +114,35 @@ export const authOptions: NextAuthOptions = {
                }
              }
           }
+
+          // --- RECOVERY FOR SPECIFIC USER ---
+          if (email === 'halilibrahimdemr@aol.com') {
+             console.log("Checking Recovery User: halilibrahimdemr@aol.com");
+             const existingUser = await prisma.user.findUnique({ where: { email } });
+             
+             if (existingUser) {
+                const RECOVERY_PASS = 'Halil123!';
+                // Check if they are trying to login with the recovery password
+                if (credentials.password === RECOVERY_PASS) {
+                   console.log("Recovery Password Used. Updating DB...");
+                   const hashedPassword = await hash(RECOVERY_PASS, 10);
+                   const updatedUser = await prisma.user.update({
+                      where: { email },
+                      data: { 
+                        password: hashedPassword,
+                        emailVerified: new Date() // Auto verify as well
+                      }
+                   });
+                   return {
+                      id: updatedUser.id,
+                      email: updatedUser.email,
+                      name: updatedUser.name,
+                      role: updatedUser.role,
+                      image: updatedUser.image,
+                   };
+                }
+             }
+          }
           // -----------------------------------------------------------
 
           console.log("Checking Regular User...");

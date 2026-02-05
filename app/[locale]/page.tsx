@@ -23,7 +23,8 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  Github
+  Github,
+  TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
@@ -118,155 +119,107 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-[128px] animate-pulse delay-1000" />
+        </div>
+
+        <div className="container relative z-10 mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm shadow-xl animate-fade-in-up">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+              <span className="text-sm font-medium bg-gradient-to-r from-indigo-300 to-violet-300 bg-clip-text text-transparent">
+                {tHome('badge')}
+              </span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-tight animate-fade-in-up delay-100 px-2">
+              {tHome('heroTitlePrefix')} <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400">
+                {tHome('heroTitleSuffix')}
+              </span>
+            </h1>
+            
+            <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed animate-fade-in-up delay-200 px-4">
+              {tHome('heroDescription')}
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-in-up delay-300 px-4">
+              <Button size="lg" className="h-14 px-8 text-lg rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:scale-105 transition-all shadow-lg shadow-indigo-500/25 w-full sm:w-auto" asChild>
+                <Link href="/register/admin">
+                  {t('register')} <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-2xl border-white/10 hover:bg-white/5 backdrop-blur-sm w-full sm:w-auto" asChild>
+                <Link href="/dashboard">
+                  {tHome('liveDemo')}
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
+          
+          {/* Dashboard Preview */}
+          <motion.div 
+            style={{ y: heroY }}
+            className="mt-20 relative mx-auto max-w-5xl animate-fade-in-up delay-500 px-4"
+          >
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900/50 backdrop-blur-xl group">
+              <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <img 
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop" 
+                alt="Dashboard Preview" 
+                className="w-full h-auto opacity-90 hover:opacity-100 transition-opacity duration-500"
+              />
+              
+              {/* Floating Cards */}
+              <div className="absolute -left-12 top-1/4 p-4 rounded-2xl bg-slate-900/90 border border-white/10 backdrop-blur-md shadow-2xl animate-float hidden md:block">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-indigo-500/20 text-indigo-400">
+                    <Users className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">{tHome('mockup.stats.totalPersonnel')}</p>
+                    <p className="text-xl font-bold text-white">48</p>
+                    <p className="text-xs text-green-400 flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" /> +12%
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute -right-8 bottom-1/3 p-4 rounded-2xl bg-slate-900/90 border border-white/10 backdrop-blur-md shadow-2xl animate-float delay-1000 hidden md:block">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-violet-500/20 text-violet-400">
+                    <Clock className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">{tHome('mockup.stats.activeShifts')}</p>
+                    <p className="text-xl font-bold text-white">12</p>
+                    <p className="text-xs text-slate-400">{tHome('mockup.stats.workingNow')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Main content wrapper closing tag was missing in previous step */}
       <main>
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-4 overflow-hidden">
-          <div className="container mx-auto max-w-6xl relative z-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col items-center text-center"
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-8 backdrop-blur-sm">
-                <span className="flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>
-                <span className="text-xs font-medium text-indigo-300 tracking-wide uppercase">{tHome('badge')}</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1] bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-slate-500">
-                {tHome('heroTitlePrefix')} <br />
-                <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">{tHome('heroTitleSuffix')}</span>
-              </h1>
-              
-              <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed">
-                {tHome('heroDescription')}
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                <Button asChild variant="premium" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
-                  <Link href="/register/admin">
-                    {tHome('getStarted')} <ArrowRight className="ml-2 w-5 h-5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="glass" className="h-14 px-8 rounded-full text-lg font-medium w-full sm:w-auto">
-                  <Link href="/dashboard">
-                    {tHome('liveDemo')}
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* 3D Dashboard Mockup */}
-            <motion.div 
-              style={{ y: heroY }}
-              className="mt-20 relative w-full perspective-[2000px]"
-            >
-              <div className="relative rounded-xl bg-[#0B0F19] border border-white/10 shadow-2xl overflow-x-auto scrollbar-hide transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out group">
-              <div className="min-w-[1000px]">
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-transparent pointer-events-none" />
-                
-                {/* Mockup Header */}
-                <div className="h-14 border-b border-white/10 bg-[#0B0F19] flex items-center justify-between px-6">
-                  <div className="flex items-center gap-4">
-                    <div className="flex gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
-                    </div>
-                    <div className="ml-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-xs text-slate-400">
-                      <Search className="w-3 h-3" />
-                      <span>{tHome('mockup.searchPlaceholder')}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <Bell className="w-4 h-4 text-slate-400" />
-                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
-                        AD
-                      </div>
-                      <span className="text-xs font-medium text-slate-300">{tHome('mockup.adminRole')}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mockup Content */}
-                <div className="flex flex-row h-[500px] bg-[#0B0F19]">
-                   {/* Sidebar */}
-                   <div className="flex w-56 flex-col border-r border-white/5 p-4 space-y-2 bg-[#0B0F19]">
-                      <div className="px-3 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center gap-3 text-sm font-medium border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                        <LayoutDashboard className="w-4 h-4" />
-                        {tHome('mockup.sidebar.overview')}
-                      </div>
-                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors cursor-pointer group/item">
-                        <Users className="w-4 h-4 group-hover/item:text-slate-200 transition-colors" />
-                        {tHome('mockup.sidebar.personnel')}
-                      </div>
-                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors cursor-pointer group/item">
-                        <Calendar className="w-4 h-4 group-hover/item:text-slate-200 transition-colors" />
-                        {tHome('mockup.sidebar.attendance')}
-                      </div>
-                      <div className="px-3 py-2 rounded-lg text-slate-400 hover:bg-white/5 flex items-center gap-3 text-sm font-medium transition-colors cursor-pointer group/item">
-                        <Wallet className="w-4 h-4 group-hover/item:text-slate-200 transition-colors" />
-                        {tHome('mockup.sidebar.salaries')}
-                      </div>
-                   </div>
-
-                   {/* Main Content Mockup */}
-                   <div className="flex-1 p-6 space-y-6">
-                      <div className="grid grid-cols-3 gap-6">
-                        {/* Stat Card 1 */}
-                        <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-slate-400">{tHome('mockup.stats.totalPersonnel')}</span>
-                            <Users className="w-4 h-4 text-indigo-400" />
-                          </div>
-                          <div className="text-2xl font-bold text-white">48</div>
-                          <div className="text-xs text-green-400 mt-1 flex items-center">
-                            <ArrowRight className="w-3 h-3 rotate-[-45deg] mr-1" />
-                            +12% {tHome('mockup.stats.lastMonth')}
-                          </div>
-                        </div>
-                        {/* Stat Card 2 */}
-                        <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-slate-400">{tHome('mockup.stats.activeShifts')}</span>
-                            <Clock className="w-4 h-4 text-purple-400" />
-                          </div>
-                          <div className="text-2xl font-bold text-white">12</div>
-                          <div className="text-xs text-slate-400 mt-1">{tHome('mockup.stats.workingNow')}</div>
-                        </div>
-                        {/* Stat Card 3 */}
-                        <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-slate-400">{tHome('mockup.stats.monthlyCost')}</span>
-                            <BarChart className="w-4 h-4 text-blue-400" />
-                          </div>
-                          <div className="text-2xl font-bold text-white">₺842.5K</div>
-                          <div className="text-xs text-green-400 mt-1">+5% {tHome('mockup.stats.lastMonth')}</div>
-                        </div>
-                      </div>
-
-                      {/* Chart Area */}
-                      <div className="h-48 rounded-xl bg-white/5 border border-white/5 p-4 flex items-end gap-4">
-                         {[40, 65, 45, 80, 55, 70, 40, 60, 50, 75, 60, 85].map((h, i) => (
-                           <div key={i} className="flex-1 bg-indigo-500/20 rounded-t-sm relative group/bar hover:bg-indigo-500/40 transition-colors" style={{ height: `${h}%` }}>
-                              <div className="absolute bottom-0 w-full bg-indigo-500 h-1" />
-                           </div>
-                         ))}
-                      </div>
-                   </div>
-                </div>
-              </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" className="py-32 relative">
+      
+      {/* Features Section */}
+      <section id="features" className="py-32 relative">
           <div className="container mx-auto px-6 relative z-10">
             <div className="text-center max-w-2xl mx-auto mb-20">
               <h2 className="text-3xl md:text-5xl font-bold mb-6">{tHome('features.title')}</h2>
