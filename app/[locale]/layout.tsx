@@ -12,6 +12,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from '@vercel/toolbar/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { SplashScreen } from '@capacitor/splash-screen';
+import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -119,14 +121,16 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthProvider>
-              <div className="min-h-screen bg-background">
-                {children}
-              </div>
-              <CommandMenu />
-              <InstallPrompt />
-              <Toaster />
-              <SonnerToaster />
-              <SpeedInsights scriptSrc="https://va.vercel-scripts.com/v1/speed-insights/script.debug.js" />
+              <ClientLayout>
+                <div className="min-h-screen bg-background">
+                  {children}
+                </div>
+                <CommandMenu />
+                <InstallPrompt />
+                <Toaster />
+                <SonnerToaster />
+                <SpeedInsights scriptSrc="https://va.vercel-scripts.com/v1/speed-insights/script.debug.js" />
+              </ClientLayout>
               {/* <VercelToolbar /> - Disabled for production */}
             </AuthProvider>
           </ThemeProvider>
