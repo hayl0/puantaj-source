@@ -12,6 +12,7 @@ export async function GET() {
   }
 
   const userId = (session.user as any).id;
+  const userRole = (session.user as any).role;
   
   try {
     // 1. Weekly Overtime Chart (Last 7 Days)
@@ -26,15 +27,29 @@ export async function GET() {
       const date = subDays(today, i);
       const dayName = format(date, 'EEE', { locale: tr });
       
-      // Fetch shifts for this day
-      const shifts = await prisma.shift.findMany({
-        where: {
-          userId,
-          start: {
+      // Prepare where clause based on role
+      const shiftWhere: any = {
+        start: {
             gte: startOfDay(date),
             lte: endOfDay(date)
-          }
         }
+      };
+
+      const attendanceWhere: any = {
+        date: { gte: startOfDay(date), lte: endOfDay(date) }
+      };
+
+      if (userRole === 'personnel') {
+        shiftWhere.employeeId = userId;
+        attendanceWhere.employeeId = userId;
+      } else {
+        shiftWhere.userId = userId;
+        attendanceWhere.userId = userId;
+      }
+
+      // Fetch shifts for this day
+      const shifts = await prisma.shift.findMany({
+        where: shiftWhere
       });
 
       // Calculate total hours from shifts
@@ -49,10 +64,7 @@ export async function GET() {
       // If no shifts, check attendance for overtime
       if (shifts.length === 0) {
          const attendances = await prisma.attendance.findMany({
-             where: {
-                 userId,
-                 date: { gte: startOfDay(date), lte: endOfDay(date) }
-             }
+             where: attendanceWhere
          });
          
          attendances.forEach(att => {
@@ -71,8 +83,15 @@ export async function GET() {
     // 2. Pending Requests
     // Since we don't have a 'Request' model, we'll fetch recent 'Leaves' with status 'pending'
     // or simulate empty if purely strictly 'Shift' requests
+    const pendingWhere: any = { status: 'pending' };
+    if (userRole === 'personnel') {
+        pendingWhere.employeeId = userId;
+    } else {
+        pendingWhere.userId = userId;
+    }
+
     const pendingRequests = await prisma.leave.findMany({
-        where: { userId, status: 'pending' },
+        where: pendingWhere,
         take: 5,
         include: { employee: true },
         orderBy: { createdAt: 'desc' }
@@ -80,8 +99,15 @@ export async function GET() {
 
     // 3. Recent Activity
     // Fetch recent Shifts created
+    const recentShiftWhere: any = {};
+    if (userRole === 'personnel') {
+        recentShiftWhere.employeeId = userId;
+    } else {
+        recentShiftWhere.userId = userId;
+    }
+
     const recentShifts = await prisma.shift.findMany({
-        where: { userId },
+        where: recentShiftWhere,
         take: 5,
         include: { employee: true },
         orderBy: { start: 'desc' }

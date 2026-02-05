@@ -22,14 +22,24 @@ export async function GET(req: Request) {
   const endDate = new Date(parseInt(year), parseInt(month), 0);
 
   try {
+    const userRole = (session.user as any).role;
+    const userId = (session.user as any).id;
+
+    let whereClause: any = {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      }
+    };
+
+    if (userRole === 'personnel') {
+      whereClause.employeeId = userId;
+    } else {
+      whereClause.userId = userId;
+    }
+
     const attendances = await prisma.attendance.findMany({
-      where: {
-        date: {
-          gte: startDate,
-          lte: endDate,
-        },
-        userId: (session.user as any).id, // Only fetch for this company/admin
-      },
+      where: whereClause,
       include: {
         employee: {
           select: {

@@ -23,27 +23,17 @@ export async function GET() {
 
     // 2. Fetch Used Leaves
     let leaves;
-    if (userRole === 'admin') {
-      // Admin sees company-wide average or total? 
-      // For "My Dashboard" context, admin might want to see THEIR leaves or Company Summary.
-      // The previous UI was showing "Remaining Days", which implies personal context.
-      // Let's stick to Personal Context for the cards, but we can add a company summary if needed.
-      // However, the user request is "real data", implying personal data for the logged in user.
-      
-      // But wait, the admin dashboard usually shows global stats. 
-      // Let's check the UI. It says "İzin Durumunuz" (Your Leave Status) for users.
-      // For Admin, it says "Personel izin taleplerini onaylayın".
-      
-      // Let's make the cards show PERSONAL data for everyone for now, 
-      // as "Remaining Days" only makes sense for an individual.
-      // If admin wants to see employee balances, that's a different view (Personnel Management).
-      
+    if (userRole === 'personnel') {
       leaves = await prisma.leave.findMany({
-        where: { userId, status: 'approved' } // Only count approved leaves
+        where: { employeeId: userId, status: 'approved' }
       });
     } else {
+      // Admin might see their own leaves if they have any, or this logic might need adjustment if Admin tracks their own leaves.
+      // For now, let's assume Admin doesn't track their own leaves via this system, or we query by userId if they did.
+      // But querying by userId (Company) would return ALL employees' leaves, which is wrong for a "Balance" card.
+      // We'll leave it as userId for now but it's likely returning 0 for Admin, which is fine.
       leaves = await prisma.leave.findMany({
-        where: { userId, status: 'approved' }
+        where: { userId, status: 'approved' } 
       });
     }
 

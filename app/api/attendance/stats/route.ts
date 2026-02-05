@@ -18,22 +18,22 @@ export async function GET(request: Request) {
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    const whereClause: any = {
-      userId: session.user.id,
+    const userRole = (session.user as any).role;
+    const userId = session.user.id;
+
+    let whereClause: any = {
       date: {
         gte: startDate,
         lte: endDate,
       },
     };
 
-    // If personnel, filter by own employee record
-    if ((session.user as any).role === 'personnel') {
-       const employee = await prisma.employee.findUnique({
-           where: { email: session.user.email || '' }
-       });
-       if (employee) {
-           whereClause.employeeId = employee.id;
-       }
+    if (userRole === 'personnel') {
+      // If personnel, userId is the employeeId (as per authOptions)
+      whereClause.employeeId = userId;
+    } else {
+      // If admin, userId is the admin's id
+      whereClause.userId = userId;
     }
 
     const attendances = await prisma.attendance.groupBy({
