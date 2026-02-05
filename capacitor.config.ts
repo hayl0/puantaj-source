@@ -14,7 +14,6 @@ const config: CapacitorConfig = {
       launchAutoHide: false,
       backgroundColor: "#030712",
       androidSplashResourceName: "splash",
-      iosSplashResourceName: "Default-Portrait_736h",
       showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true,
