@@ -60,10 +60,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
+        'x-default': baseUrl,
         'tr': `${baseUrl}/tr`,
         'en': `${baseUrl}/en`,
         'de': `${baseUrl}/de`,
-        // Add other languages if needed
+        'fr': `${baseUrl}/fr`,
+        'es': `${baseUrl}/es`,
+        'it': `${baseUrl}/it`,
+        'pt': `${baseUrl}/pt`,
+        'ru': `${baseUrl}/ru`,
+        'zh': `${baseUrl}/zh`,
+        'ja': `${baseUrl}/ja`,
+        'ko': `${baseUrl}/ko`,
+        'ar': `${baseUrl}/ar`,
       },
     },
     robots: {
