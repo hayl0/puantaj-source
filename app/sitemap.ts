@@ -22,11 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   routes.forEach(route => {
     locales.forEach(locale => {
       sitemap.push({
-        url: `${baseUrl}/${locale}${route}`,
-        lastModified: new Date(),
-        changeFrequency: route === '' ? 'weekly' : 'monthly',
-        priority: route === '' ? 1 : 0.8,
-      })
+      url: `${baseUrl}/${locale}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: route === '' ? 1 : 0.8,
+    })
     })
   })
 

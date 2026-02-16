@@ -1,7 +1,7 @@
 "use client"
 
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from '@/i18n/routing';
+import { usePathname, Link } from '@/i18n/routing';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,12 +28,7 @@ const languages = [
 
 export function LanguageSwitcher() {
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
-
-  const handleLocaleChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale });
-  };
 
   return (
     <DropdownMenu>
@@ -47,12 +42,12 @@ export function LanguageSwitcher() {
         {languages.map((lang) => (
           <DropdownMenuItem 
             key={lang.code}
-            onClick={() => handleLocaleChange(lang.code)}
+            asChild
             className={`cursor-pointer hover:bg-white/5 hover:text-white focus:bg-white/5 focus:text-white ${locale === lang.code ? 'text-indigo-400 font-medium bg-indigo-500/10' : ''}`}
           >
-            <span className="flex items-center gap-2">
+            <Link href={pathname} locale={lang.code} className="flex items-center gap-2 w-full">
               <span>{lang.flag}</span> {lang.name}
-            </span>
+            </Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
